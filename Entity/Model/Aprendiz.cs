@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTOs.DTOs
+namespace Entity.Model2
 {
-    class FormModuleDTO
+    class Aprendiz
     {
         public int Id { get; set; }
-        public int ModuleId { get; set; }
-        public int FormId { get; set; }
     }
 }

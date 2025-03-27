@@ -1,8 +1,17 @@
-﻿using System;
+﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Configuration;
+using System.Data;
+using System.Reflection;
 
-public class Class1
+namespace Entity.Contexts
 {
-	public Class1()
-	{
-	}
+    //representa el contexto de la base de datos de la aplicacion,
+    //proporcionando configuraciones y metodos para la gestion de entidades y consultas personalizadas con Dapper.
+
+    public class ApplicationDbContext : DbContext
+    {
+
+    }
 }

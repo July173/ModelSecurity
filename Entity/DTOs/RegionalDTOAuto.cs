@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTOs.DTOs
+namespace Entity.DTOautogestion
 {
-    class RolUserDTO
+    internal class RegionalDTOAuto
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
-        public int RolId { get; set; }
+        public string Name { get; set; }
+        public string CodeRegional { get; set; }
     }
 }

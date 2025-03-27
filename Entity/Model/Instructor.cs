@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTOs.DTOs
+namespace Entity.Model2
 {
-    class RolDTO
+    class Instructor
     {
         public int Id { get; set; }
-        public string Code { get; set; }
-        public string Name { get; set; }
-        public bool Active { get; set; }
     }
 }

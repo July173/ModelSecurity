@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTOs.DTOs
+namespace Entity.Model2
 {
-    class RolFormPermissionDTO
+    class Regional
     {
         public int Id { get; set; }
-        public int RolId { get; set; }
-        public int FormId { get; set; }
+        public string name { get; set; }
+        public string code_regional { get; set; }
     }
 }
