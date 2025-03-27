@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EFA4BB1C-F4A9-4589-9350-C424ABFB4237}</ProjectGuid>
+    <ProjectGuid>{F2862004-810D-4746-9114-13FC29F8F37D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Diagram2</RootNamespace>
@@ -44,23 +44,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
-    <Compile Include="DbModel.Designer.cs">
+    <Compile Include="DbAutogestion.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DbModel.edmx</DependentUpon>
+      <DependentUpon>DbAutogestion.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="DbModel.edmx">
+    <EntityDeploy Include="DbAutogestion.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DbModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>DbAutogestion.Designer.cs</LastGenOutput>
     </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
-    <None Include="DbModel.edmx.diagram">
-      <DependentUpon>DbModel.edmx</DependentUpon>
+    <None Include="DbAutogestion.edmx.diagram">
+      <DependentUpon>DbAutogestion.edmx</DependentUpon>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
