@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Entity.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Data
 {
     //Repository encargado de la gestion de la entidad de tol en la base de base de datos 
     class RolData
-	{
+    {
         private readonly ApplicationDbContext _context;
         private readonly ILogger _logger;
 
@@ -19,28 +17,28 @@ namespace Data
             _logger = logger;
         }
 
-        public async Task <IEnumerable<Rol>>GetAllAsync()
+        public async Task<IEnumerable<Rol>> GetAllAsync()
         {
             return await _context.Set<Rol>().ToListAsync();
         }
 
-        public async Task <Rol?>GetByidAsync(int id)
+        public async Task<Rol?> GetByidAsync(int id)
         {
             try
             {
                 return await _context.Set<Rol>().FindAsync(id);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener rol con ID{Rolid}");
                 throw;
             }
-       
+
         }
         public async Task<Rol> CreateAsync(Rol rol)
         {
             try
-            { 
+            {
                 await _context.Set<Rol>.AddAsync(rol);
                 await _context.SaveChangesAsync();
                 return rol;
@@ -85,4 +83,5 @@ namespace Data
                 return false;
             }
         }
+    } 
 }
