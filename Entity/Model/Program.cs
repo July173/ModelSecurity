@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.Model2
+namespace Entity.Model
 {
-    class Program
+    public class Program
     {
         public int Id { get; set; }
         public decimal code_program { get; set; }

@@ -4,24 +4,36 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Reflection;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Entity.Contexts
 {
-    //representa el contexto de la base de datos de la aplicacion,
-    //proporcionando configuraciones y metodos para la gestion de entidades y consultas personalizadas con Dapper.
+    /// <summary>
+    /// representa el contexto de la base de datos de la aplicacion,proporcionando configuraciones y metodos para la 
+    /// gestion de entidades y consultas personalizadas con Dapper.
+    /// </summary>
 
     public class ApplicationDbContext : DbContext
     {
-        //configuracion de la applicacion
+        /// <summary>
+        /// Configuración de la aplicación.
+        /// </summary>
         protected readonly IConfiguration _configuration;
 
-        //constructor del contexto de la BD
+        /// <summary>
+        /// Constructor del contexto de la base de datos.
+        /// </summary>
+        /// <param name="options">Opciones de configuración para el contexto de base de datos.</param>
+        /// <param name="configuration">Instancia de IConfiguration para acceder a la configuración de la aplicación.</param>
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration) : base(options)
         {
             _configuration = configuration;
         }
-        //confogura los modelos de la base de datos aplicando configuraciones desde ensambaldos
+        /// <summary>
+        /// Configura los modelos de la base de datos aplicando configuraciones desde ensamblados.
+        /// </summary>
+        /// <param name="modelBuilder">Constructor del modelo de base de datos.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -29,34 +41,55 @@ namespace Entity.Contexts
             base.OnModelCreating(modelBuilder);
         }
 
-        //configura opciones adicionales del contexto, como el registro de datos sensibles
+        /// <summary>
+        /// Configura opciones adicionales del contexto, como el registro de datos sensibles.
+        /// </summary>
+        /// <param name="optionsBuilder">Constructor de opciones de configuración del contexto.</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.EnableSensitiveDataLogging();
             //otras configuraciones adiconales pueden ir aqui
         }
 
-        //configura convenciones de tipos de datos, estableciendo la precision estableciendo por defecto los valores decimales.
+        /// <summary>
+        /// Configura convenciones de tipos de datos, estableciendo la precisión por defecto de los valores decimales.
+        /// </summary>
+        /// <param name="configurationBuilder">Constructor de configuración de modelos.</param>
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
         {
             configurationBuilder.Properties<decimal>().HavePrecision(18, 2);
         }
-        //Guarda los cambios en la base de datos, aseguranod la auditoria antes de persistir los datos.
-        //retorna numero de filas afectadas
+        /// <summary>
+        /// Guarda los cambios en la base de datos, asegurando la auditoría antes de persistir los datos.
+        /// </summary>
+        /// <returns>Número de filas afectadas.</returns>
         public override int SaveChanges()
         {
             EnsureAudit();
             return base.SaveChanges();
         }
 
-        //guarda los cambisod e la base de datos de manera asincrona asegurando la auditoria antes de la persistencia 
+        /// <summary>
+        /// Guarda los cambios en la base de datos de manera asíncrona, asegurando la auditoría antes de la persistencia.
+        /// </summary>
+        /// <param name="acceptAllChangesOnSuccess">Indica si se deben aceptar todos los cambios en caso de éxito.</param>
+        /// <param name="cancellationToken">Token de cancelación para abortar la operación.</param>
+        /// <returns>Número de filas afectadas de forma asíncrona.</returns>
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSucces, CancellationToken cancellationToken = default)
         {
             EnsureAudit();
             return base.SaveChangesAsync(acceptAllChangesOnSucces, cancellationToken);
         }
 
-        //ejecuta una consulta sql utilizando Dapper y devuelve una coleccion de resultados de tipo genreico
+        /// <summary>
+        /// Ejecuta una consulta SQL utilizando Dapper y devuelve una colección de resultados de tipo genérico.
+        /// </summary>
+        /// <typeparam name="T">Tipo de los datos de retorno.</typeparam>
+        /// <param name="text">Consulta SQL a ejecutar.</param>
+        /// <param name="parameters">Parámetros opcionales de la consulta.</param>
+        /// <param name="timeout">Tiempo de espera opcional para la consulta.</param>
+        /// <param name="type">Tipo opcional de comando SQL.</param>
+        /// <returns>Una colección de objetos del tipo especificado.</returns>
 
         public async Task<IEnumerable<T>> QueryAsync<T>(string text, object parameters = null, int? timeout = null, CommandType? type = null)
         {
@@ -65,7 +98,15 @@ namespace Entity.Contexts
             return await connection.QueryAsync<T>(command.Definition);
         }
 
-        //ejecuta una sola consulta con SQL utilizando Dapper y devuelve un solo resultado o el valor predeterminado si no hay resultados.
+        /// <summary>
+        /// Ejecuta una consulta SQL utilizando Dapper y devuelve un solo resultado o el valor predeterminado si no hay resultados.
+        /// </summary>
+        /// <typeparam name="T">Tipo de los datos de retorno.</typeparam>
+        /// <param name="text">Consulta SQL a ejecutar.</param>
+        /// <param name="parameters">Parámetros opcionales de la consulta.</param>
+        /// <param name="timeout">Tiempo de espera opcional para la consulta.</param>
+        /// <param name="type">Tipo opcional de comando SQL.</param>
+        /// <returns>Un objeto del tipo especificado o su valor predeterminado.</returns>
         public async Task<T> QueryFirstOrDefaultAsync<T>(string text, object parameters = null, int? timeout = null, CommandType? type = null)
         {
             using var command = new DapperEFCoreCommand(this, text, parameters, timeout, type, CancellationToken.None);
@@ -73,17 +114,29 @@ namespace Entity.Contexts
             return await connection.QueryFirstOrDefaultAsync<T>(command.Definition);
         }
 
-        //metodo interno para garantizar la auditoria de los cambios en las entidades.
+        /// <summary>
+        /// Método interno para garantizar la auditoría de los cambios en las entidades.
+        /// </summary>
 
         private void EnsureAudit()
         {
             ChangeTracker.DetectChanges();
         }
 
-        //estrucutura para ejecutar comando SQL con Dapper en Entity Framework Core.
+        /// <summary>
+        /// Estructura para ejecutar comandos SQL con Dapper en Entity Framework Core.
+        /// </summary>
         public readonly struct DapperEFCoreCommand : IDisposable
         {
-            //constructor del comando Dapper
+            /// <summary>
+            /// Constructor del comando Dapper.
+            /// </summary>
+            /// <param name="context">Contexto de la base de datos.</param>
+            /// <param name="text">Consulta SQL.</param>
+            /// <param name="parameters">Parámetros opcionales.</param>
+            /// <param name="timeout">Tiempo de espera opcional.</param>
+            /// <param name="type">Tipo de comando SQL opcional.</param>
+            /// <param name="ct">Token de cancelación.</param>
 
             public DapperEFCoreCommand(DbContext context, string text, object parameters, int? timeout, CommandType? type, CancellationToken ct)
             {
@@ -101,9 +154,14 @@ namespace Entity.Contexts
                     );
             }
 
-            //Define los parametros del comando SQL.
+            /// <summary>
+            /// Define los parámetros del comando SQL.
+            /// </summary>
             public CommandDefinition Definition { get; }
-            
+            /// <summary>
+            /// Método para liberar los recursos.
+            /// </summary>
+
             public void Dispose()
             {
             }

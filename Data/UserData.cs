@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Entity.Contexts;
 using Entity.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -31,7 +32,7 @@ namespace Data
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener usuario con ID{UserId}");
+                _logger.LogError($"Error al obtener usuario con ID{id}");
                 throw;
             }
         }
@@ -61,3 +62,29 @@ namespace Data
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Error al actualizar el usuario {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            try
+            {
+                var user = await _context.Set<User>().FindAsync(id);
+                if (user == null)
+                    return false;
+
+                _context.Set<User>().Remove(user);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al eliminar el usuario {ex.Message}");
+                return false;
+            }
+        }
+    }
+}
+

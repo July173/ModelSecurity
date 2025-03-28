@@ -8,18 +8,26 @@ using Microsoft.Extensions.Logging;
 
 namespace Data
 {
-    //Repository encargado de la gestion de la entidad de tol en la base de base de datos 
+    /// <summary>
+    ///Repository encargado de la gestion de la entidad de tol en la base de base de datos 
+    /// </summary>
     class RolData
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger _logger;
-
+        /// <summary>
+        /// Constructor que recibe el contexto de la base de datos 
+        /// </summary>
+        /// <param name="context"> instancia de <see cref="ApplicationDbContext"/>para la conexion con la base de datos</param>
         public RolData(ApplicationDbContext context, ILogger logger)
         {
             _context = context;
             _logger = logger;
         }
-
+        /// <summary>
+        /// Obtiene todos los roles almacenados en la base de datos
+        /// </summary>
+        /// <returns> Lista de roles </returns>
         public async Task<IEnumerable<Rol>> GetAllAsync()
         {
             return await _context.Set<Rol>().ToListAsync();
@@ -34,10 +42,16 @@ namespace Data
             catch (Exception ex)
             {
                 _logger.LogError( $"Error al obtener rol con ID{id}");
-                throw;
+                throw;// Re-lanza la excepcion para que sea manejada en capas superiores
             }
 
         }
+
+        /// <summary>
+        /// Crea un nuevo rol en la base de datos 
+        /// </summary>
+        /// <param name="rol">instancia del rol a crear.</param>
+        /// <returns>el rol creado</returns>
         public async Task<Rol> CreateAsync(Rol rol)
         {
             try
@@ -52,6 +66,12 @@ namespace Data
                 throw;
             }
         }
+
+        /// <summary>
+        /// Actualiza un rol existente en la base de datos 
+        /// </summary>
+        /// <param name="rol">Objeto con la infromacion actualizada</param>
+        /// <returns>True si la operacion fue exitosa, False en caso contrario.</returns>
             public async Task<bool> UpdateAsync(Rol rol)
         {
             try
@@ -67,7 +87,11 @@ namespace Data
             }
         }
 
-
+        /// <summary>
+        /// Elimina un rol en la base de datos 
+        /// </summary>
+        /// <param name="id">Identificador unico del rol a eliminar</param>
+        /// <returns>True si la eliminacion fue exitosa, False en caso contrario.</returns>
             public async Task<bool> DeleteAsync(int id)
         {
             try

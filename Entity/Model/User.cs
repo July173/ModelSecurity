@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.Model2
+namespace Entity.Model
 {
-    class User1
+    public class User
     {
         public int Id { get; set; }
         public string username { get; set; }

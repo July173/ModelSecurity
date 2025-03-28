@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Entity.Contexts;
 using Entity.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -18,29 +19,29 @@ namespace Data
             _logger = logger;
         }
 
-        public async Task<IEnumerable<RolUser>> GetAllAsync()
+        public async Task<IEnumerable<UserRol>> GetAllAsync()
         {
-            return await _context.Set<RolUser>().ToListAsync();
+            return await _context.Set<UserRol>().ToListAsync();
         }
 
-        public async Task<RolUser?> GetByIdAsync(int id)
+        public async Task<UserRol?> GetByIdAsync(int id)
         {
             try
             {
-                return await _context.Set<RolUser>().FindAsync(id);
+                return await _context.Set<UserRol>().FindAsync(id);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener Rol-Usuario con ID {RolUserId}");
+                _logger.LogError($"Error al obtener Rol-Usuario con ID {id}");
                 throw;
             }
         }
 
-        public async Task<RolUser> CreateAsync(RolUser rolUser)
+        public async Task<UserRol> CreateAsync(UserRol rolUser)
         {
             try
             {
-                await _context.Set<RolUser>().AddAsync(rolUser);
+                await _context.Set<UserRol>().AddAsync(rolUser);
                 await _context.SaveChangesAsync();
                 return rolUser;
             }
@@ -51,11 +52,11 @@ namespace Data
             }
         }
 
-        public async Task<bool> UpdateAsync(RolUser rolUser)
+        public async Task<bool> UpdateAsync(UserRol rolUser)
         {
             try
             {
-                _context.Set<RolUser>().Update(rolUser);
+                _context.Set<UserRol>().Update(rolUser);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -70,11 +71,11 @@ namespace Data
         {
             try
             {
-                var rolUser = await _context.Set<RolUser>().FindAsync(id);
+                var rolUser = await _context.Set<UserRol>().FindAsync(id);
                 if (rolUser == null)
                     return false;
 
-                _context.Set<RolUser>().Remove(rolUser);
+                _context.Set<UserRol>().Remove(rolUser);
                 await _context.SaveChangesAsync();
                 return true;
             }

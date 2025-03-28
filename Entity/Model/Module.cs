@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entity.Model
 {
-    class Module
+    public class Module
     {
         public int id { get; set; }
         public bool active { get; set; }
