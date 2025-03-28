@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.Model2
+namespace Entity.Model
 {
-    class Module1
+    class Module
     {
         public int id { get; set; }
         public bool active { get; set; }

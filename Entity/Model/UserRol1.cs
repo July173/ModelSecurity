@@ -12,6 +12,6 @@ namespace Entity.Model2
         public int UserId { get; set; }
         public User1 Name { get; set; }
         public int RolId { get; set; }
-        public Rol1 Rol { get; set; }
+        public Rol Rol { get; set; }
     }
 }

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Entity.Contexts;
+using Entity.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Data
 {
@@ -30,7 +33,7 @@ namespace Data
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener rol con ID{Rolid}");
+                _logger.LogError( $"Error al obtener rol con ID{id}");
                 throw;
             }
 
@@ -39,7 +42,7 @@ namespace Data
         {
             try
             {
-                await _context.Set<Rol>.AddAsync(rol);
+                await _context.Set<Rol>().AddAsync(rol);
                 await _context.SaveChangesAsync();
                 return rol;
             }
@@ -48,7 +51,7 @@ namespace Data
                 _logger.LogError($"Error al crear el rol {ex.Message}");
                 throw;
             }
-
+        }
             public async Task<bool> UpdateAsync(Rol rol)
         {
             try
@@ -62,7 +65,7 @@ namespace Data
                 _logger.LogError($"Error al actualizar el rol {ex.Message}");
                 return false;
             }
-
+        }
 
 
             public async Task<bool> DeleteAsync(int id)

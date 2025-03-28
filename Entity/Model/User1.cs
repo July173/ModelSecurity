@@ -14,6 +14,6 @@ namespace Entity.Model2
         public string password { get; set; }
 
         public int PersonId { get; set; }
-        public Person1 Person1 { get; set; }
+        public Person Person1 { get; set; }
     }
 }

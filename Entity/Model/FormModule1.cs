@@ -13,6 +13,6 @@ namespace Entity.Model2
         public int FormId { get; set; }
         public Form1 Form1 { get; set; }
         public int ModuleId { get; set; }
-        public Module1 Module1 { get; set; }
+        public Module Module1 { get; set; }
     }
 }
