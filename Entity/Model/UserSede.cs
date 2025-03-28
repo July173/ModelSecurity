@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.Model2
+namespace Entity.Model
 {
-    class UserSede
+   public class UserSede
     {
         public int Id { get; set; }
         public string status_procedure { get; set; }

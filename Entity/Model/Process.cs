@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.Model2
+namespace Entity.Model
 {
-    class Process
+    public class Process
     {
         public int Id { get; set; }
         public string start_aprendiz { get; set; }

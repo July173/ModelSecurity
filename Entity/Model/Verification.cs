@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.Model2
+namespace Entity.Model
 {
-    class Verification
+    public class Verification
     {
         public int Id { get; set; }
         public string observation { get; set; }
