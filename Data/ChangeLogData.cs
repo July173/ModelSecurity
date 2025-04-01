@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Entity.Contexts;
 using Entity.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Data
 {
-    class ChangeLogData
+    public class ChangeLogData
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger _logger;
