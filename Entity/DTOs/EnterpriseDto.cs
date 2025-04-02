@@ -9,9 +9,6 @@ namespace Entity.DTOautogestion
     public class EnterpriseDto
     {
         public int Id { get; set; }
-        //public DateTime CreateDate { get; set; }
-        //public DateTime DeleteDate { get; set; }
-        //public DateTime UpdateDelete { get; set; }
         public string Observation { get; set; }
         public string NameBoss { get; set; }
         public string NameEnterprise { get; set; }
@@ -19,7 +16,7 @@ namespace Entity.DTOautogestion
         public string Locate { get; set; }
         public string EmailBoss { get; set; }
         public short NitEnterprise { get; set; }
-        //public bool Active { get; set; }
+        public bool Active { get; set; }
         public string EmailEnterprise { get; set; }
     }
 }
