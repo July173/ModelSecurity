@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOautogestion
 {
-    internal class EnterpriseDTOAuto
+    public class EnterpriseDto
     {
         public int Id { get; set; }
         //public DateTime CreateDate { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOautogestion
 {
-    internal class AprendizProssesIntructorDTOAuto
+    public class AprendizProssesIntructorDto
     {
         public int Id { get; set; }
         public int AprendizId { get; set; }

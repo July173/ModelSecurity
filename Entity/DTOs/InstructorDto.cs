@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOautogestion
 {
-    internal class AprendizDTOAuto
+    public class InstructorDto
     {
-        public int id { get; set; }
+        public int Id { get; set; }
     }
 }

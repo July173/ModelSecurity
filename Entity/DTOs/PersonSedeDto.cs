@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOautogestion.pivote
 {
-    internal class PersonSedeDTOAuto
+    public class PersonSedeDto
     {
         public int Id { get; set; }
         public int SedeId { get; set; }

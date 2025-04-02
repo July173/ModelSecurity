@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOautogestion
 {
-    internal class RolDTOAuto
+    public class TypeModalityDto
     {
         public int Id { get; set; }
-        public string TypeRol { get; set; }
         public string Description { get; set; }
-        //public bool Active { get; set; }
+        public string Name { get; set; }
     }
 }

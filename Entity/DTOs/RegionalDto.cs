@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOautogestion
 {
-    internal class TypeModalityDTOAuto
+    public class RegionalDto
     {
         public int Id { get; set; }
-        public string Description { get; set; }
         public string Name { get; set; }
+        public string CodeRegional { get; set; }
     }
 }
