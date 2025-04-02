@@ -1,12 +1,13 @@
 ﻿using Business;
 using Data;
-using Entity.DTOs;
+using Entity.DTOautogestion;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Utilities.Exceptions;
+using ValidationException = Utilities.Exceptions.ValidationException;
 
 namespace Web.Controllers
 {
@@ -76,7 +77,7 @@ namespace Web.Controllers
                 var person = await _PersonBusiness.GetPersonByIdAsync(id);
                 return Ok(person);
             }
-            catch (ValidationException ex)
+            catch (Utilities.Exceptions.ValidationException ex)
             {
                 _logger.LogWarning(ex, "Validación fallida para la persona con ID: {PersonId}", id);
                 return BadRequest(new { message = ex.Message });

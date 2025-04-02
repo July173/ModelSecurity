@@ -1,5 +1,5 @@
 ﻿using Data;
-using Entity.DTOs;
+using Entity.DTOautogestion;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
@@ -34,8 +34,7 @@ namespace Business
                     personsDTO.Add(new PersonDto
                     {
                         Id = person.Id,
-                        Name = person.Name,
-                        Age = person.Age
+                        Name = person.name,
                     });
                 }
 
@@ -69,8 +68,7 @@ namespace Business
                 return new PersonDto
                 {
                     Id = person.Id,
-                    Name = person.Name,
-                    Age = person.Age
+                    Name = person.name,
                 };
             }
             catch (Exception ex)
@@ -89,17 +87,15 @@ namespace Business
 
                 var person = new Person
                 {
-                    Name = personDto.Name,
-                    Age = personDto.Age
+                   name = personDto.Name,
                 };
 
                 var personCreada = await _personData.CreateAsync(person);
 
                 return new PersonDto
                 {
-                    Id = personCreada.Id,
-                    Name = personCreada.Name,
-                    Age = personCreada.Age
+                    Id = person.Id,
+                    Name = person.name,
                 };
             }
             catch (Exception ex)

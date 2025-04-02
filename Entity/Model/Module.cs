@@ -9,6 +9,8 @@ namespace Entity.Model
     public class Module
     {
         public int id { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
         public bool active { get; set; }
         public DateTime create_date { get; set; }
         public DateTime delete_date { get; set; }

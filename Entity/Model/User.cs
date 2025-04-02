@@ -15,5 +15,7 @@ namespace Entity.Model
 
         public int PersonId { get; set; }
         public Person Person1 { get; set; }
+
+        public bool active { get; set; }
     }
 }

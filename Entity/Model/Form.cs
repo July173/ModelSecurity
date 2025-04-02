@@ -9,6 +9,7 @@ namespace Entity.Model
     public class Form
     {
         public int Id { get; set; }
+        public string name { get; set; }
         public string description { get; set; }
         public string cuestion { get; set; }
         public string type_cuestion { get; set; }

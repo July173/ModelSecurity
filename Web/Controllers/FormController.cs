@@ -1,11 +1,12 @@
 ﻿using Business;
-using Entity.DTOs;
+using Entity.DTOautogestion;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Utilities.Exceptions;
+using ValidationException = Utilities.Exceptions.ValidationException;
 
 namespace Web.Controllers
 {

@@ -1,11 +1,11 @@
 ﻿
 using Data;
-using Entity.DTOs;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using Utilities.Exceptions;
 using System.ComponentModel.Design;
+using Entity.DTOautogestion;
 
 
 namespace Business
@@ -24,20 +24,20 @@ namespace Business
             _logger = logger;
         }
         // Método para obtener todos los roles como DTOs
-        public async Task<IEnumerable<RolDto>> GetAllRolesAsync()
+        public async Task<IEnumerable<RolDTO>> GetAllRolesAsync()
         {
             try
             {
                 var roles = await _rolData.GetAllAsync();
-                var rolesDTO = new List<RolDto>();
+                var rolesDTO = new List<RolDTO>();
 
                 foreach (var rol in roles)
                 {
-                    rolesDTO.Add(new RolDto
+                    rolesDTO.Add(new RolDTO
                     {
                         Id = rol.Id,
-                        Name = rol.Name,
-                        Active = rol.Active //si existe la entidad
+                        TypeRol = rol.type_rol,
+                        Active = rol.active //si existe la entidad
                     });
                 }
                 return rolesDTO;
@@ -50,26 +50,26 @@ namespace Business
             }
         }
         // Método para obtener un rol por su ID como DTO
-        public async Task<RolDto> GetRolByIdAsync(int id)
+        public async Task<RolDTO> GetRolByIdAsync(int id)
         {
             if (id <= 0)
             {
                 _logger.LogWarning("Se intentó obtener un rol con un ID invalido: {RolId}",id);
-                throw new Utilities.Exeptions.ValidationException("id", "El ID del rol debe ser mayor a 0");
+                throw new Utilities.Exceptions.ValidationException("id", "El ID del rol debe ser mayor a 0");
             }
             try
             {
-                var rol = await _rolData.GetByIdAsync(id);
+                var rol = await _rolData.GetByidAsync(id);
                 if (rol == null)
                 {
                     _logger.LogInformation("No se encontró el rol con ID {RolId}", id);
                     throw new EntityNotFoundException("Rol", id);
                 }
-                return new RolDto
+                return new RolDTO
                 {
                     Id = rol.Id,
-                    Name = rol.Name,
-                    Active = rol.Active
+                    TypeRol = rol.type_rol,
+                    Active = rol.active //si existe la entidad
                 };
             }
             catch (Exception ex)
@@ -79,42 +79,43 @@ namespace Business
             }
         }
         // Método para crear un rol desde un DTO
-        public async Task<RolDto> CreateRolAsync(RolDto RolDto)
+        public async Task<RolDTO> CreateRolAsync(RolDTO RolDTO)
         {
             try
             {
-                ValidateRol(RolDto);
+                ValidateRol(RolDTO);
 
                 var rol = new Rol
                 {
-                    Name = RolDto.Name,
-                    Active = RolDto.Active //si existe en la entidad
+                    type_rol = RolDTO.TypeRol,
+                    active = RolDTO.Active //si existe en la entidad
                 };
 
                 var rolCreado = await _rolData.CreateAsync(rol);
 
-                return new RolDto
+                return new RolDTO
                 {
-                    Id = rolCreado.Id,
-                    Name = rolCreado.Name,
-                    Active = rolCreado.Active //si existe en la entidad
+                    Id = rol.Id,
+                    TypeRol = rol.type_rol,
+                    Active = rol.active //si existe la entidad
+                                        
                 };
-            }
+              }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear un nuevo rol: {RolNombre}", RolDto?.Name?? "null");
+                _logger.LogError(ex, "Error al crear un nuevo rol: {RolNombre}", RolDTO?.TypeRol?? "null");
                 throw new ExternalServiceException("Base de datos", $"Error al crear el rol", ex);
             }
         }
 
         // Método para validar el DTO 
-        private void ValidateRol(RolDto RolDto)
+        private void ValidateRol(RolDTO RolDto)
         {
             if (RolDto == null)
             {
                 throw new Utilities.Exceptions.ValidationException( "El objeto rol no puede ser nulo");
             }
-            if (string.IsNullOrWhiteSpace(RolDto.Name))
+            if (string.IsNullOrWhiteSpace(RolDto.TypeRol))
             {
                 _logger.LogWarning("Se intentó crear/actualizar un rol con nombre vacio");
                 throw new Utilities.Exceptions.ValidationException("Name", "El nombre del rol nes obligatorio");

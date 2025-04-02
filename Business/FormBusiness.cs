@@ -1,5 +1,5 @@
 ﻿using Data;
-using Entity.DTOs;
+using Entity.DTOautogestion;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
@@ -34,8 +34,8 @@ namespace Business
                     formsDTO.Add(new FormDto
                     {
                         Id = form.Id,
-                        Name = form.Name,
-                        Description = form.Description
+                        Name = form.name,
+                        Description = form.description
                     });
                 }
 
@@ -59,7 +59,7 @@ namespace Business
 
             try
             {
-                var form = await _formData.GetByIdAsync(id);
+                var form = await _formData.GetByidAsync(id);
                 if (form == null)
                 {
                     _logger.LogInformation("No se encontró ningún formulario con ID: {FormId}", id);
@@ -69,8 +69,8 @@ namespace Business
                 return new FormDto
                 {
                     Id = form.Id,
-                    Name = form.Name,
-                    Description = form.Description
+                    Name = form.name,
+                    Description = form.description
                 };
             }
             catch (Exception ex)
@@ -89,8 +89,8 @@ namespace Business
 
                 var form = new Form
                 {
-                    Name = formDto.Name,
-                    Description = formDto.Description
+                    name = formDto.Name,
+                    description = formDto.Description
                 };
 
                 var formCreado = await _formData.CreateAsync(form);
@@ -98,8 +98,8 @@ namespace Business
                 return new FormDto
                 {
                     Id = formCreado.Id,
-                    Name = formCreado.Name,
-                    Description = formCreado.Description
+                    Name = formCreado.name,
+                    Description = formCreado.description
                 };
             }
             catch (Exception ex)

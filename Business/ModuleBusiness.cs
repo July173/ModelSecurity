@@ -1,5 +1,5 @@
 ﻿using Data;
-using Entity.DTOs;
+using Entity.DTOautogestion;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
@@ -33,9 +33,9 @@ namespace Business
                 {
                     modulesDTO.Add(new ModuleDto
                     {
-                        Id = module.Id,
-                        Name = module.Name,
-                        Description = module.Description
+                        Id = module.id,
+                        Name = module.name,
+                        Description = module.description
                     });
                 }
 
@@ -59,7 +59,7 @@ namespace Business
 
             try
             {
-                var module = await _moduleData.GetByIdAsync(id);
+                var module = await _moduleData.GetByidAsync(id);
                 if (module == null)
                 {
                     _logger.LogInformation("No se encontró ningún módulo con ID: {ModuleId}", id);
@@ -68,9 +68,9 @@ namespace Business
 
                 return new ModuleDto
                 {
-                    Id = module.Id,
-                    Name = module.Name,
-                    Description = module.Description
+                    Id = module.id,
+                    Name = module.name,
+                    Description = module.description
                 };
             }
             catch (Exception ex)
@@ -89,17 +89,17 @@ namespace Business
 
                 var module = new Module
                 {
-                    Name = moduleDto.Name,
-                    Description = moduleDto.Description
+                    name = moduleDto.Name,
+                    description = moduleDto.Description
                 };
 
                 var moduleCreado = await _moduleData.CreateAsync(module);
 
                 return new ModuleDto
                 {
-                    Id = moduleCreado.Id,
-                    Name = moduleCreado.Name,
-                    Description = moduleCreado.Description
+                    Id = moduleCreado.id,
+                    Name = moduleCreado.name,
+                    Description = moduleCreado.description
                 };
             }
             catch (Exception ex)

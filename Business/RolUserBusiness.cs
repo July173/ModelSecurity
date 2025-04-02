@@ -1,5 +1,5 @@
 ﻿using Data;
-using Entity.DTOs;
+using Entity.DTOautogestion.pivote;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
@@ -22,16 +22,16 @@ namespace Business
         }
 
         // Método para obtener todos los roles de usuario como DTOs
-        public async Task<IEnumerable<RolUserDto>> GetAllRolUsersAsync()
+        public async Task<IEnumerable<UserRolDto>> GetAllRolUsersAsync()
         {
             try
             {
                 var rolUsers = await _rolUserData.GetAllAsync();
-                var rolUsersDTO = new List<RolUserDto>();
+                var rolUsersDTO = new List<UserRolDto>();
 
                 foreach (var rolUser in rolUsers)
                 {
-                    rolUsersDTO.Add(new RolUserDto
+                    rolUsersDTO.Add(new UserRolDto
                     {
                         Id = rolUser.Id,
                         UserId = rolUser.UserId,
@@ -49,7 +49,7 @@ namespace Business
         }
 
         // Método para obtener un rol de usuario por ID como DTO
-        public async Task<RolUserDto> GetRolUserByIdAsync(int id)
+        public async Task<UserRolDto> GetRolUserByIdAsync(int id)
         {
             if (id <= 0)
             {
@@ -66,7 +66,7 @@ namespace Business
                     throw new EntityNotFoundException("RolUser", id);
                 }
 
-                return new RolUserDto
+                return new UserRolDto
                 {
                     Id = rolUser.Id,
                     UserId = rolUser.UserId,
@@ -81,13 +81,13 @@ namespace Business
         }
 
         // Método para crear un rol de usuario desde un DTO
-        public async Task<RolUserDto> CreateRolUserAsync(RolUserDto rolUserDto)
+        public async Task<UserRolDto> CreateRolUserAsync(UserRolDto rolUserDto)
         {
             try
             {
                 ValidateRolUser(rolUserDto);
 
-                var rolUser = new RolUser
+                var rolUser = new UserRol
                 {
                     UserId = rolUserDto.UserId,
                     RolId = rolUserDto.RolId
@@ -95,7 +95,7 @@ namespace Business
 
                 var rolUserCreado = await _rolUserData.CreateAsync(rolUser);
 
-                return new RolUserDto
+                return new UserRolDto
                 {
                     Id = rolUserCreado.Id,
                     UserId = rolUserCreado.UserId,
@@ -110,7 +110,7 @@ namespace Business
         }
 
         // Método para validar el DTO
-        private void ValidateRolUser(RolUserDto rolUserDto)
+        private void ValidateRolUser(UserRolDto rolUserDto)
         {
             if (rolUserDto == null)
             {

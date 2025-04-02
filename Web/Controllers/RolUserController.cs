@@ -1,12 +1,13 @@
 ﻿using Business;
 using Data;
-using Entity.DTOs;
+using Entity.DTOautogestion.pivote;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Utilities.Exceptions;
+using ValidationException = Utilities.Exceptions.ValidationException;
 
 namespace Web.Controllers
 {
@@ -39,7 +40,7 @@ namespace Web.Controllers
         /// <response code="200">Retorna la lista de relaciones</response>
         /// <response code="500">Error interno del servidor</response>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<RolUserDto>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<UserRolDto>), 200)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> GetAllRolUsers()
         {
@@ -65,7 +66,7 @@ namespace Web.Controllers
         /// <response code="404">Relación no encontrada</response>
         /// <response code="500">Error interno del servidor</response>
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(RolUserDto), 200)]
+        [ProducesResponseType(typeof(UserRolDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -102,10 +103,10 @@ namespace Web.Controllers
         /// <response code="400">Datos de la relación no válidos</response>
         /// <response code="500">Error interno del servidor</response>
         [HttpPost]
-        [ProducesResponseType(typeof(RolUserDto), 201)]
+        [ProducesResponseType(typeof(UserRolDto), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> CreateRolUser([FromBody] RolUserDto RolUserDto)
+        public async Task<IActionResult> CreateRolUser([FromBody] UserRolDto RolUserDto)
         {
             try
             {
