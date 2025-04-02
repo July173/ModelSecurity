@@ -14,9 +14,7 @@ namespace Entity.DTOautogestion
         public string Address { get; set; }
         public short PhoneSede { get; set; }
         public string EmailContacto { get; set; }
-        //public bool Active { get; set; }
-        //public DateTime CreateDate { get; set; }
-        //public DateTime DeleteDate { get; set; }
-        //public DateTime UpdateDate { get; set; }
+        public bool Active { get; set; }
+        
     }
 }
