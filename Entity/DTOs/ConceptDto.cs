@@ -8,7 +8,8 @@ namespace Entity.DTOautogestion
 {
     public class ConceptDto
     {
-        public int Id { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
         public string observation { get; set; }
         
         public bool active { get; set; }

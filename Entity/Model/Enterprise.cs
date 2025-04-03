@@ -10,11 +10,9 @@ namespace Entity.Model
     {
         public int id { get; set; }
         public string observation { get; set; }
-        public string name_boss { get; set; }
         public string name_enterprise { get; set; }
         public string phone_enterprise { get; set; }
         public string locate { get; set; }
-        public string email_boss { get; set; }
         public string nit_enterprise { get; set; }
         public string email_enterprise { get; set; }
         public bool active { get; set; }

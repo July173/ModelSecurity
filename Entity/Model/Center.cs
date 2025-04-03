@@ -10,6 +10,7 @@ namespace Entity.Model
     {
         public int id { get; set; }
         public string name { get; set; }
+        public string address { get; set; }
         public string code_center { get; set; }
         public bool active { get; set; }
         public DateTime create_date { get; set; }

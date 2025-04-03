@@ -10,6 +10,7 @@ namespace Entity.Model
     {
         public int id { get; set; }
         public string name { get; set; }
+        public string description { get; set; }
         public string code_regional { get; set; }
         
         public bool active { get; set; }

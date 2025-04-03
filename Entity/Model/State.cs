@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entity.Model
 {
-    public class Stade
+    public class State
     {
         public int id { get; set; }
         public bool active { get; set; }
@@ -14,6 +14,6 @@ namespace Entity.Model
         public DateTime delete_date { get; set; }
         public DateTime update_date { get; set; }
         public string description { get; set; }
-        public string type_stade { get; set; }
+        public string type_state { get; set; }
     }
 }

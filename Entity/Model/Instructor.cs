@@ -9,5 +9,7 @@ namespace Entity.Model
     public class Instructor
     {
         public int id { get; set; }
+        public int userId { get; set; }
+        public User user { get; set; }
     }
 }

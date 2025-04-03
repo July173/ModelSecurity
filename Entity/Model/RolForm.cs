@@ -11,9 +11,9 @@ namespace Entity.Model
         public int id { get; set; }
         public string permission { get; set; }
         public int rolId { get; set; }
-        public Rol rol1 { get; set; }
-        public int form1Id { get; set; }
-        public Form form1 { get; set; }
+        public Rol rol{ get; set; }
+        public int formId { get; set; }
+        public Form form { get; set; }
 
     }
 }

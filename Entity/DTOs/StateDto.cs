@@ -11,7 +11,7 @@ namespace Entity.DTOautogestion
         public int id { get; set; }
         
         public bool active { get; set; }
-        public string typeStade { get; set; }
-        public string dscription { get; set; }
+        public string typeState { get; set; }
+        public string description { get; set; }
     }
 }

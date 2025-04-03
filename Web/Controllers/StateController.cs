@@ -1,6 +1,6 @@
 ﻿namespace Web.Controllers
 {
-    public class StadeController
+    public class StateController
     {
     }
 }

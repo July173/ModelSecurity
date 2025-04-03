@@ -9,5 +9,7 @@ namespace Entity.DTOautogestion
     public class InstructorDto
     {
         public int id { get; set; }
+        public int userId { get; set; }
+
     }
 }
