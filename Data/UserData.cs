@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Data
 {
-    class UserData
+    public class UserData
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger _logger;

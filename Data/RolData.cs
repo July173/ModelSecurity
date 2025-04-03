@@ -11,7 +11,7 @@ namespace Data
     /// <summary>
     ///Repository encargado de la gestion de la entidad de tol en la base de base de datos 
     /// </summary>
-    class RolData
+    public class RolData
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger _logger;

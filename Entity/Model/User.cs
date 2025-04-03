@@ -12,8 +12,8 @@ namespace Entity.Model
         public string username { get; set; }
         public string email { get; set; }
         public string password { get; set; }
-
         public int PersonId { get; set; }
         public Person Person1 { get; set; }
+        public bool active { get; set; }
     }
 }
