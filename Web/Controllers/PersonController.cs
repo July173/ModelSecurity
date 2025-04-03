@@ -111,7 +111,7 @@ namespace Web.Controllers
             try
             {
                 var createdPerson = await _PersonBusiness.CreatePersonAsync(personDto);
-                return CreatedAtAction(nameof(GetPersonById), new { id = createdPerson.Id }, createdPerson);
+                return CreatedAtAction(nameof(GetPersonById), new { id = createdPerson.id }, createdPerson);
             }
             catch (ValidationException ex)
             {

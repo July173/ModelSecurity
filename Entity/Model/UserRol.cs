@@ -8,10 +8,10 @@ namespace Entity.Model
 {
     public class UserRol
     {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public User Name { get; set; }
-        public int RolId { get; set; }
-        public Rol Rol { get; set; }
+        public int id { get; set; }
+        public int userId { get; set; }
+        public User name { get; set; }
+        public int rolId { get; set; }
+        public Rol rol { get; set; }
     }
 }

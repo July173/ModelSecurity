@@ -8,6 +8,6 @@ namespace Entity.Model
 {
     public class Instructor
     {
-        public int Id { get; set; }
+        public int id { get; set; }
     }
 }

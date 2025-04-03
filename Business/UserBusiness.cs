@@ -33,7 +33,7 @@ namespace Business
                 {
                     usersDTO.Add(new UserDto
                     {
-                        Id = user.Id,
+                        id = user.id,
                         username = user.username,
                         email = user.email,
                         active = user.active //si existe la entidad
@@ -69,7 +69,7 @@ namespace Business
 
                 return new UserDto
                 {
-                    Id = user.Id,
+                    id = user.id,
                     username = user.username,
                     email = user.email,
                     active = user.active
@@ -100,7 +100,7 @@ namespace Business
 
                 return new UserDto
                 {
-                    Id = user.Id,
+                    id = user.id,
                     username = user.username,
                     email = user.email,
                     active = user.active  // Si existe en la entidad

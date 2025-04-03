@@ -33,9 +33,9 @@ namespace Business
                 {
                     formsDTO.Add(new FormDto
                     {
-                        Id = form.Id,
-                        Name = form.name,
-                        Description = form.description
+                        id = form.id,
+                        name = form.name,
+                        description = form.description
                     });
                 }
 
@@ -68,9 +68,9 @@ namespace Business
 
                 return new FormDto
                 {
-                    Id = form.Id,
-                    Name = form.name,
-                    Description = form.description
+                    id = form.id,
+                    name = form.name,
+                    description = form.description
                 };
             }
             catch (Exception ex)
@@ -89,22 +89,22 @@ namespace Business
 
                 var form = new Form
                 {
-                    name = formDto.Name,
-                    description = formDto.Description
+                    name = formDto.name,
+                    description = formDto.description
                 };
 
                 var formCreado = await _formData.CreateAsync(form);
 
                 return new FormDto
                 {
-                    Id = formCreado.Id,
-                    Name = formCreado.name,
-                    Description = formCreado.description
+                    id = formCreado.id,
+                    name = formCreado.name,
+                    description = formCreado.description
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo formulario: {Name}", formDto?.Name ?? "null");
+                _logger.LogError(ex, "Error al crear nuevo formulario: {Name}", formDto?.name ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el formulario", ex);
             }
         }
@@ -117,7 +117,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto formulario no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(formDto.Name))
+            if (string.IsNullOrWhiteSpace(formDto.name))
             {
                 _logger.LogWarning("Se intentó crear/actualizar un formulario con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name del formulario es obligatorio");

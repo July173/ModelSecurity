@@ -8,8 +8,8 @@ namespace Entity.DTOautogestion.pivote
 {
     public class AprendizProgramDto
     {
-        public int Id { get; set; }
-        public int ProgramId { get; set; }
-        public int AprendizId { get; set; }
+        public int id { get; set; }
+        public int programId { get; set; }
+        public int aprendizId { get; set; }
     }
 }

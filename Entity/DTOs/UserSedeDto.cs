@@ -9,8 +9,8 @@ namespace Entity.DTOs
 {
     class UserSedeDto
     {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public int SedeId { get; set; }
+        public int id { get; set; }
+        public int userId { get; set; }
+        public int sedeId { get; set; }
     }
 }

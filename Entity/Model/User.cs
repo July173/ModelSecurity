@@ -8,12 +8,12 @@ namespace Entity.Model
 {
     public class User
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public string username { get; set; }
         public string email { get; set; }
         public string password { get; set; }
-        public int PersonId { get; set; }
-        public Person Person1 { get; set; }
+        public int personId { get; set; }
+        public Person person1 { get; set; }
         public bool active { get; set; }
     }
 }

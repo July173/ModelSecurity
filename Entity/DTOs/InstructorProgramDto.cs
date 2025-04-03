@@ -9,8 +9,8 @@ namespace Entity.DTOs
 {
     class InstructorProgramDto
     {
-        public int Id { get; set; }
-        public int InstructorId { get; set; }
-        public int ProgramId { get; set; }
+        public int id { get; set; }
+        public int instructorId { get; set; }
+        public int programId { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace Entity.Model
 {
     public class Sede
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public string name { get; set; }
         public string code_sede { get; set; }
         public string addres { get; set; }
@@ -18,7 +18,7 @@ namespace Entity.Model
         public DateTime create_date { get; set; }
         public DateTime delete_date { get; set; }
         public DateTime update_date { get; set; }
-        public int CenterId { get; set; }
-        public Center Center { get; set; }
+        public int centerId { get; set; }
+        public Center center { get; set; }
     }
 }

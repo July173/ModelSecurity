@@ -95,7 +95,7 @@ namespace Web.Controllers
             try
             {
                 var createdUser = await _UserBusiness.CreateUserAsync(UserDto);
-                return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
+                return CreatedAtAction(nameof(GetUserById), new { id = createdUser.id }, createdUser);
             }
             catch (ValidationException ex)
             {

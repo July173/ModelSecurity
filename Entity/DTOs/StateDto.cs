@@ -8,10 +8,10 @@ namespace Entity.DTOautogestion
 {
     public class StateDto
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         
-        public bool Active { get; set; }
-        public string TypeStade { get; set; }
-        public string Description { get; set; }
+        public bool active { get; set; }
+        public string typeStade { get; set; }
+        public string dscription { get; set; }
     }
 }

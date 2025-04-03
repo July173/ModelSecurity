@@ -33,7 +33,7 @@ namespace Business
                 {
                     aprendicesDTO.Add(new AprendizDto
                     {
-                        id = aprendiz.Id,
+                        id = aprendiz.id,
                         previousProgram = aprendiz.previousProgram,
                         active = aprendiz.active //si existe la entidad
                     });
@@ -68,7 +68,7 @@ namespace Business
 
                 return new AprendizDto
                 {
-                    id = aprendiz.Id,
+                    id = aprendiz.id,
                     previousProgram = aprendiz.previousProgram,
                     active = aprendiz.active //si existe la entidad
                 };
@@ -97,7 +97,7 @@ namespace Business
 
                 return new AprendizDto
                 {
-                    id = aprendiz.Id,
+                    id = aprendiz.id,
                     previousProgram = aprendiz.previousProgram,
                     active = aprendiz.active //si existe la entidad
                 };

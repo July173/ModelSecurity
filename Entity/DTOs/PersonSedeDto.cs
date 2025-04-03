@@ -8,9 +8,9 @@ namespace Entity.DTOautogestion.pivote
 {
     public class PersonSedeDto
     {
-        public int Id { get; set; }
-        public int SedeId { get; set; }
-        public int StatusProcedure { get; set; }
-        public int PersonId { get; set; }
+        public int id { get; set; }
+        public int sedeId { get; set; }
+        public int statusProcedure { get; set; }
+        public int personId { get; set; }
     }
 }

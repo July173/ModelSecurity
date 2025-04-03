@@ -111,7 +111,7 @@ namespace Web.Controllers
             try
             {
                 var createdRolUser = await _RolUserBusiness.CreateRolUserAsync(RolUserDto);
-                return CreatedAtAction(nameof(GetRolUserById), new { id = createdRolUser.Id }, createdRolUser);
+                return CreatedAtAction(nameof(GetRolUserById), new { id = createdRolUser.id }, createdRolUser);
             }
             catch (ValidationException ex)
             {

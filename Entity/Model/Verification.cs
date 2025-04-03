@@ -8,7 +8,8 @@ namespace Entity.Model
 {
     public class Verification
     {
-        public int Id { get; set; }
+        public int id { get; set; }
+        public string   name { get; set; }
         public string observation { get; set; }
         public bool active { get; set; }
         public DateTime create_date { get; set; }

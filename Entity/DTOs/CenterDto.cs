@@ -8,10 +8,10 @@ namespace Entity.DTOautogestion
 {
     public class CenterDto
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string CodeCenter { get; set; }
-        public bool Active { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
+        public string codeCenter { get; set; }
+        public bool active { get; set; }
        
     }
 }

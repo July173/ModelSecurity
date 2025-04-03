@@ -8,7 +8,7 @@ namespace Entity.Model
 {
     public class Regional
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public string name { get; set; }
         public string code_regional { get; set; }
         

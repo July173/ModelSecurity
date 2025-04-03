@@ -33,8 +33,8 @@ namespace Business
                 {
                     personsDTO.Add(new PersonDto
                     {
-                        Id = person.Id,
-                        Name = person.name,
+                        id = person.id,
+                        name = person.name,
                     });
                 }
 
@@ -67,8 +67,8 @@ namespace Business
 
                 return new PersonDto
                 {
-                    Id = person.Id,
-                    Name = person.name,
+                    id = person.id,
+                    name = person.name,
                 };
             }
             catch (Exception ex)
@@ -87,20 +87,20 @@ namespace Business
 
                 var person = new Person
                 {
-                   name = personDto.Name,
+                   name = personDto.name,
                 };
 
                 var personCreada = await _personData.CreateAsync(person);
 
                 return new PersonDto
                 {
-                    Id = person.Id,
-                    Name = person.name,
+                    id = person.id,
+                    name = person.name,
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nueva persona: {Name}", personDto?.Name ?? "null");
+                _logger.LogError(ex, "Error al crear nueva persona: {Name}", personDto?.name ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear la persona", ex);
             }
         }
@@ -113,7 +113,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto persona no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(personDto.Name))
+            if (string.IsNullOrWhiteSpace(personDto.name))
             {
                 _logger.LogWarning("Se intentó crear/actualizar una persona con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name de la persona es obligatorio");

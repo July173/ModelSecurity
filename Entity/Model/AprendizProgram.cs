@@ -8,10 +8,10 @@ namespace Entity.Model
 {
     public class AprendizProgram
     {
-        public int Id { get; set; }
-        public int AprendizId { get; set; }
-        public Aprendiz Aprendiz { get; set; }
-        public int ProgramId { get; set; }
-        public Program Program { get; set; }
+        public int id { get; set; }
+        public int aprendizId { get; set; }
+        public Aprendiz aprendiz { get; set; }
+        public int programId { get; set; }
+        public Program program { get; set; }
     }
 }

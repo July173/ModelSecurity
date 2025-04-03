@@ -8,7 +8,7 @@ namespace Entity.Model
 {
    public  class Enterprise
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public string observation { get; set; }
         public string name_boss { get; set; }
         public string name_enterprise { get; set; }

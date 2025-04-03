@@ -8,10 +8,10 @@ namespace Entity.DTOautogestion
 {
     public class ProssesDto
     {
-        public int Id { get; set; }
-        public string TypeProcess { get; set; }
-        public bool Active { get; set; }
-        public DateTime StartAprendiz { get; set; }
-        public string Observation { get; set; }
+        public int id { get; set; }
+        public string typeProcess { get; set; }
+        public bool active { get; set; }
+        public DateTime startAprendiz { get; set; }
+        public string observation { get; set; }
     }
 }

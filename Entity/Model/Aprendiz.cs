@@ -8,7 +8,7 @@ namespace Entity.Model
 {
     public class Aprendiz
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public string previousProgram { get; set; }
         public bool active { get; set; }
     }

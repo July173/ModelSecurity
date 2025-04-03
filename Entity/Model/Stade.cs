@@ -8,7 +8,7 @@ namespace Entity.Model
 {
     public class Stade
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public bool active { get; set; }
         public DateTime create_date { get; set; }
         public DateTime delete_date { get; set; }

@@ -9,7 +9,7 @@ namespace Entity.DTOautogestion
 {
     public class UserDto
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public string username { get; set; }
         public string email { get; set; }
         public bool active { get; set; }

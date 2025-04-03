@@ -8,8 +8,8 @@ namespace Entity.DTOautogestion.pivote
 {
     public class UserRolDto
     {
-        public int Id { get; set; }
-        public int RolId { get; set; }
-        public int UserId { get; set; }
+        public int id { get; set; }
+        public int rolId { get; set; }
+        public int userId { get; set; }
     }
 }

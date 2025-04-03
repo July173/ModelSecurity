@@ -8,12 +8,12 @@ namespace Entity.Model
 {
    public class UserSede
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public string status_procedure { get; set; }
-        public int UserId { get; set; }
-        public User User { get; set; }
-        public int SedeId { get; set; }
-        public Sede Sede { get; set; }
+        public int userId { get; set; }
+        public User user { get; set; }
+        public int sedeId { get; set; }
+        public Sede sede { get; set; }
 
     }
 }

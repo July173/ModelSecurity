@@ -33,9 +33,9 @@ namespace Business
                 {
                     rolUsersDTO.Add(new UserRolDto
                     {
-                        Id = rolUser.Id,
-                        UserId = rolUser.UserId,
-                        RolId = rolUser.RolId
+                        id = rolUser.id,
+                        userId = rolUser.userId,
+                        rolId = rolUser.rolId
                     });
                 }
 
@@ -68,9 +68,9 @@ namespace Business
 
                 return new UserRolDto
                 {
-                    Id = rolUser.Id,
-                    UserId = rolUser.UserId,
-                    RolId = rolUser.RolId
+                    id = rolUser.id,
+                    userId = rolUser.userId,
+                    rolId = rolUser.rolId
                 };
             }
             catch (Exception ex)
@@ -89,22 +89,22 @@ namespace Business
 
                 var rolUser = new UserRol
                 {
-                    UserId = rolUserDto.UserId,
-                    RolId = rolUserDto.RolId
+                    userId = rolUserDto.userId,
+                    rolId = rolUserDto.rolId
                 };
 
                 var rolUserCreado = await _rolUserData.CreateAsync(rolUser);
 
                 return new UserRolDto
                 {
-                    Id = rolUserCreado.Id,
-                    UserId = rolUserCreado.UserId,
-                    RolId = rolUserCreado.RolId
+                    id = rolUserCreado.id,
+                    userId = rolUserCreado.userId,
+                    rolId = rolUserCreado.rolId
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo rol de usuario: {UserId}, {RolId}", rolUserDto?.UserId ?? 0, rolUserDto?.RolId ?? 0);
+                _logger.LogError(ex, "Error al crear nuevo rol de usuario: {UserId}, {RolId}", rolUserDto?.userId ?? 0, rolUserDto?.rolId ?? 0);
                 throw new ExternalServiceException("Base de datos", "Error al crear el rol de usuario", ex);
             }
         }
@@ -117,13 +117,13 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto rol de usuario no puede ser nulo");
             }
 
-            if (rolUserDto.UserId <= 0)
+            if (rolUserDto.userId <= 0)
             {
                 _logger.LogWarning("Se intentó crear/actualizar un rol de usuario con UserId inválido");
                 throw new Utilities.Exceptions.ValidationException("UserId", "El UserId del rol de usuario es obligatorio y debe ser mayor que cero");
             }
 
-            if (rolUserDto.RolId <= 0)
+            if (rolUserDto.rolId <= 0)
             {
                 _logger.LogWarning("Se intentó crear/actualizar un rol de usuario con RolId inválido");
                 throw new Utilities.Exceptions.ValidationException("RolId", "El RolId del rol de usuario es obligatorio y debe ser mayor que cero");

@@ -9,7 +9,7 @@ namespace Entity.Model
 {
     public class Person
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public string name { get; set; }
         public string first_name { get; set; }
         public string second_name { get; set; }

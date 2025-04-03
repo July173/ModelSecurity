@@ -33,9 +33,9 @@ namespace Business
                 {
                     modulesDTO.Add(new ModuleDto
                     {
-                        Id = module.id,
-                        Name = module.name,
-                        Description = module.description
+                        id = module.id,
+                        name = module.name,
+                        description = module.description
                     });
                 }
 
@@ -68,9 +68,9 @@ namespace Business
 
                 return new ModuleDto
                 {
-                    Id = module.id,
-                    Name = module.name,
-                    Description = module.description
+                    id = module.id,
+                    name = module.name,
+                    description = module.description
                 };
             }
             catch (Exception ex)
@@ -89,22 +89,22 @@ namespace Business
 
                 var module = new Module
                 {
-                    name = moduleDto.Name,
-                    description = moduleDto.Description
+                    name = moduleDto.name,
+                    description = moduleDto.description
                 };
 
                 var moduleCreado = await _moduleData.CreateAsync(module);
 
                 return new ModuleDto
                 {
-                    Id = moduleCreado.id,
-                    Name = moduleCreado.name,
-                    Description = moduleCreado.description
+                    id = moduleCreado.id,
+                    name = moduleCreado.name,
+                    description = moduleCreado.description
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo módulo: {Name}", moduleDto?.Name ?? "null");
+                _logger.LogError(ex, "Error al crear nuevo módulo: {Name}", moduleDto?.name ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el módulo", ex);
             }
         }
@@ -117,7 +117,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto módulo no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(moduleDto.Name))
+            if (string.IsNullOrWhiteSpace(moduleDto.name))
             {
                 _logger.LogWarning("Se intentó crear/actualizar un módulo con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name del módulo es obligatorio");

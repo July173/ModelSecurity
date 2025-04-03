@@ -8,13 +8,13 @@ namespace Entity.DTOautogestion
 {
     public class SedeDto
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public long CodeSede { get; set; }
-        public string Address { get; set; }
-        public short PhoneSede { get; set; }
-        public string EmailContacto { get; set; }
-        public bool Active { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
+        public long codeSede { get; set; }
+        public string address { get; set; }
+        public short phoneSede { get; set; }
+        public string emailContacto { get; set; }
+        public bool active { get; set; }
         
     }
 }

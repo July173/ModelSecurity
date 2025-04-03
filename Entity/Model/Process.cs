@@ -8,7 +8,7 @@ namespace Entity.Model
 {
     public class Process
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public string start_aprendiz { get; set; }
         public string observation { get; set; }
         public string type_procces { get; set; }

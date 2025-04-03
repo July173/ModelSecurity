@@ -8,7 +8,7 @@ namespace Entity.Model
 {
    public class Center
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public string name { get; set; }
         public string code_center { get; set; }
         public bool active { get; set; }

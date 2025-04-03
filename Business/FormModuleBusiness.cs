@@ -33,9 +33,9 @@ namespace Business
                 {
                     formModulesDTO.Add(new FormModuleDto
                     {
-                        Id = formModule.Id,
-                        FormId = formModule.FormId,
-                        ModuleId = formModule.ModuleId
+                        id = formModule.id,
+                        formId = formModule.formId,
+                        moduleId = formModule.moduleId
                     });
                 }
 
@@ -68,9 +68,9 @@ namespace Business
 
                 return new FormModuleDto
                 {
-                    Id = formModule.Id,
-                    FormId = formModule.FormId,
-                    ModuleId = formModule.ModuleId
+                    id = formModule.id,
+                    formId = formModule.formId,
+                    moduleId = formModule.moduleId
                 };
             }
             catch (Exception ex)
@@ -89,17 +89,17 @@ namespace Business
 
                 var formModule = new FormModule
                 {
-                    FormId = formModuleDto.FormId,
-                    ModuleId = formModuleDto.ModuleId
+                    formId = formModuleDto.formId,
+                    moduleId = formModuleDto.moduleId
                 };
 
                 var formModuleCreado = await _formModuleData.CreateAsync(formModule);
 
                 return new FormModuleDto
                 {
-                    Id = formModuleCreado.Id,
-                    FormId = formModuleCreado.FormId,
-                    ModuleId = formModuleCreado.ModuleId
+                    id = formModuleCreado.id,
+                    formId = formModuleCreado.formId,
+                    moduleId = formModuleCreado.moduleId
                 };
             }
             catch (Exception ex)
@@ -117,7 +117,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto módulo de formulario no puede ser nulo");
             }
 
-            if (formModuleDto.FormId <= 0 || formModuleDto.ModuleId <= 0)
+            if (formModuleDto.formId <= 0 || formModuleDto.moduleId <= 0)
             {
                 _logger.LogWarning("Se intentó crear/actualizar un módulo de formulario con FormId o ModuleId inválidos");
                 throw new Utilities.Exceptions.ValidationException("FormId/ModuleId", "El FormId y el ModuleId del módulo de formulario son obligatorios y deben ser mayores que cero");

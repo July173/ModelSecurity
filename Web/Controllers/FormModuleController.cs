@@ -111,7 +111,7 @@ namespace Web.Controllers
             try
             {
                 var createdFormModule = await _FormModuleBusiness.CreateFormModuleAsync(formModuleDto);
-                return CreatedAtAction(nameof(GetFormModuleById), new { id = createdFormModule.Id }, createdFormModule);
+                return CreatedAtAction(nameof(GetFormModuleById), new { id = createdFormModule.id }, createdFormModule);
             }
             catch (ValidationException ex)
             {
