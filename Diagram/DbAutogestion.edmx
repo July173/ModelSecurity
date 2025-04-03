@@ -175,6 +175,7 @@
           <Property Name="delete_date" Type="DateTime" Nullable="false" />
           <NavigationProperty Name="FormModuleId" Relationship="DbAutogestion.FormModuleForm" FromRole="Form" ToRole="FormModule" />
           <NavigationProperty Name="RolFormId" Relationship="DbAutogestion.RolFormForm" FromRole="Form" ToRole="RolForm" />
+          <Property Name="name" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="FormModule">
           <Key>
@@ -195,6 +196,8 @@
           <Property Name="uptade_date" Type="DateTime" Nullable="false" />
           <Property Name="delete_date" Type="DateTime" Nullable="false" />
           <NavigationProperty Name="FormModuleId" Relationship="DbAutogestion.FormModuleModule" FromRole="Module" ToRole="FormModule" />
+          <Property Name="name" Type="String" Nullable="false" />
+          <Property Name="description" Type="String" Nullable="false" />
         </EntityType>
         <Association Name="FormModuleForm">
           <End Type="DbAutogestion.FormModule" Role="FormModule" Multiplicity="*" />
@@ -259,6 +262,7 @@
           <Property Name="type_identification" Type="String" Nullable="false" />
           <Property Name="number_identification" Type="String" Nullable="false" />
           <Property Name="signing" Type="String" Nullable="false" />
+          <Property Name="email" Type="String" Nullable="false" />
         </EntityType>
         <Association Name="UsuarioRolRol">
           <End Type="DbAutogestion.UserRol" Role="UsuarioRol" Multiplicity="*" />
@@ -280,6 +284,7 @@
           <NavigationProperty Name="userSede" Relationship="DbAutogestion.useruserSede" FromRole="user" ToRole="userSede" />
           <NavigationProperty Name="Aprendiz" Relationship="DbAutogestion.Aprendizuser" FromRole="user" ToRole="Aprendiz" />
           <NavigationProperty Name="Instructor" Relationship="DbAutogestion.Instructoruser" FromRole="user" ToRole="Instructor" />
+          <Property Name="email" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="userSede">
           <Key>
@@ -320,6 +325,7 @@
           <Property Name="delete_date" Type="DateTime" Nullable="false" />
           <NavigationProperty Name="RegionalId" Relationship="DbAutogestion.RegionalCenter" FromRole="Center" ToRole="Regional" />
           <NavigationProperty Name="SedeId" Relationship="DbAutogestion.CenterSede" FromRole="Center" ToRole="Sede" />
+          <Property Name="address" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="Regional">
           <Key>
@@ -329,6 +335,8 @@
           <Property Name="name" Type="String" Nullable="false" />
           <Property Name="code_regional" Type="String" Nullable="false" />
           <NavigationProperty Name="CenterId" Relationship="DbAutogestion.RegionalCenter" FromRole="Regional" ToRole="Center" />
+          <Property Name="description" Type="String" Nullable="false" />
+          <Property Name="active" Type="String" Nullable="false" />
         </EntityType>
         <Association Name="RegionalCenter">
           <End Type="DbAutogestion.Regional" Role="Regional" Multiplicity="1" />
@@ -382,6 +390,8 @@
           <NavigationProperty Name="AprendizProgramId" Relationship="DbAutogestion.AprendizProgramAprendiz" FromRole="Aprendiz" ToRole="AprendizProgram" />
           <NavigationProperty Name="AprendizProceesIntructorId" Relationship="DbAutogestion.AprendizProceesIntructorAprendiz" FromRole="Aprendiz" ToRole="AprendizProceesIntructor" />
           <NavigationProperty Name="user" Relationship="DbAutogestion.Aprendizuser" FromRole="Aprendiz" ToRole="user" />
+          <Property Name="previous_program" Type="String" Nullable="false" />
+          <Property Name="active" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="Personaprendiz">
           <End Type="DbAutogestion.user" Role="Person" Multiplicity="1" />
@@ -440,6 +450,7 @@
           <Property Name="description" Type="String" Nullable="false" />
           <Property Name="name" Type="String" Nullable="false" />
           <NavigationProperty Name="AprendizProceesIntructor" Relationship="DbAutogestion.AprendizProceesIntructorTypeModality" FromRole="TypeModality" ToRole="AprendizProceesIntructor" />
+          <Property Name="active" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="RegisterySofia">
           <Key>
@@ -466,6 +477,7 @@
           <Property Name="update_date" Type="DateTime" Nullable="false" />
           <Property Name="active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AprendizProceesIntructorId" Relationship="DbAutogestion.AprendizProceesIntructorConcept" FromRole="Concept" ToRole="AprendizProceesIntructor" />
+          <Property Name="name" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="Enterprise">
           <Key>
@@ -476,11 +488,9 @@
           <Property Name="delete_date" Type="DateTime" Nullable="false" />
           <Property Name="update_delete" Type="DateTime" Nullable="false" />
           <Property Name="observation" Type="String" Nullable="false" />
-          <Property Name="name_boss" Type="String" Nullable="false" />
           <Property Name="name_enterprise" Type="String" Nullable="false" />
           <Property Name="phone_enterprise" Type="Int16" Nullable="false" />
           <Property Name="locate" Type="String" Nullable="false" />
-          <Property Name="email_boss" Type="String" Nullable="false" />
           <Property Name="nit_enterprise" Type="Int16" Nullable="false" />
           <Property Name="active" Type="Boolean" Nullable="false" />
           <Property Name="email_enterprise" Type="String" Nullable="false" />
@@ -560,7 +570,7 @@
           <Property Name="delete_date" Type="DateTime" Nullable="false" />
           <Property Name="update_date" Type="DateTime" Nullable="false" />
           <Property Name="active" Type="Boolean" Nullable="false" />
-          <Property Name="type_stade" Type="String" Nullable="false" />
+          <Property Name="type_state" Type="String" Nullable="false" />
           <Property Name="description" Type="String" Nullable="false" />
           <NavigationProperty Name="AprendizProceesIntructorId" Relationship="DbAutogestion.AprendizProceesIntructorstate" FromRole="state" ToRole="AprendizProceesIntructor" />
         </EntityType>
@@ -579,6 +589,7 @@
           <Property Name="observation" Type="String" Nullable="false" />
           <Property Name="active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AprendizProceesIntructorId" Relationship="DbAutogestion.AprendizProceesIntructorverification" FromRole="verification" ToRole="AprendizProceesIntructor" />
+          <Property Name="name" Type="String" Nullable="false" />
         </EntityType>
         <Association Name="AprendizProceesIntructorverification">
           <End Type="DbAutogestion.AprendizProceesIntructor" Role="AprendizProceesIntructor" Multiplicity="*" />

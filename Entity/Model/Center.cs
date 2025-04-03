@@ -13,6 +13,8 @@ namespace Entity.Model
         public string address { get; set; }
         public string code_center { get; set; }
         public bool active { get; set; }
+        public int regionalId { get; set; }
+        public Regional Regional { get; set; }
         public DateTime create_date { get; set; }
         public DateTime delete_date { get; set; }
         public DateTime update_date { get; set; }

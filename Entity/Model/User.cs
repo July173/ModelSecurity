@@ -13,7 +13,7 @@ namespace Entity.Model
         public string email { get; set; }
         public string password { get; set; }
         public int personId { get; set; }
-        public Person person1 { get; set; }
+        public Person person { get; set; }
         public bool active { get; set; }
     }
 }
