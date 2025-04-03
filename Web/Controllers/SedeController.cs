@@ -1,6 +1,6 @@
 ﻿namespace Web.Controllers
 {
-    public class Instructor
+    public class SedeController
     {
     }
 }
