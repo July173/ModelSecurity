@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOs
 {
-    public class UserSedeDto
+    public class UserSedeDTO
     {
-        public int id { get; set; }
-        public int userId { get; set; }
-        public int sedeId { get; set; }
+        public int Id { get; set; }
+        public string StatusProcedure { get; set; }
+        public int UserId { get; set; }
+        public int SedeId { get; set; }
     }
 }

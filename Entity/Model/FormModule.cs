@@ -8,11 +8,11 @@ namespace Entity.Model
 {
     public class FormModule
     {
-        public int id { get; set; }
-        public string status_procedure { get; set; }
-        public int formId { get; set; }
-        public Form form1 { get; set; }
-        public int moduleId { get; set; }
-        public Module module1 { get; set; }
+        public int Id { get; set; }
+        public string StatusProcedure { get; set; }
+        public int FormId { get; set; }
+        public Form Form { get; set; }
+        public int ModuleId { get; set; }
+        public Module Module { get; set; }
     }
 }

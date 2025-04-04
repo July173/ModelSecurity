@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.DTOautogestion.pivote
+namespace Entity.DTOautogestion
 {
-    public class UserRolDto
+    public class UserRolDTO
     {
-        public int id { get; set; }
-        public int rolId { get; set; }
-        public int userId { get; set; }
+        public int Id { get; set; }
+        public int RolId { get; set; }
+        public int UserId { get; set; }
     }
 }

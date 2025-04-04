@@ -8,24 +8,24 @@ namespace Entity.Model
 {
     public class AprendizProcessInstructor
     {
-        public int id { get; set; }
-        public int typeModalityId { get; set; }
-        public TypeModality typeModality { get; set; }
-        public int registerySofiaId { get; set; }
-        public RegisterySofia registerySofia { get; set; }
-        public int conceptId { get; set; }
-        public Concept concept { get; set; }
-        public int enterpriseId { get; set; }
-        public Enterprise enterprise { get; set; }
-        public int processId { get; set; }
-        public Process process { get; set; }
-        public int aprendizId { get; set; }
-        public Aprendiz aprendiz { get; set; }
-        public int instructorId { get; set; }
-        public Instructor instructor { get; set; }
-        public int stateId { get; set; }
-        public State state { get; set; }
-        public int verificationId { get; set; }
-        public Verification verification { get; set; }  
+        public int Id { get; set; }
+        public int TypeModalityId { get; set; }
+        public TypeModality TypeModality { get; set; }
+        public int RegisterySofiaId { get; set; }
+        public RegisterySofia RegisterySofia { get; set; }
+        public int ConceptId { get; set; }
+        public Concept Concept { get; set; }
+        public int EnterpriseId { get; set; }
+        public Enterprise Enterprise { get; set; }
+        public int ProcessId { get; set; }
+        public Process Process { get; set; }
+        public int AprendizId { get; set; }
+        public Aprendiz Aprendiz { get; set; }
+        public int InstructorId { get; set; }
+        public Instructor Instructor { get; set; }
+        public int StateId { get; set; }
+        public State State { get; set; }
+        public int VerificationId { get; set; }
+        public Verification Verification { get; set; }  
     }
 }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOautogestion.pivote
 {
-    public class RolFormDto
+    public class RolFormDTO
     {
-        public int id { get; set; }
-        public string permission { get; set; }
-        public int rolId { get; set; }
-        public int formId { get; set; }
+        public int Id { get; set; }
+        public string Permission { get; set; }
+        public int RolId { get; set; }
+        public int FormId { get; set; }
     }
 }

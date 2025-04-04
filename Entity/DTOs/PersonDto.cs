@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOautogestion
 {
-    public class PersonDto
+    public class PersonDTO
     {
-   
-            public int id { get; set; }
-            public string name { get; set; }
-            public string firstName { get; set; }
-            public string secondName { get; set; }
-            public string firstLastName { get; set; }
-            public string secondLastName { get; set; }
-            public short phoneNumber { get; set; }
-            public string email { get; set; }
-            public string typeIdentification { get; set; }
-            public short numberIdentification { get; set; }
-            public string signing { get; set; }
+        public int Id { get; set; }
+        public bool Active { get; set; }
+        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string SecondName { get; set; }
+        public string FirstLastName { get; set; }
+        public string SecondLastName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+        public string TypeIdentification { get; set; }
+        public int NumberIdentification { get; set; }
+        public bool Signig { get; set; }
 
-}
+    }
 }

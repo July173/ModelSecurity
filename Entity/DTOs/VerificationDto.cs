@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOautogestion
 {
-    public class VerificationDto
+    public class VerificationDTO
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public string observation { get; set; }
-        public bool active { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Observation { get; set; }
+        public bool Active { get; set; }
     }
 }

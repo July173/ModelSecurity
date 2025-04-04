@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOautogestion
 {
-    public class ProgramDto
+    public class ProgramDTO
     {
-        public int id { get; set; }
-        public decimal codeProgram { get; set; }
-        public string name { get; set; }
-        public string typeProgram { get; set; }
-       
-        public bool active { get; set; }
-        public string description { get; set; }
+        public int Id { get; set; }
+        public decimal CodeProgram { get; set; }
+        public string Name { get; set; }
+        public string TypeProgram { get; set; }      
+        public string Description { get; set; }
+        public bool Active { get; set; }
     }
 }

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOautogestion
 {
-    public class InstructorDto
+    public class InstructorDTO
     {
-        public int id { get; set; }
-        public int userId { get; set; }
-
+        public int Id { get; set; }
+        public bool Active { get; set; }
+        public int UserId { get; set; }
     }
 }

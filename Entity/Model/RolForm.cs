@@ -8,12 +8,12 @@ namespace Entity.Model
 {
     public class RolForm
     {
-        public int id { get; set; }
-        public string permission { get; set; }
-        public int rolId { get; set; }
-        public Rol rol{ get; set; }
-        public int formId { get; set; }
-        public Form form { get; set; }
+        public int Id { get; set; }
+        public string Permission { get; set; }
+        public int RolId { get; set; }
+        public Rol Rol { get; set; }
+        public int FormId { get; set; }
+        public Form Form { get; set; }
 
     }
 }

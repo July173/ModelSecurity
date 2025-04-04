@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.DTOautogestion.pivote
+namespace Entity.DTOautogestion
 {
-    public class AprendizProgramDto
+    public class AprendizProgramDTO
     {
-        public int id { get; set; }
-        public int programId { get; set; }
-        public int aprendizId { get; set; }
+        public int Id { get; set; }
+        public int ProgramId { get; set; }
+        public int AprendizId { get; set; }
     }
 }

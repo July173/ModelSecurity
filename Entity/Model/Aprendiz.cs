@@ -8,11 +8,10 @@ namespace Entity.Model
 {
     public class Aprendiz
     {
-        public int id { get; set; }
-        public string previousProgram { get; set; }
-        public bool active { get; set; }
-        public int userId { get; set; }
-        public User user { get; set; }
-
+        public int Id { get; set; }
+        public string PreviuosProgram { get; set; }
+        public bool Active { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
     }
 }

@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOautogestion
 {
-    public class AprendizProcessInstructorDto
+    public class AprendizProcessInstructorDTO
     {
-        public int id { get; set; }
-        public int aprendizId { get; set; }
-        public int instructorId { get; set; }
-        public int registerySofiaId { get; set; }
-        public int conceptId { get; set; }
-        public int enterpriseId { get; set; }
-        public int processId { get; set; }
-        public int typeModalityId { get; set; }
-        public int stateId { get; set; }
-        public int verificationId { get; set; }
+        public int Id { get; set; }
+        public int AprendizId { get; set; }
+        public int InstructorId { get; set; }
+        public int RegisterySofiaId { get; set; }
+        public int ConceptId { get; set; }
+        public int EnterpriseId { get; set; }
+        public int ProcessId { get; set; }
+        public int TypeModalityId { get; set; }
+        public int StadeId { get; set; }
+        public int VerificationId { get; set; }
     }
 }
