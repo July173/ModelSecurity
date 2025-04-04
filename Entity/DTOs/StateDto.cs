@@ -9,9 +9,8 @@ namespace Entity.DTOautogestion
     public class StateDto
     {
         public int Id { get; set; }
-        
-        public bool Active { get; set; }
-        public string TypeStade { get; set; }
+        public string TypeState { get; set; }
         public string Description { get; set; }
+        public bool Active { get; set; }
     }
 }

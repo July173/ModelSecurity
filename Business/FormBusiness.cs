@@ -34,8 +34,12 @@ namespace Business
                     formsDTO.Add(new FormDto
                     {
                         Id = form.Id,
-                        Name = form.name,
-                        Description = form.description
+                        Name = form.Name,
+                        Description = form.Description,
+                        Cuestion = form.Cuestion,
+                        TypeCuestion = form.TypeCuestion,
+                        Answer = form.Answer,
+                        Active = form.Active,
                     });
                 }
 
@@ -69,8 +73,12 @@ namespace Business
                 return new FormDto
                 {
                     Id = form.Id,
-                    Name = form.name,
-                    Description = form.description
+                    Name = form.Name,
+                    Description = form.Description,
+                    Cuestion = form.Cuestion,
+                    TypeCuestion = form.TypeCuestion,
+                    Answer = form.Answer,
+                    Active = form.Active
                 };
             }
             catch (Exception ex)
@@ -89,17 +97,25 @@ namespace Business
 
                 var form = new Form
                 {
-                    name = formDto.Name,
-                    description = formDto.Description
+                    Name = formDto.Name,
+                    Description = formDto.Description,
+                    Cuestion = formDto.Cuestion,
+                    TypeCuestion = formDto.TypeCuestion,
+                    Answer = formDto.Answer,
+                    Active = formDto.Active,
                 };
 
                 var formCreado = await _formData.CreateAsync(form);
 
                 return new FormDto
                 {
-                    Id = formCreado.Id,
-                    Name = formCreado.name,
-                    Description = formCreado.description
+                    Id = form.Id,
+                    Name = form.Name,
+                    Description = form.Description,
+                    Cuestion = form.Cuestion,
+                    TypeCuestion = form.TypeCuestion,
+                    Answer = form.Answer,
+                    Active = form.Active,
                 };
             }
             catch (Exception ex)

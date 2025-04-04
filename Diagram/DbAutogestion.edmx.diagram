@@ -4,10 +4,10 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="f567930c9dcc409f937b312fb7f1599a" Name="Diagram1" ZoomLevel="82" >
+      <Diagram DiagramId="f567930c9dcc409f937b312fb7f1599a" Name="Diagram1" ZoomLevel="52" >
         <EntityTypeShape EntityType="DbAutogestion.Form" Width="1.5" PointX="10" PointY="8" />
-        <EntityTypeShape EntityType="DbAutogestion.FormModule" Width="1.5" PointX="10" PointY="11.5" />
-        <EntityTypeShape EntityType="DbAutogestion.Module" Width="1.5" PointX="10" PointY="13.625" />
+        <EntityTypeShape EntityType="DbAutogestion.FormModule" Width="1.5" PointX="10" PointY="11.875" />
+        <EntityTypeShape EntityType="DbAutogestion.Module" Width="1.5" PointX="10.125" PointY="14.875" />
         <AssociationConnector Association="DbAutogestion.FormModuleForm" />
         <AssociationConnector Association="DbAutogestion.FormModuleModule" />
         <EntityTypeShape EntityType="DbAutogestion.RolForm" Width="1.5" PointX="12.625" PointY="8.25" />
@@ -15,33 +15,28 @@
         <AssociationConnector Association="DbAutogestion.RolRolForm" />
         <AssociationConnector Association="DbAutogestion.RolFormForm" />
         <EntityTypeShape EntityType="DbAutogestion.UserRol" Width="1.5" PointX="17.75" PointY="8.25" />
-        <EntityTypeShape EntityType="DbAutogestion.person" Width="1.5" PointX="17.75" PointY="10.5" />
+        <EntityTypeShape EntityType="DbAutogestion.Person" Width="1.5" PointX="17.75" PointY="10.5" />
         <AssociationConnector Association="DbAutogestion.UsuarioRolRol" />
-        <AssociationConnector Association="DbAutogestion.UserRolUser" />
-        <EntityTypeShape EntityType="DbAutogestion.user" Width="1.5" PointX="19.875" PointY="9.25" />
-        <EntityTypeShape EntityType="DbAutogestion.userSede" Width="1.5" PointX="20" PointY="14.5" />
+        <EntityTypeShape EntityType="DbAutogestion.User" Width="1.5" PointX="19.875" PointY="9.25" />
+        <EntityTypeShape EntityType="DbAutogestion.UserSede" Width="1.5" PointX="20" PointY="14.5" />
         <EntityTypeShape EntityType="DbAutogestion.Sede" Width="1.5" PointX="17.75" PointY="16.125" />
         <EntityTypeShape EntityType="DbAutogestion.Center" Width="1.5" PointX="15.125" PointY="15.75" />
         <EntityTypeShape EntityType="DbAutogestion.Regional" Width="1.5" PointX="12.375" PointY="17" />
         <AssociationConnector Association="DbAutogestion.RegionalCenter" />
         <AssociationConnector Association="DbAutogestion.CenterSede" />
         <AssociationConnector Association="DbAutogestion.SedePersonSede" />
-        <AssociationConnector Association="DbAutogestion.PersonSedePerson" />
-        <AssociationConnector Association="DbAutogestion.PersonUser" ></AssociationConnector>
         <EntityTypeShape EntityType="DbAutogestion.Aprendiz" Width="1.5" PointX="22.875" PointY="9" />
-        <AssociationConnector Association="DbAutogestion.Personaprendiz" />
-        <EntityTypeShape EntityType="DbAutogestion.Program" Width="1.5" PointX="20.875" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbAutogestion.Program" Width="1.5" PointX="25.875" PointY="5.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DbAutogestion.AprendizProgram" Width="1.5" PointX="23.125" PointY="6.75" />
         <AssociationConnector Association="DbAutogestion.AprendizProgramProgram" />
         <AssociationConnector Association="DbAutogestion.AprendizProgramAprendiz" />
-        <EntityTypeShape EntityType="DbAutogestion.Instructor" Width="1.5" PointX="22.875" PointY="11.125" />
-        <AssociationConnector Association="DbAutogestion.InstructorPerson" />
+        <EntityTypeShape EntityType="DbAutogestion.Instructor" Width="1.5" PointX="22.75" PointY="11.875" />
         <EntityTypeShape EntityType="DbAutogestion.TypeModality" Width="1.5" PointX="26.25" PointY="13" />
         <EntityTypeShape EntityType="DbAutogestion.RegisterySofia" Width="1.5" PointX="24" PointY="14.625" />
         <EntityTypeShape EntityType="DbAutogestion.Concept" Width="1.5" PointX="30" PointY="18.25" />
-        <EntityTypeShape EntityType="DbAutogestion.Enterprise" Width="1.625" PointX="32.25" PointY="14.375" />
+        <EntityTypeShape EntityType="DbAutogestion.Enterprise" Width="1.625" PointX="32.5" PointY="14.75" />
         <EntityTypeShape EntityType="DbAutogestion.Process" Width="1.5" PointX="30.625" PointY="12" />
-        <EntityTypeShape EntityType="DbAutogestion.AprendizProceesIntructor" Width="1.5" PointX="28.875" PointY="14.625" />
+        <EntityTypeShape EntityType="DbAutogestion.AprendizProcessInstructor" Width="1.5" PointX="28.875" PointY="14.625" />
         <AssociationConnector Association="DbAutogestion.AprendizProceesIntructorAprendiz" />
         <AssociationConnector Association="DbAutogestion.AprendizProceesIntructorInstructor" />
         <AssociationConnector Association="DbAutogestion.AprendizProceesIntructorRegisterySofia" />
@@ -49,18 +44,19 @@
         <AssociationConnector Association="DbAutogestion.AprendizProceesIntructorEnterprise" />
         <AssociationConnector Association="DbAutogestion.ProcessAprendizProceesIntructor" />
         <AssociationConnector Association="DbAutogestion.AprendizProceesIntructorTypeModality" />
-        <EntityTypeShape EntityType="DbAutogestion.state" Width="1.5" PointX="25.75" PointY="16.875" />
+        <EntityTypeShape EntityType="DbAutogestion.State" Width="1.5" PointX="25.75" PointY="16.875" />
         <AssociationConnector Association="DbAutogestion.AprendizProceesIntructorstate" />
-        <EntityTypeShape EntityType="DbAutogestion.verification" Width="1.5" PointX="27.75" PointY="18.375" />
+        <EntityTypeShape EntityType="DbAutogestion.Verification" Width="1.5" PointX="27.75" PointY="18.375" />
         <AssociationConnector Association="DbAutogestion.AprendizProceesIntructorverification" />
-        <AssociationConnector Association="DbAutogestion.userperson" />
         <AssociationConnector Association="DbAutogestion.useruserSede" />
         <AssociationConnector Association="DbAutogestion.Aprendizuser" />
         <AssociationConnector Association="DbAutogestion.Instructoruser" />
-        <EntityTypeShape EntityType="DbAutogestion.instructor_program" Width="1.5" PointX="25.875" PointY="10.375" />
+        <EntityTypeShape EntityType="DbAutogestion.InstructorProgram" Width="1.5" PointX="25.875" PointY="10.375" />
         <AssociationConnector Association="DbAutogestion.instructor_programInstructor" />
         <AssociationConnector Association="DbAutogestion.instructor_programProgram" />
-        <EntityTypeShape EntityType="DbAutogestion.change_log" Width="1.5" PointX="31.375" PointY="9" />
+        <EntityTypeShape EntityType="DbAutogestion.change_log" Width="1.5" PointX="32.25" PointY="7.375" />
+        <AssociationConnector Association="DbAutogestion.UserPerson" />
+        <AssociationConnector Association="DbAutogestion.UserRolUser" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

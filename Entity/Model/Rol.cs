@@ -9,8 +9,8 @@ namespace Entity.Model
     public class Rol
     {
         public int Id { get; set; }
-        public string type_rol { get; set; }
+        public string TypeRol { get; set; }
         public string Description { get; set; }
-        public bool active { get; set; }
+        public bool Active { get; set; }
     }
 }

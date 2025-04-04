@@ -9,10 +9,11 @@ namespace Entity.Model
     public class Verification
     {
         public int Id { get; set; }
-        public string observation { get; set; }
-        public bool active { get; set; }
-        public DateTime create_date { get; set; }
-        public DateTime delete_date { get; set; }
-        public DateTime update_date { get; set; }
+        public string Name { get; set; }
+        public string Observation { get; set; }
+        public bool Active { get; set; }
+        public DateTime CreateDate { get; set; }
+        public DateTime DeleteDate { get; set; }
+        public DateTime UpdateDate { get; set; }
     }
 }

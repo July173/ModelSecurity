@@ -4,11 +4,9 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Namespace="DbAutogestion.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
-        <EntityContainer Name="DbAutogestionTargetContainer" >
-        </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+    <Schema Namespace="DbAutogestion.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="DbAutogestionStoreContainer" />
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="DbAutogestion" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
@@ -35,17 +33,13 @@
             <End Role="Form" EntitySet="FormSet" />
           </AssociationSet>
           <EntitySet Name="UserRolSet" EntityType="DbAutogestion.UserRol" />
-          <EntitySet Name="personSet" EntityType="DbAutogestion.person" />
+          <EntitySet Name="PersonSet1" EntityType="DbAutogestion.Person" />
           <AssociationSet Name="UsuarioRolRol" Association="DbAutogestion.UsuarioRolRol">
             <End Role="UsuarioRol" EntitySet="UserRolSet" />
             <End Role="Rol" EntitySet="RolSet" />
           </AssociationSet>
-          <AssociationSet Name="UserRolUser" Association="DbAutogestion.UserRolUser">
-            <End Role="UserRol" EntitySet="UserRolSet" />
-            <End Role="User" EntitySet="personSet" />
-          </AssociationSet>
-          <EntitySet Name="userSet1" EntityType="DbAutogestion.user" />
-          <EntitySet Name="userSedeSet" EntityType="DbAutogestion.userSede" />
+          <EntitySet Name="UserSet" EntityType="DbAutogestion.User" />
+          <EntitySet Name="UserSedeSet1" EntityType="DbAutogestion.UserSede" />
           <EntitySet Name="SedeSet" EntityType="DbAutogestion.Sede" />
           <EntitySet Name="CenterSet" EntityType="DbAutogestion.Center" />
           <EntitySet Name="RegionalSet" EntityType="DbAutogestion.Regional" />
@@ -59,21 +53,9 @@
           </AssociationSet>
           <AssociationSet Name="SedePersonSede" Association="DbAutogestion.SedePersonSede">
             <End Role="Sede" EntitySet="SedeSet" />
-            <End Role="PersonSede" EntitySet="userSedeSet" />
-          </AssociationSet>
-          <AssociationSet Name="PersonSedePerson" Association="DbAutogestion.PersonSedePerson">
-            <End Role="PersonSede" EntitySet="userSedeSet" />
-            <End Role="Person" EntitySet="userSet1" />
-          </AssociationSet>
-          <AssociationSet Name="PersonUser" Association="DbAutogestion.PersonUser">
-            <End Role="Person" EntitySet="userSet1" />
-            <End Role="User" EntitySet="personSet" />
+            <End Role="PersonSede" EntitySet="UserSedeSet1" />
           </AssociationSet>
           <EntitySet Name="AprendizSet1" EntityType="DbAutogestion.Aprendiz" />
-          <AssociationSet Name="Personaprendiz" Association="DbAutogestion.Personaprendiz">
-            <End Role="Person" EntitySet="userSet1" />
-            <End Role="aprendiz" EntitySet="AprendizSet1" />
-          </AssociationSet>
           <EntitySet Name="ProgramSet" EntityType="DbAutogestion.Program" />
           <EntitySet Name="AprendizProgramSet" EntityType="DbAutogestion.AprendizProgram" />
           <AssociationSet Name="AprendizProgramProgram" Association="DbAutogestion.AprendizProgramProgram">
@@ -85,71 +67,63 @@
             <End Role="Aprendiz" EntitySet="AprendizSet1" />
           </AssociationSet>
           <EntitySet Name="InstructorSet" EntityType="DbAutogestion.Instructor" />
-          <AssociationSet Name="InstructorPerson" Association="DbAutogestion.InstructorPerson">
-            <End Role="Instructor" EntitySet="InstructorSet" />
-            <End Role="Person" EntitySet="userSet1" />
-          </AssociationSet>
           <EntitySet Name="TypeModalitySet" EntityType="DbAutogestion.TypeModality" />
           <EntitySet Name="RegisterySofiaSet" EntityType="DbAutogestion.RegisterySofia" />
           <EntitySet Name="ConceptSet" EntityType="DbAutogestion.Concept" />
           <EntitySet Name="EnterpriseSet" EntityType="DbAutogestion.Enterprise" />
           <EntitySet Name="ProcessSet" EntityType="DbAutogestion.Process" />
-          <EntitySet Name="AprendizProceesIntructorSet" EntityType="DbAutogestion.AprendizProceesIntructor" />
+          <EntitySet Name="AprendizProcessInstructorSet" EntityType="DbAutogestion.AprendizProcessInstructor" />
           <AssociationSet Name="AprendizProceesIntructorAprendiz" Association="DbAutogestion.AprendizProceesIntructorAprendiz">
-            <End Role="AprendizProceesIntructor" EntitySet="AprendizProceesIntructorSet" />
+            <End Role="AprendizProceesIntructor" EntitySet="AprendizProcessInstructorSet" />
             <End Role="Aprendiz" EntitySet="AprendizSet1" />
           </AssociationSet>
           <AssociationSet Name="AprendizProceesIntructorInstructor" Association="DbAutogestion.AprendizProceesIntructorInstructor">
-            <End Role="AprendizProceesIntructor" EntitySet="AprendizProceesIntructorSet" />
+            <End Role="AprendizProceesIntructor" EntitySet="AprendizProcessInstructorSet" />
             <End Role="Instructor" EntitySet="InstructorSet" />
           </AssociationSet>
           <AssociationSet Name="AprendizProceesIntructorRegisterySofia" Association="DbAutogestion.AprendizProceesIntructorRegisterySofia">
-            <End Role="AprendizProceesIntructor" EntitySet="AprendizProceesIntructorSet" />
+            <End Role="AprendizProceesIntructor" EntitySet="AprendizProcessInstructorSet" />
             <End Role="RegisterySofia" EntitySet="RegisterySofiaSet" />
           </AssociationSet>
           <AssociationSet Name="AprendizProceesIntructorConcept" Association="DbAutogestion.AprendizProceesIntructorConcept">
-            <End Role="AprendizProceesIntructor" EntitySet="AprendizProceesIntructorSet" />
+            <End Role="AprendizProceesIntructor" EntitySet="AprendizProcessInstructorSet" />
             <End Role="Concept" EntitySet="ConceptSet" />
           </AssociationSet>
           <AssociationSet Name="AprendizProceesIntructorEnterprise" Association="DbAutogestion.AprendizProceesIntructorEnterprise">
-            <End Role="AprendizProceesIntructor" EntitySet="AprendizProceesIntructorSet" />
+            <End Role="AprendizProceesIntructor" EntitySet="AprendizProcessInstructorSet" />
             <End Role="Enterprise" EntitySet="EnterpriseSet" />
           </AssociationSet>
           <AssociationSet Name="ProcessAprendizProceesIntructor" Association="DbAutogestion.ProcessAprendizProceesIntructor">
             <End Role="Process" EntitySet="ProcessSet" />
-            <End Role="AprendizProceesIntructor" EntitySet="AprendizProceesIntructorSet" />
+            <End Role="AprendizProceesIntructor" EntitySet="AprendizProcessInstructorSet" />
           </AssociationSet>
           <AssociationSet Name="AprendizProceesIntructorTypeModality" Association="DbAutogestion.AprendizProceesIntructorTypeModality">
-            <End Role="AprendizProceesIntructor" EntitySet="AprendizProceesIntructorSet" />
+            <End Role="AprendizProceesIntructor" EntitySet="AprendizProcessInstructorSet" />
             <End Role="TypeModality" EntitySet="TypeModalitySet" />
           </AssociationSet>
-          <EntitySet Name="stateSet" EntityType="DbAutogestion.state" />
+          <EntitySet Name="StateSet1" EntityType="DbAutogestion.State" />
           <AssociationSet Name="AprendizProceesIntructorstate" Association="DbAutogestion.AprendizProceesIntructorstate">
-            <End Role="AprendizProceesIntructor" EntitySet="AprendizProceesIntructorSet" />
-            <End Role="state" EntitySet="stateSet" />
+            <End Role="AprendizProceesIntructor" EntitySet="AprendizProcessInstructorSet" />
+            <End Role="state" EntitySet="StateSet1" />
           </AssociationSet>
-          <EntitySet Name="verificationSet" EntityType="DbAutogestion.verification" />
+          <EntitySet Name="VerificationSet1" EntityType="DbAutogestion.Verification" />
           <AssociationSet Name="AprendizProceesIntructorverification" Association="DbAutogestion.AprendizProceesIntructorverification">
-            <End Role="AprendizProceesIntructor" EntitySet="AprendizProceesIntructorSet" />
-            <End Role="verification" EntitySet="verificationSet" />
-          </AssociationSet>
-          <AssociationSet Name="userperson" Association="DbAutogestion.userperson">
-            <End Role="user" EntitySet="userSet1" />
-            <End Role="person" EntitySet="personSet" />
+            <End Role="AprendizProceesIntructor" EntitySet="AprendizProcessInstructorSet" />
+            <End Role="verification" EntitySet="VerificationSet1" />
           </AssociationSet>
           <AssociationSet Name="useruserSede" Association="DbAutogestion.useruserSede">
-            <End Role="user" EntitySet="userSet1" />
-            <End Role="userSede" EntitySet="userSedeSet" />
+            <End Role="user" EntitySet="UserSet" />
+            <End Role="userSede" EntitySet="UserSedeSet1" />
           </AssociationSet>
           <AssociationSet Name="Aprendizuser" Association="DbAutogestion.Aprendizuser">
             <End Role="Aprendiz" EntitySet="AprendizSet1" />
-            <End Role="user" EntitySet="userSet1" />
+            <End Role="user" EntitySet="UserSet" />
           </AssociationSet>
           <AssociationSet Name="Instructoruser" Association="DbAutogestion.Instructoruser">
             <End Role="Instructor" EntitySet="InstructorSet" />
-            <End Role="user" EntitySet="userSet1" />
+            <End Role="user" EntitySet="UserSet" />
           </AssociationSet>
-          <EntitySet Name="instructors_programs" EntityType="DbAutogestion.instructor_program" />
+          <EntitySet Name="instructors_programs" EntityType="DbAutogestion.InstructorProgram" />
           <AssociationSet Name="instructor_programInstructor" Association="DbAutogestion.instructor_programInstructor">
             <End Role="instructor_program" EntitySet="instructors_programs" />
             <End Role="Instructor" EntitySet="InstructorSet" />
@@ -159,22 +133,31 @@
             <End Role="Program" EntitySet="ProgramSet" />
           </AssociationSet>
           <EntitySet Name="change_logs" EntityType="DbAutogestion.change_log" />
+          <AssociationSet Name="UserPerson" Association="DbAutogestion.UserPerson">
+            <End Role="User" EntitySet="UserSet" />
+            <End Role="Person" EntitySet="PersonSet1" />
+          </AssociationSet>
+          <AssociationSet Name="UserRolUser" Association="DbAutogestion.UserRolUser">
+            <End Role="UserRol" EntitySet="UserRolSet" />
+            <End Role="User" EntitySet="UserSet" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Form">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="description" Type="String" Nullable="false" />
-          <Property Name="cuestion" Type="String" Nullable="false" />
-          <Property Name="type_cuestion" Type="String" Nullable="false" />
-          <Property Name="answer" Type="String" Nullable="false" />
-          <Property Name="active" Type="Boolean" Nullable="false" />
-          <Property Name="create_date" Type="DateTime" Nullable="false" />
-          <Property Name="update_date" Type="DateTime" Nullable="false" />
-          <Property Name="delete_date" Type="DateTime" Nullable="false" />
-          <NavigationProperty Name="FormModuleId" Relationship="DbAutogestion.FormModuleForm" FromRole="Form" ToRole="FormModule" />
-          <NavigationProperty Name="RolFormId" Relationship="DbAutogestion.RolFormForm" FromRole="Form" ToRole="RolForm" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="Cuestion" Type="String" Nullable="false" />
+          <Property Name="TypeCuestion" Type="String" Nullable="false" />
+          <Property Name="Answer" Type="String" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" />
+          <Property Name="DeleteDate" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="FormModule" Relationship="DbAutogestion.FormModuleForm" FromRole="Form" ToRole="FormModule" />
+          <NavigationProperty Name="RolForm" Relationship="DbAutogestion.RolFormForm" FromRole="Form" ToRole="RolForm" />
+          <Property Name="Name" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="FormModule">
           <Key>
@@ -183,18 +166,20 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="FormId" Relationship="DbAutogestion.FormModuleForm" FromRole="FormModule" ToRole="Form" />
           <NavigationProperty Name="ModuleId" Relationship="DbAutogestion.FormModuleModule" FromRole="FormModule" ToRole="Module" />
-          <Property Name="status_procedure" Type="String" Nullable="false" />
+          <Property Name="StatusProcedure" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="Module">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="active" Type="Boolean" Nullable="false" />
-          <Property Name="create_date" Nullable="false" Type="DateTime" />
-          <Property Name="uptade_date" Type="DateTime" Nullable="false" />
-          <Property Name="delete_date" Type="DateTime" Nullable="false" />
-          <NavigationProperty Name="FormModuleId" Relationship="DbAutogestion.FormModuleModule" FromRole="Module" ToRole="FormModule" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDate" Nullable="false" Type="DateTime" />
+          <Property Name="UptadeDate" Type="DateTime" Nullable="false" />
+          <Property Name="DeleteDate" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="FormModule" Relationship="DbAutogestion.FormModuleModule" FromRole="Module" ToRole="FormModule" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
         </EntityType>
         <Association Name="FormModuleForm">
           <End Type="DbAutogestion.FormModule" Role="FormModule" Multiplicity="*" />
@@ -209,7 +194,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="permission" Type="Int32" Nullable="false" />
+          <Property Name="Permission" Type="Int32" Nullable="false" />
           <NavigationProperty Name="RolId" Relationship="DbAutogestion.RolRolForm" FromRole="RolForm" ToRole="Rol" />
           <NavigationProperty Name="FormId" Relationship="DbAutogestion.RolFormForm" FromRole="RolForm" ToRole="Form" />
         </EntityType>
@@ -218,11 +203,11 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="type_rol" Type="String" Nullable="false" />
-          <Property Name="description" Type="String" Nullable="false" />
-          <Property Name="active" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="RolFormId" Relationship="DbAutogestion.RolRolForm" FromRole="Rol" ToRole="RolForm" />
-          <NavigationProperty Name="UsuarioRolId" Relationship="DbAutogestion.UsuarioRolRol" FromRole="Rol" ToRole="UsuarioRol" />
+          <Property Name="TypeRol" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="RolForm" Relationship="DbAutogestion.RolRolForm" FromRole="Rol" ToRole="RolForm" />
+          <NavigationProperty Name="UsuarioRol" Relationship="DbAutogestion.UsuarioRolRol" FromRole="Rol" ToRole="UsuarioRol" />
         </EntityType>
         <Association Name="RolRolForm">
           <End Type="DbAutogestion.RolForm" Role="RolForm" Multiplicity="*" />
@@ -240,95 +225,98 @@
           <NavigationProperty Name="RolId" Relationship="DbAutogestion.UsuarioRolRol" FromRole="UsuarioRol" ToRole="Rol" />
           <NavigationProperty Name="UserId" Relationship="DbAutogestion.UserRolUser" FromRole="UserRol" ToRole="User" />
         </EntityType>
-        <EntityType Name="person">
+        <EntityType Name="Person">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="delete_date" Type="DateTime" Nullable="false" />
-          <Property Name="update_date" Type="DateTime" Nullable="false" />
-          <Property Name="create_date" Type="DateTime" Nullable="false" />
-          <Property Name="active" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="user" Relationship="DbAutogestion.userperson" FromRole="person" ToRole="user" />
-          <Property Name="name" Type="String" Nullable="false" />
-          <Property Name="first_name" Type="String" Nullable="false" />
-          <Property Name="second_name" Type="String" Nullable="false" />
-          <Property Name="first_last_name" Type="String" Nullable="false" />
-          <Property Name="second_last_name" Type="String" Nullable="false" />
-          <Property Name="phone_number" Type="String" Nullable="false" />
-          <Property Name="type_identification" Type="String" Nullable="false" />
-          <Property Name="number_identification" Type="String" Nullable="false" />
-          <Property Name="signing" Type="String" Nullable="false" />
+          <Property Name="DeleteDate" Type="DateTime" Nullable="false" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" />
+          <Property Name="SecondName" Type="String" Nullable="false" />
+          <Property Name="FirstLastName" Type="String" Nullable="false" />
+          <Property Name="SecondLastName" Type="String" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" Nullable="false" />
+          <Property Name="TypeIdentification" Type="String" Nullable="false" />
+          <Property Name="NumberIdentification" Type="String" Nullable="false" />
+          <Property Name="Signing" Type="String" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="DbAutogestion.UserPerson" FromRole="Person" ToRole="User" />
         </EntityType>
         <Association Name="UsuarioRolRol">
           <End Type="DbAutogestion.UserRol" Role="UsuarioRol" Multiplicity="*" />
           <End Type="DbAutogestion.Rol" Role="Rol" Multiplicity="1" />
         </Association>
-        <Association Name="UserRolUser">
-          <End Type="DbAutogestion.UserRol" Role="UserRol" Multiplicity="*" />
-          <End Type="DbAutogestion.person" Role="User" Multiplicity="1" />
-        </Association>
-        <EntityType Name="user">
+        <EntityType Name="User">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="user_name" Type="String" Nullable="false" />
-          <Property Name="password" Type="String" Nullable="false" />
-          <Property Name="active" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="id_person" Relationship="DbAutogestion.userperson" FromRole="user" ToRole="person" />
-          <NavigationProperty Name="userSede" Relationship="DbAutogestion.useruserSede" FromRole="user" ToRole="userSede" />
+          <Property Name="Username" Type="String" Nullable="false" />
+          <Property Name="Password" Type="String" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="UserSede" Relationship="DbAutogestion.useruserSede" FromRole="user" ToRole="userSede" />
           <NavigationProperty Name="Aprendiz" Relationship="DbAutogestion.Aprendizuser" FromRole="user" ToRole="Aprendiz" />
           <NavigationProperty Name="Instructor" Relationship="DbAutogestion.Instructoruser" FromRole="user" ToRole="Instructor" />
+          <Property Name="Email" Type="String" Nullable="false" />
+          <NavigationProperty Name="PersonId" Relationship="DbAutogestion.UserPerson" FromRole="User" ToRole="Person" />
+          <NavigationProperty Name="UserRol" Relationship="DbAutogestion.UserRolUser" FromRole="User" ToRole="UserRol" />
         </EntityType>
-        <EntityType Name="userSede">
+        <EntityType Name="UserSede">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="SedeId" Relationship="DbAutogestion.SedePersonSede" FromRole="PersonSede" ToRole="Sede" />
-          <Property Name="status_procedure" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="user" Relationship="DbAutogestion.useruserSede" FromRole="userSede" ToRole="user" />
+          <Property Name="StatusProcedure" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserId" Relationship="DbAutogestion.useruserSede" FromRole="userSede" ToRole="user" />
         </EntityType>
         <EntityType Name="Sede">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" />
-          <Property Name="code_sede" Type="Int64" Nullable="false" />
-          <Property Name="address" Type="String" Nullable="false" />
-          <Property Name="phone_sede" Type="Int16" Nullable="false" />
-          <Property Name="email_contacto" Type="String" Nullable="false" />
-          <Property Name="active" Type="Boolean" Nullable="false" />
-          <Property Name="create_date" Type="DateTime" Nullable="false" />
-          <Property Name="delete_date" Type="DateTime" Nullable="false" />
-          <Property Name="update_date" Type="DateTime" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="CodeSede" Type="Int64" Nullable="false" />
+          <Property Name="Address" Type="String" Nullable="false" />
+          <Property Name="PhoneSede" Type="Int16" Nullable="false" />
+          <Property Name="EmailContact" Type="String" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" />
+          <Property Name="DeleteDate" Type="DateTime" Nullable="false" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" />
           <NavigationProperty Name="CenterId" Relationship="DbAutogestion.CenterSede" FromRole="Sede" ToRole="Center" />
-          <NavigationProperty Name="PersonSedeId" Relationship="DbAutogestion.SedePersonSede" FromRole="Sede" ToRole="PersonSede" />
+          <NavigationProperty Name="PersonSede" Relationship="DbAutogestion.SedePersonSede" FromRole="Sede" ToRole="PersonSede" />
         </EntityType>
         <EntityType Name="Center">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" />
-          <Property Name="code_center" Type="String" Nullable="false" />
-          <Property Name="active" Type="Boolean" Nullable="false" />
-          <Property Name="create_date" Type="DateTime" Nullable="false" />
-          <Property Name="update_date" Type="DateTime" Nullable="false" />
-          <Property Name="delete_date" Type="DateTime" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="CodeCenter" Type="String" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" />
+          <Property Name="DeleteDate" Type="DateTime" Nullable="false" />
           <NavigationProperty Name="RegionalId" Relationship="DbAutogestion.RegionalCenter" FromRole="Center" ToRole="Regional" />
-          <NavigationProperty Name="SedeId" Relationship="DbAutogestion.CenterSede" FromRole="Center" ToRole="Sede" />
+          <NavigationProperty Name="Sede" Relationship="DbAutogestion.CenterSede" FromRole="Center" ToRole="Sede" />
+          <Property Name="Address" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="Regional">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" />
-          <Property Name="code_regional" Type="String" Nullable="false" />
-          <NavigationProperty Name="CenterId" Relationship="DbAutogestion.RegionalCenter" FromRole="Regional" ToRole="Center" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="CodeRegional" Type="String" Nullable="false" />
+          <NavigationProperty Name="Center" Relationship="DbAutogestion.RegionalCenter" FromRole="Regional" ToRole="Center" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="Active" Type="String" Nullable="false" />
+          <Property Name="Address" Type="String" Nullable="false" />
         </EntityType>
         <Association Name="RegionalCenter">
           <End Type="DbAutogestion.Regional" Role="Regional" Multiplicity="1" />
@@ -356,52 +344,42 @@
         </Association>
         <Association Name="SedePersonSede">
           <End Type="DbAutogestion.Sede" Role="Sede" Multiplicity="1" />
-          <End Type="DbAutogestion.userSede" Role="PersonSede" Multiplicity="*" />
+          <End Type="DbAutogestion.UserSede" Role="PersonSede" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Sede">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="PersonSede">
-              <PropertyRef Name="status_procedure" />
+              <PropertyRef Name="StatusProcedure" />
             </Dependent>
           </ReferentialConstraint>
-        </Association>
-        <Association Name="PersonSedePerson">
-          <End Type="DbAutogestion.userSede" Role="PersonSede" Multiplicity="*" />
-          <End Type="DbAutogestion.user" Role="Person" Multiplicity="1" />
-        </Association>
-        <Association Name="PersonUser">
-          <End Type="DbAutogestion.user" Role="Person" Multiplicity="1" />
-          <End Type="DbAutogestion.person" Role="User" Multiplicity="1" />
         </Association>
         <EntityType Name="Aprendiz">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="AprendizProgramId" Relationship="DbAutogestion.AprendizProgramAprendiz" FromRole="Aprendiz" ToRole="AprendizProgram" />
-          <NavigationProperty Name="AprendizProceesIntructorId" Relationship="DbAutogestion.AprendizProceesIntructorAprendiz" FromRole="Aprendiz" ToRole="AprendizProceesIntructor" />
-          <NavigationProperty Name="user" Relationship="DbAutogestion.Aprendizuser" FromRole="Aprendiz" ToRole="user" />
+          <NavigationProperty Name="AprendizProgram" Relationship="DbAutogestion.AprendizProgramAprendiz" FromRole="Aprendiz" ToRole="AprendizProgram" />
+          <NavigationProperty Name="AprendizProcessIntructor" Relationship="DbAutogestion.AprendizProceesIntructorAprendiz" FromRole="Aprendiz" ToRole="AprendizProceesIntructor" />
+          <NavigationProperty Name="User" Relationship="DbAutogestion.Aprendizuser" FromRole="Aprendiz" ToRole="user" />
+          <Property Name="PreviousProgram" Type="String" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
         </EntityType>
-        <Association Name="Personaprendiz">
-          <End Type="DbAutogestion.user" Role="Person" Multiplicity="1" />
-          <End Type="DbAutogestion.Aprendiz" Role="aprendiz" Multiplicity="1" />
-        </Association>
         <EntityType Name="Program">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="code_program" Type="Decimal" Nullable="false" />
-          <Property Name="name" Type="String" Nullable="false" />
-          <Property Name="type_program" Type="String" Nullable="false" />
-          <Property Name="create_date" Type="DateTime" Nullable="false" />
-          <Property Name="delete_date" Type="DateTime" Nullable="false" />
-          <Property Name="update_date" Type="DateTime" Nullable="false" />
-          <Property Name="active" Type="Boolean" Nullable="false" />
-          <Property Name="description" Type="String" Nullable="false" />
-          <NavigationProperty Name="AprendizProgramId" Relationship="DbAutogestion.AprendizProgramProgram" FromRole="Program" ToRole="AprendizProgram" />
-          <NavigationProperty Name="instructor_program" Relationship="DbAutogestion.instructor_programProgram" FromRole="Program" ToRole="instructor_program" />
+          <Property Name="CodeProgram" Type="Decimal" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="TypeProgram" Type="String" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" />
+          <Property Name="DeleteDate" Type="DateTime" Nullable="false" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <NavigationProperty Name="AprendizProgram" Relationship="DbAutogestion.AprendizProgramProgram" FromRole="Program" ToRole="AprendizProgram" />
+          <NavigationProperty Name="InstructorProgram" Relationship="DbAutogestion.instructor_programProgram" FromRole="Program" ToRole="instructor_program" />
         </EntityType>
         <EntityType Name="AprendizProgram">
           <Key>
@@ -424,83 +402,80 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="AprendizProceesIntructorId" Relationship="DbAutogestion.AprendizProceesIntructorInstructor" FromRole="Instructor" ToRole="AprendizProceesIntructor" />
-          <NavigationProperty Name="user" Relationship="DbAutogestion.Instructoruser" FromRole="Instructor" ToRole="user" />
-          <NavigationProperty Name="instructor_program" Relationship="DbAutogestion.instructor_programInstructor" FromRole="Instructor" ToRole="instructor_program" />
+          <NavigationProperty Name="AprendizProcessInstructor" Relationship="DbAutogestion.AprendizProceesIntructorInstructor" FromRole="Instructor" ToRole="AprendizProceesIntructor" />
+          <NavigationProperty Name="UserId" Relationship="DbAutogestion.Instructoruser" FromRole="Instructor" ToRole="user" />
+          <NavigationProperty Name="InstructorProgram" Relationship="DbAutogestion.instructor_programInstructor" FromRole="Instructor" ToRole="instructor_program" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
         </EntityType>
-        <Association Name="InstructorPerson">
-          <End Type="DbAutogestion.Instructor" Role="Instructor" Multiplicity="1" />
-          <End Type="DbAutogestion.user" Role="Person" Multiplicity="1" />
-        </Association>
         <EntityType Name="TypeModality">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="description" Type="String" Nullable="false" />
-          <Property Name="name" Type="String" Nullable="false" />
-          <NavigationProperty Name="AprendizProceesIntructor" Relationship="DbAutogestion.AprendizProceesIntructorTypeModality" FromRole="TypeModality" ToRole="AprendizProceesIntructor" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="AprendizProcessInstructor" Relationship="DbAutogestion.AprendizProceesIntructorTypeModality" FromRole="TypeModality" ToRole="AprendizProceesIntructor" />
+          <Property Name="Active" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="RegisterySofia">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" />
-          <Property Name="description" Type="String" Nullable="false" />
-          <Property Name="document" Type="String" Nullable="false" />
-          <Property Name="create_date" Type="DateTime" Nullable="false" />
-          <Property Name="update_date" Type="DateTime" Nullable="false" />
-          <Property Name="delete_date" Type="DateTime" Nullable="false" />
-          <Property Name="active" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="AprendizProceesIntructorId" Relationship="DbAutogestion.AprendizProceesIntructorRegisterySofia" FromRole="RegisterySofia" ToRole="AprendizProceesIntructor" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="Document" Type="String" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" />
+          <Property Name="DeleteDate" Type="DateTime" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AprendizProcessInstructor" Relationship="DbAutogestion.AprendizProceesIntructorRegisterySofia" FromRole="RegisterySofia" ToRole="AprendizProceesIntructor" />
         </EntityType>
         <EntityType Name="Concept">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="observation" Type="String" Nullable="false" />
-          <Property Name="create_date" Type="DateTime" Nullable="false" />
-          <Property Name="delete_date" Type="DateTime" Nullable="false" />
-          <Property Name="update_date" Type="DateTime" Nullable="false" />
-          <Property Name="active" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="AprendizProceesIntructorId" Relationship="DbAutogestion.AprendizProceesIntructorConcept" FromRole="Concept" ToRole="AprendizProceesIntructor" />
+          <Property Name="Observation" Type="String" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" />
+          <Property Name="DeleteDate" Type="DateTime" Nullable="false" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AprendizProcessInstructor" Relationship="DbAutogestion.AprendizProceesIntructorConcept" FromRole="Concept" ToRole="AprendizProceesIntructor" />
+          <Property Name="Name" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="Enterprise">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="create_date" Type="DateTime" Nullable="false" />
-          <Property Name="delete_date" Type="DateTime" Nullable="false" />
-          <Property Name="update_delete" Type="DateTime" Nullable="false" />
-          <Property Name="observation" Type="String" Nullable="false" />
-          <Property Name="name_boss" Type="String" Nullable="false" />
-          <Property Name="name_enterprise" Type="String" Nullable="false" />
-          <Property Name="phone_enterprise" Type="Int16" Nullable="false" />
-          <Property Name="locate" Type="String" Nullable="false" />
-          <Property Name="email_boss" Type="String" Nullable="false" />
-          <Property Name="nit_enterprise" Type="Int16" Nullable="false" />
-          <Property Name="active" Type="Boolean" Nullable="false" />
-          <Property Name="email_enterprise" Type="String" Nullable="false" />
-          <NavigationProperty Name="AprendizProceesIntructorId" Relationship="DbAutogestion.AprendizProceesIntructorEnterprise" FromRole="Enterprise" ToRole="AprendizProceesIntructor" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" />
+          <Property Name="DeleteDate" Type="DateTime" Nullable="false" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" />
+          <Property Name="Observation" Type="String" Nullable="false" />
+          <Property Name="NameEnterprise" Type="String" Nullable="false" />
+          <Property Name="PhoneEnterprise" Type="Int16" Nullable="false" />
+          <Property Name="Locate" Type="String" Nullable="false" />
+          <Property Name="NitEnterprise" Type="Int16" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="EmailEnterprise" Type="String" Nullable="false" />
+          <NavigationProperty Name="AprendizProcessInstructor" Relationship="DbAutogestion.AprendizProceesIntructorEnterprise" FromRole="Enterprise" ToRole="AprendizProceesIntructor" />
         </EntityType>
         <EntityType Name="Process">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="type_process" Type="String" Nullable="false" />
-          <Property Name="update_date" Type="DateTime" Nullable="false" />
-          <Property Name="create_date" Type="DateTime" Nullable="false" />
-          <Property Name="delete_date" Type="DateTime" Nullable="false" />
-          <Property Name="active" Type="Boolean" Nullable="false" />
-          <Property Name="start_aprendiz" Type="DateTime" Nullable="false" />
-          <Property Name="observation" Type="String" Nullable="false" />
-          <NavigationProperty Name="AprendizProceesIntructorId" Relationship="DbAutogestion.ProcessAprendizProceesIntructor" FromRole="Process" ToRole="AprendizProceesIntructor" />
+          <Property Name="TypeProcess" Type="String" Nullable="false" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" />
+          <Property Name="DeleteDate" Type="DateTime" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="StartAprendiz" Type="DateTime" Nullable="false" />
+          <Property Name="Observation" Type="String" Nullable="false" />
+          <NavigationProperty Name="AprendizProceesIntructor" Relationship="DbAutogestion.ProcessAprendizProceesIntructor" FromRole="Process" ToRole="AprendizProceesIntructor" />
         </EntityType>
-        <EntityType Name="AprendizProceesIntructor">
+        <EntityType Name="AprendizProcessInstructor">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -511,33 +486,33 @@
           <NavigationProperty Name="ConceptId" Relationship="DbAutogestion.AprendizProceesIntructorConcept" FromRole="AprendizProceesIntructor" ToRole="Concept" />
           <NavigationProperty Name="EnterpriseId" Relationship="DbAutogestion.AprendizProceesIntructorEnterprise" FromRole="AprendizProceesIntructor" ToRole="Enterprise" />
           <NavigationProperty Name="ProcessId" Relationship="DbAutogestion.ProcessAprendizProceesIntructor" FromRole="AprendizProceesIntructor" ToRole="Process" />
-          <NavigationProperty Name="TypeModality" Relationship="DbAutogestion.AprendizProceesIntructorTypeModality" FromRole="AprendizProceesIntructor" ToRole="TypeModality" />
-          <NavigationProperty Name="stateId" Relationship="DbAutogestion.AprendizProceesIntructorstate" FromRole="AprendizProceesIntructor" ToRole="state" />
-          <NavigationProperty Name="verificationId" Relationship="DbAutogestion.AprendizProceesIntructorverification" FromRole="AprendizProceesIntructor" ToRole="verification" />
+          <NavigationProperty Name="TypeModalityId" Relationship="DbAutogestion.AprendizProceesIntructorTypeModality" FromRole="AprendizProceesIntructor" ToRole="TypeModality" />
+          <NavigationProperty Name="StateId" Relationship="DbAutogestion.AprendizProceesIntructorstate" FromRole="AprendizProceesIntructor" ToRole="state" />
+          <NavigationProperty Name="VerificationId" Relationship="DbAutogestion.AprendizProceesIntructorverification" FromRole="AprendizProceesIntructor" ToRole="verification" />
         </EntityType>
         <Association Name="AprendizProceesIntructorAprendiz">
-          <End Type="DbAutogestion.AprendizProceesIntructor" Role="AprendizProceesIntructor" Multiplicity="*" />
+          <End Type="DbAutogestion.AprendizProcessInstructor" Role="AprendizProceesIntructor" Multiplicity="*" />
           <End Type="DbAutogestion.Aprendiz" Role="Aprendiz" Multiplicity="1" />
         </Association>
         <Association Name="AprendizProceesIntructorInstructor">
-          <End Type="DbAutogestion.AprendizProceesIntructor" Role="AprendizProceesIntructor" Multiplicity="*" />
+          <End Type="DbAutogestion.AprendizProcessInstructor" Role="AprendizProceesIntructor" Multiplicity="*" />
           <End Type="DbAutogestion.Instructor" Role="Instructor" Multiplicity="1" />
         </Association>
         <Association Name="AprendizProceesIntructorRegisterySofia">
-          <End Type="DbAutogestion.AprendizProceesIntructor" Role="AprendizProceesIntructor" Multiplicity="*" />
+          <End Type="DbAutogestion.AprendizProcessInstructor" Role="AprendizProceesIntructor" Multiplicity="*" />
           <End Type="DbAutogestion.RegisterySofia" Role="RegisterySofia" Multiplicity="1" />
         </Association>
         <Association Name="AprendizProceesIntructorConcept">
-          <End Type="DbAutogestion.AprendizProceesIntructor" Role="AprendizProceesIntructor" Multiplicity="*" />
+          <End Type="DbAutogestion.AprendizProcessInstructor" Role="AprendizProceesIntructor" Multiplicity="*" />
           <End Type="DbAutogestion.Concept" Role="Concept" Multiplicity="1" />
         </Association>
         <Association Name="AprendizProceesIntructorEnterprise">
-          <End Type="DbAutogestion.AprendizProceesIntructor" Role="AprendizProceesIntructor" Multiplicity="*" />
+          <End Type="DbAutogestion.AprendizProcessInstructor" Role="AprendizProceesIntructor" Multiplicity="*" />
           <End Type="DbAutogestion.Enterprise" Role="Enterprise" Multiplicity="1" />
         </Association>
         <Association Name="ProcessAprendizProceesIntructor">
           <End Type="DbAutogestion.Process" Role="Process" Multiplicity="1" />
-          <End Type="DbAutogestion.AprendizProceesIntructor" Role="AprendizProceesIntructor" Multiplicity="*" />
+          <End Type="DbAutogestion.AprendizProcessInstructor" Role="AprendizProceesIntructor" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Process">
               <PropertyRef Name="Id" />
@@ -548,72 +523,69 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="AprendizProceesIntructorTypeModality">
-          <End Type="DbAutogestion.AprendizProceesIntructor" Role="AprendizProceesIntructor" Multiplicity="*" />
+          <End Type="DbAutogestion.AprendizProcessInstructor" Role="AprendizProceesIntructor" Multiplicity="*" />
           <End Type="DbAutogestion.TypeModality" Role="TypeModality" Multiplicity="1" />
         </Association>
-        <EntityType Name="state">
+        <EntityType Name="State">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="create_date" Type="DateTime" Nullable="false" />
-          <Property Name="delete_date" Type="DateTime" Nullable="false" />
-          <Property Name="update_date" Type="DateTime" Nullable="false" />
-          <Property Name="active" Type="Boolean" Nullable="false" />
-          <Property Name="type_stade" Type="String" Nullable="false" />
-          <Property Name="description" Type="String" Nullable="false" />
-          <NavigationProperty Name="AprendizProceesIntructorId" Relationship="DbAutogestion.AprendizProceesIntructorstate" FromRole="state" ToRole="AprendizProceesIntructor" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" />
+          <Property Name="DeleteDate" Type="DateTime" Nullable="false" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="TypeState" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <NavigationProperty Name="AprendizProcessInstructor" Relationship="DbAutogestion.AprendizProceesIntructorstate" FromRole="state" ToRole="AprendizProceesIntructor" />
         </EntityType>
         <Association Name="AprendizProceesIntructorstate">
-          <End Type="DbAutogestion.AprendizProceesIntructor" Role="AprendizProceesIntructor" Multiplicity="*" />
-          <End Type="DbAutogestion.state" Role="state" Multiplicity="1" />
+          <End Type="DbAutogestion.AprendizProcessInstructor" Role="AprendizProceesIntructor" Multiplicity="*" />
+          <End Type="DbAutogestion.State" Role="state" Multiplicity="1" />
         </Association>
-        <EntityType Name="verification">
+        <EntityType Name="Verification">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="create_date" Type="DateTime" Nullable="false" />
-          <Property Name="uptade_date" Type="DateTime" Nullable="false" />
-          <Property Name="delete_date" Type="DateTime" Nullable="false" />
-          <Property Name="observation" Type="String" Nullable="false" />
-          <Property Name="active" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="AprendizProceesIntructorId" Relationship="DbAutogestion.AprendizProceesIntructorverification" FromRole="verification" ToRole="AprendizProceesIntructor" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" />
+          <Property Name="UptadeDate" Type="DateTime" Nullable="false" />
+          <Property Name="DeleteDate" Type="DateTime" Nullable="false" />
+          <Property Name="Observation" Type="String" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AprendizProcessInstructor" Relationship="DbAutogestion.AprendizProceesIntructorverification" FromRole="verification" ToRole="AprendizProceesIntructor" />
+          <Property Name="Name" Type="String" Nullable="false" />
         </EntityType>
         <Association Name="AprendizProceesIntructorverification">
-          <End Type="DbAutogestion.AprendizProceesIntructor" Role="AprendizProceesIntructor" Multiplicity="*" />
-          <End Type="DbAutogestion.verification" Role="verification" Multiplicity="1" />
-        </Association>
-        <Association Name="userperson">
-          <End Type="DbAutogestion.user" Role="user" Multiplicity="*" />
-          <End Type="DbAutogestion.person" Role="person" Multiplicity="1" />
+          <End Type="DbAutogestion.AprendizProcessInstructor" Role="AprendizProceesIntructor" Multiplicity="*" />
+          <End Type="DbAutogestion.Verification" Role="verification" Multiplicity="1" />
         </Association>
         <Association Name="useruserSede">
-          <End Type="DbAutogestion.user" Role="user" Multiplicity="1" />
-          <End Type="DbAutogestion.userSede" Role="userSede" Multiplicity="*" />
+          <End Type="DbAutogestion.User" Role="user" Multiplicity="1" />
+          <End Type="DbAutogestion.UserSede" Role="userSede" Multiplicity="*" />
         </Association>
         <Association Name="Aprendizuser">
           <End Type="DbAutogestion.Aprendiz" Role="Aprendiz" Multiplicity="1" />
-          <End Type="DbAutogestion.user" Role="user" Multiplicity="1" />
+          <End Type="DbAutogestion.User" Role="user" Multiplicity="1" />
         </Association>
         <Association Name="Instructoruser">
           <End Type="DbAutogestion.Instructor" Role="Instructor" Multiplicity="1" />
-          <End Type="DbAutogestion.user" Role="user" Multiplicity="1" />
+          <End Type="DbAutogestion.User" Role="user" Multiplicity="1" />
         </Association>
-        <EntityType Name="instructor_program">
+        <EntityType Name="InstructorProgram">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="Instructor_id" Relationship="DbAutogestion.instructor_programInstructor" FromRole="instructor_program" ToRole="Instructor" />
-          <NavigationProperty Name="Program" Relationship="DbAutogestion.instructor_programProgram" FromRole="instructor_program" ToRole="Program" />
+          <NavigationProperty Name="InstructorId" Relationship="DbAutogestion.instructor_programInstructor" FromRole="instructor_program" ToRole="Instructor" />
+          <NavigationProperty Name="ProgramId" Relationship="DbAutogestion.instructor_programProgram" FromRole="instructor_program" ToRole="Program" />
         </EntityType>
         <Association Name="instructor_programInstructor">
-          <End Type="DbAutogestion.instructor_program" Role="instructor_program" Multiplicity="*" />
+          <End Type="DbAutogestion.InstructorProgram" Role="instructor_program" Multiplicity="*" />
           <End Type="DbAutogestion.Instructor" Role="Instructor" Multiplicity="1" />
         </Association>
         <Association Name="instructor_programProgram">
-          <End Type="DbAutogestion.instructor_program" Role="instructor_program" Multiplicity="*" />
+          <End Type="DbAutogestion.InstructorProgram" Role="instructor_program" Multiplicity="*" />
           <End Type="DbAutogestion.Program" Role="Program" Multiplicity="1" />
         </Association>
         <EntityType Name="change_log">
@@ -621,7 +593,24 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TableName" Type="String" Nullable="false" />
+          <Property Name="IdTable" Type="Int16" Nullable="false" />
+          <Property Name="OldValues" Type="String" Nullable="false" />
+          <Property Name="NewValues" Type="String" Nullable="false" />
+          <Property Name="Action" Type="String" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="Username" Type="String" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" />
         </EntityType>
+        <Association Name="UserPerson">
+          <End Type="DbAutogestion.User" Role="User" Multiplicity="1" />
+          <End Type="DbAutogestion.Person" Role="Person" Multiplicity="1" />
+        </Association>
+        <Association Name="UserRolUser">
+          <End Type="DbAutogestion.UserRol" Role="UserRol" Multiplicity="*" />
+          <End Type="DbAutogestion.User" Role="User" Multiplicity="1" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -629,7 +618,7 @@
       <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
         <Alias Key="Model" Value="DbAutogestion" />
         <Alias Key="Target" Value="DbAutogestion.Store" />
-        <EntityContainerMapping CdmEntityContainer="DbAutogestionContainer" StorageEntityContainer="DbAutogestionTargetContainer">
+        <EntityContainerMapping CdmEntityContainer="DbAutogestionContainer" StorageEntityContainer="DbAutogestionStoreContainer">
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -645,6 +634,9 @@
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->

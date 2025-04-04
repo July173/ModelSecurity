@@ -1,4 +1,5 @@
 ﻿using Data;
+using Entity.DTOautogestion;
 using Entity.DTOautogestion.pivote;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
@@ -34,6 +35,7 @@ namespace Business
                     formModulesDTO.Add(new FormModuleDto
                     {
                         Id = formModule.Id,
+                        StatusProcedure = formModule.StatusProcedure,
                         FormId = formModule.FormId,
                         ModuleId = formModule.ModuleId
                     });
@@ -69,6 +71,7 @@ namespace Business
                 return new FormModuleDto
                 {
                     Id = formModule.Id,
+                    StatusProcedure = formModule.StatusProcedure,
                     FormId = formModule.FormId,
                     ModuleId = formModule.ModuleId
                 };
@@ -89,6 +92,7 @@ namespace Business
 
                 var formModule = new FormModule
                 {
+                    StatusProcedure = formModuleDto.StatusProcedure,
                     FormId = formModuleDto.FormId,
                     ModuleId = formModuleDto.ModuleId
                 };
@@ -97,9 +101,10 @@ namespace Business
 
                 return new FormModuleDto
                 {
-                    Id = formModuleCreado.Id,
-                    FormId = formModuleCreado.FormId,
-                    ModuleId = formModuleCreado.ModuleId
+                    Id = formModule.Id,
+                    StatusProcedure = formModule.StatusProcedure,
+                    FormId = formModule.FormId,
+                    ModuleId = formModule.ModuleId
                 };
             }
             catch (Exception ex)

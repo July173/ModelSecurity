@@ -23,8 +23,8 @@ namespace Entity.Model
         public Aprendiz Aprendiz { get; set; }
         public int InstructorId { get; set; }
         public Instructor Instructor { get; set; }
-        public int StadeId { get; set; }
-        public Stade Stade { get; set; }
+        public int StateId { get; set; }
+        public State State { get; set; }
         public int VerificationId { get; set; }
         public Verification Verification { get; set; }  
     }

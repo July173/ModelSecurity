@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOautogestion
 {
-    public class ProssesDto
+    public class ProcessDto
     {
         public int Id { get; set; }
+        public string StartAprendiz { get; set; }
         public string TypeProcess { get; set; }
-        public bool Active { get; set; }
-        public DateTime StartAprendiz { get; set; }
         public string Observation { get; set; }
+        public bool Active { get; set; }
     }
 }

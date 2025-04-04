@@ -34,7 +34,17 @@ namespace Business
                     personsDTO.Add(new PersonDto
                     {
                         Id = person.Id,
-                        Name = person.name,
+                        Name = person.Name,
+                        FirstName = person.FirstName,
+                        SecondName = person.SecondName,
+                        FirstLastName = person.FirstLastName,
+                        SecondLastName = person.SecondLastName,
+                        PhoneNumber = person.PhoneNumber,
+                        Email = person.Email,
+                        TypeIdentification = person.TypeIdentification,
+                        NumberIdentification = person.NumberIdentification,
+                        Signig = person.Signig,
+                        Active = person.Active
                     });
                 }
 
@@ -68,7 +78,17 @@ namespace Business
                 return new PersonDto
                 {
                     Id = person.Id,
-                    Name = person.name,
+                    Name = person.Name,
+                    FirstName = person.FirstName,
+                    SecondName = person.SecondName,
+                    FirstLastName = person.FirstLastName,
+                    SecondLastName = person.SecondLastName,
+                    PhoneNumber = person.PhoneNumber,
+                    Email = person.Email,
+                    TypeIdentification = person.TypeIdentification,
+                    NumberIdentification = person.NumberIdentification,
+                    Signig = person.Signig,
+                    Active = person.Active
                 };
             }
             catch (Exception ex)
@@ -87,7 +107,17 @@ namespace Business
 
                 var person = new Person
                 {
-                   name = personDto.Name,
+                    Name = personDto.Name,
+                    FirstName = personDto.FirstName,
+                    SecondName = personDto.SecondName,
+                    FirstLastName = personDto.FirstLastName,
+                    SecondLastName = personDto.SecondLastName,
+                    PhoneNumber = personDto.PhoneNumber,
+                    Email = personDto.Email,
+                    TypeIdentification = personDto.TypeIdentification,
+                    NumberIdentification = personDto.NumberIdentification,
+                    Signig = personDto.Signig,
+                    Active = personDto.Active
                 };
 
                 var personCreada = await _personData.CreateAsync(person);
@@ -95,7 +125,17 @@ namespace Business
                 return new PersonDto
                 {
                     Id = person.Id,
-                    Name = person.name,
+                    Name = person.Name,
+                    FirstName = person.FirstName,
+                    SecondName = person.SecondName,
+                    FirstLastName = person.FirstLastName,
+                    SecondLastName = person.SecondLastName,
+                    PhoneNumber = person.PhoneNumber,
+                    Email = person.Email,
+                    TypeIdentification = person.TypeIdentification,
+                    NumberIdentification = person.NumberIdentification,
+                    Signig = person.Signig,
+                    Active = person.Active
                 };
             }
             catch (Exception ex)

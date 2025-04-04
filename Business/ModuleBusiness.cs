@@ -33,9 +33,10 @@ namespace Business
                 {
                     modulesDTO.Add(new ModuleDto
                     {
-                        Id = module.id,
-                        Name = module.name,
-                        Description = module.description
+                        Id = module.Id,
+                        Name = module.Name,
+                        Description = module.Description,
+                        Active = module.Active,
                     });
                 }
 
@@ -68,9 +69,10 @@ namespace Business
 
                 return new ModuleDto
                 {
-                    Id = module.id,
-                    Name = module.name,
-                    Description = module.description
+                    Id = module.Id,
+                    Name = module.Name,
+                    Description = module.Description,
+                    Active = module.Active,
                 };
             }
             catch (Exception ex)
@@ -89,17 +91,19 @@ namespace Business
 
                 var module = new Module
                 {
-                    name = moduleDto.Name,
-                    description = moduleDto.Description
+                    Name = moduleDto.Name,
+                    Description = moduleDto.Description,
+                    Active = moduleDto.Active,
                 };
 
                 var moduleCreado = await _moduleData.CreateAsync(module);
 
                 return new ModuleDto
                 {
-                    Id = moduleCreado.id,
-                    Name = moduleCreado.name,
-                    Description = moduleCreado.description
+                    Id = module.Id,
+                    Name = module.Name,
+                    Description = module.Description,
+                    Active = module.Active,
                 };
             }
             catch (Exception ex)

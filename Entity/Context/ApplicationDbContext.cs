@@ -4,15 +4,14 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Reflection;
-using static System.Collections.Specialized.BitVector32;
+using System.Reflection.Emit;
 
 namespace Entity.Contexts
 {
     /// <summary>
-    /// representa el contexto de la base de datos de la aplicacion,proporcionando configuraciones y metodos para la 
-    /// gestion de entidades y consultas personalizadas con Dapper.
+    /// Representa el contexto de la base de datos de la aplicación, proporcionando configuraciones y métodos
+    /// para la gestión de entidades y consultas personalizadas con Dapper.
     /// </summary>
-
     public class ApplicationDbContext : DbContext
     {
         /// <summary>
@@ -25,11 +24,12 @@ namespace Entity.Contexts
         /// </summary>
         /// <param name="options">Opciones de configuración para el contexto de base de datos.</param>
         /// <param name="configuration">Instancia de IConfiguration para acceder a la configuración de la aplicación.</param>
-
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration)
+        : base(options)
         {
             _configuration = configuration;
         }
+
         /// <summary>
         /// Configura los modelos de la base de datos aplicando configuraciones desde ensamblados.
         /// </summary>
@@ -38,6 +38,7 @@ namespace Entity.Contexts
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -48,7 +49,7 @@ namespace Entity.Contexts
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.EnableSensitiveDataLogging();
-            //otras configuraciones adiconales pueden ir aqui
+            // Otras configuraciones adicionales pueden ir aquí
         }
 
         /// <summary>
@@ -59,6 +60,7 @@ namespace Entity.Contexts
         {
             configurationBuilder.Properties<decimal>().HavePrecision(18, 2);
         }
+
         /// <summary>
         /// Guarda los cambios en la base de datos, asegurando la auditoría antes de persistir los datos.
         /// </summary>
@@ -75,10 +77,10 @@ namespace Entity.Contexts
         /// <param name="acceptAllChangesOnSuccess">Indica si se deben aceptar todos los cambios en caso de éxito.</param>
         /// <param name="cancellationToken">Token de cancelación para abortar la operación.</param>
         /// <returns>Número de filas afectadas de forma asíncrona.</returns>
-        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSucces, CancellationToken cancellationToken = default)
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
             EnsureAudit();
-            return base.SaveChangesAsync(acceptAllChangesOnSucces, cancellationToken);
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
         /// <summary>
@@ -90,7 +92,6 @@ namespace Entity.Contexts
         /// <param name="timeout">Tiempo de espera opcional para la consulta.</param>
         /// <param name="type">Tipo opcional de comando SQL.</param>
         /// <returns>Una colección de objetos del tipo especificado.</returns>
-
         public async Task<IEnumerable<T>> QueryAsync<T>(string text, object parameters = null, int? timeout = null, CommandType? type = null)
         {
             using var command = new DapperEFCoreCommand(this, text, parameters, timeout, type, CancellationToken.None);
@@ -117,7 +118,6 @@ namespace Entity.Contexts
         /// <summary>
         /// Método interno para garantizar la auditoría de los cambios en las entidades.
         /// </summary>
-
         private void EnsureAudit()
         {
             ChangeTracker.DetectChanges();
@@ -137,7 +137,6 @@ namespace Entity.Contexts
             /// <param name="timeout">Tiempo de espera opcional.</param>
             /// <param name="type">Tipo de comando SQL opcional.</param>
             /// <param name="ct">Token de cancelación.</param>
-
             public DapperEFCoreCommand(DbContext context, string text, object parameters, int? timeout, CommandType? type, CancellationToken ct)
             {
                 var transaction = context.Database.CurrentTransaction?.GetDbTransaction();
@@ -151,21 +150,20 @@ namespace Entity.Contexts
                     commandTimeout,
                     commandType,
                     cancellationToken: ct
-                    );
+                );
             }
 
             /// <summary>
             /// Define los parámetros del comando SQL.
             /// </summary>
             public CommandDefinition Definition { get; }
+
             /// <summary>
             /// Método para liberar los recursos.
             /// </summary>
-
             public void Dispose()
             {
             }
         }
-    
     }
 }

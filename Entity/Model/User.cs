@@ -9,11 +9,12 @@ namespace Entity.Model
     public class User
     {
         public int Id { get; set; }
-        public string username { get; set; }
-        public string email { get; set; }
-        public string password { get; set; }
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public bool Active { get; set; }
         public int PersonId { get; set; }
-        public Person Person1 { get; set; }
-        public bool active { get; set; }
+        public Person Person { get; set; }
+
     }
 }

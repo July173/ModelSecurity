@@ -8,61 +8,61 @@ using Microsoft.Extensions.Logging;
 
 namespace Data
 {
-    public class StadeData
+    public class UserRolData
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger _logger;
 
-        public StadeData(ApplicationDbContext context, ILogger logger)
+        public UserRolData(ApplicationDbContext context, ILogger logger)
         {
             _context = context;
             _logger = logger;
         }
 
-        public async Task<IEnumerable<Stade>> GetAllAsync()
+        public async Task<IEnumerable<UserRol>> GetAllAsync()
         {
-            return await _context.Set<Stade>().ToListAsync();
+            return await _context.Set<UserRol>().ToListAsync();
         }
 
-        public async Task<Stade?> GetByIdAsync(int id)
+        public async Task<UserRol?> GetByIdAsync(int id)
         {
             try
             {
-                return await _context.Set<Stade>().FindAsync(id);
+                return await _context.Set<UserRol>().FindAsync(id);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error al obtener un stade con ID {id}");
+                _logger.LogError($"Error al obtener Rol-Usuario con ID {id}");
                 throw;
             }
         }
 
-        public async Task<Stade> CreateAsync(Stade stade)
+        public async Task<UserRol> CreateAsync(UserRol rolUser)
         {
             try
             {
-                await _context.Set<Stade>().AddAsync(stade);
+                await _context.Set<UserRol>().AddAsync(rolUser);
                 await _context.SaveChangesAsync();
-                return stade;
+                return rolUser;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error al crear el stade {ex.Message}");
+                _logger.LogError($"Error al crear la relación Rol-Usuario {ex.Message}");
                 throw;
             }
         }
 
-        public async Task<bool> UpdateAsync(Stade stade)
+        public async Task<bool> UpdateAsync(UserRol rolUser)
         {
             try
             {
-                _context.Set<Stade>().Update(stade);
+                _context.Set<UserRol>().Update(rolUser);
                 await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error al actualizar el stade {ex.Message}");
+                _logger.LogError($"Error al actualizar la relación Rol-Usuario {ex.Message}");
                 return false;
             }
         }
@@ -71,17 +71,17 @@ namespace Data
         {
             try
             {
-                var stade = await _context.Set<Stade>().FindAsync(id);
-                if (stade == null)
+                var rolUser = await _context.Set<UserRol>().FindAsync(id);
+                if (rolUser == null)
                     return false;
 
-                _context.Set<Stade>().Remove(stade);
+                _context.Set<UserRol>().Remove(rolUser);
                 await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error al eliminar el stade {ex.Message}");
+                Console.WriteLine($"Error al eliminar la relación Rol-Usuario {ex.Message}");
                 return false;
             }
         }

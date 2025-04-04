@@ -9,9 +9,10 @@ namespace Entity.Model
     public class Regional
     {
         public int Id { get; set; }
-        public string name { get; set; }
-        public string code_regional { get; set; }
-        
-        public bool active { get; set; }
+        public string Name { get; set; }
+        public string CodeRegional { get; set; }
+        public string Description { get; set; }
+        public string Address { get; set; }
+        public bool Active { get; set; }
     }
 }

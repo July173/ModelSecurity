@@ -24,20 +24,21 @@ namespace Business
             _logger = logger;
         }
         // Método para obtener todos los roles como DTOs
-        public async Task<IEnumerable<RolDTO>> GetAllRolesAsync()
+        public async Task<IEnumerable<RolDto>> GetAllRolesAsync()
         {
             try
             {
                 var roles = await _rolData.GetAllAsync();
-                var rolesDTO = new List<RolDTO>();
+                var rolesDTO = new List<RolDto>();
 
                 foreach (var rol in roles)
                 {
-                    rolesDTO.Add(new RolDTO
+                    rolesDTO.Add(new RolDto
                     {
                         Id = rol.Id,
-                        TypeRol = rol.type_rol,
-                        Active = rol.active //si existe la entidad
+                        TypeRol = rol.TypeRol,
+                        Description = rol.Description,
+                        Active = rol.Active //si existe la entidad
                     });
                 }
                 return rolesDTO;
@@ -50,7 +51,7 @@ namespace Business
             }
         }
         // Método para obtener un rol por su ID como DTO
-        public async Task<RolDTO> GetRolByIdAsync(int id)
+        public async Task<RolDto> GetRolByIdAsync(int id)
         {
             if (id <= 0)
             {
@@ -65,11 +66,12 @@ namespace Business
                     _logger.LogInformation("No se encontró el rol con ID {RolId}", id);
                     throw new EntityNotFoundException("Rol", id);
                 }
-                return new RolDTO
+                return new RolDto
                 {
                     Id = rol.Id,
-                    TypeRol = rol.type_rol,
-                    Active = rol.active //si existe la entidad
+                    TypeRol = rol.TypeRol,
+                    Description = rol.Description,
+                    Active = rol.Active //si existe la entidad
                 };
             }
             catch (Exception ex)
@@ -79,37 +81,40 @@ namespace Business
             }
         }
         // Método para crear un rol desde un DTO
-        public async Task<RolDTO> CreateRolAsync(RolDTO RolDTO)
+        public async Task<RolDto> CreateRolAsync(RolDto RolDto)
         {
             try
             {
-                ValidateRol(RolDTO);
+                ValidateRol(RolDto);
 
                 var rol = new Rol
                 {
-                    type_rol = RolDTO.TypeRol,
-                    active = RolDTO.Active //si existe en la entidad
+                    Id = RolDto.Id,
+                    TypeRol = RolDto.TypeRol,
+                    Description = RolDto.Description,
+                    Active = RolDto.Active //si existe la entidad
                 };
 
                 var rolCreado = await _rolData.CreateAsync(rol);
 
-                return new RolDTO
+                return new RolDto
                 {
                     Id = rol.Id,
-                    TypeRol = rol.type_rol,
-                    Active = rol.active //si existe la entidad
-                                        
+                    TypeRol = rol.TypeRol,
+                    Description = rol.Description,
+                    Active = rol.Active //si existe la entidad
+
                 };
               }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear un nuevo rol: {RolNombre}", RolDTO?.TypeRol?? "null");
+                _logger.LogError(ex, "Error al crear un nuevo rol: {RolNombre}", RolDto?.TypeRol?? "null");
                 throw new ExternalServiceException("Base de datos", $"Error al crear el rol", ex);
             }
         }
 
         // Método para validar el DTO 
-        private void ValidateRol(RolDTO RolDto)
+        private void ValidateRol(RolDto RolDto)
         {
             if (RolDto == null)
             {

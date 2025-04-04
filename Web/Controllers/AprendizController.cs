@@ -95,7 +95,7 @@ namespace Web.Controllers
             try
             {
                 var createdAprendiz = await _AprendizBusiness.CreateAprendizAsync(AprendizDto);
-                return CreatedAtAction(nameof(GetAprendizById), new { id = createdAprendiz.id }, createdAprendiz);
+                return CreatedAtAction(nameof(GetAprendizById), new { id = createdAprendiz.Id }, createdAprendiz);
             }
             catch (ValidationException ex)
             {

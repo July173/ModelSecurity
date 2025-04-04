@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOs
 {
-    class UserSedeDto
+    public class UserSedeDto
     {
         public int Id { get; set; }
+        public string StatusProcedure { get; set; }
         public int UserId { get; set; }
         public int SedeId { get; set; }
     }

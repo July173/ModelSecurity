@@ -1,4 +1,5 @@
 ﻿using Data;
+using Entity.DTOautogestion;
 using Entity.DTOautogestion.pivote;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
@@ -10,12 +11,12 @@ namespace Business
     /// <summary>
     /// Clase de negocio encargada de la lógica relacionada con los usuarios y sus roles en el sistema.
     /// </summary>
-    public class RolUserBusiness
+    public class UserRolBusiness
     {
-        private readonly RolUserData _rolUserData;
+        private readonly UserRolData _rolUserData;
         private readonly ILogger _logger;
 
-        public RolUserBusiness(RolUserData rolUserData, ILogger logger)
+        public UserRolBusiness(UserRolData rolUserData, ILogger logger)
         {
             _rolUserData = rolUserData;
             _logger = logger;
@@ -97,9 +98,9 @@ namespace Business
 
                 return new UserRolDto
                 {
-                    Id = rolUserCreado.Id,
-                    UserId = rolUserCreado.UserId,
-                    RolId = rolUserCreado.RolId
+                    Id = rolUser.Id,
+                    UserId = rolUser.UserId,
+                    RolId = rolUser.RolId
                 };
             }
             catch (Exception ex)

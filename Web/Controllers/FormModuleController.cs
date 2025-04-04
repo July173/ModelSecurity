@@ -1,5 +1,6 @@
 ﻿using Business;
 using Data;
+using Entity.DTOautogestion;
 using Entity.DTOautogestion.pivote;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
