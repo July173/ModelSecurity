@@ -93,7 +93,7 @@ namespace Web.Controllers
             try
             {
                 var createdAprendizProcessInstructor = await _aprendizProcessInstructorBusiness.CreateAprendizProcessInstructorAsync(aprendizProcessInstructorDto);
-                return CreatedAtAction(nameof(GetAprendizProcessInstructorById), new { id = createdAprendizProcessInstructor.id }, createdAprendizProcessInstructor);
+                return CreatedAtAction(nameof(GetAprendizProcessInstructorById), new { id = createdAprendizProcessInstructor.Id }, createdAprendizProcessInstructor);
             }
             catch (ValidationException ex)
             {

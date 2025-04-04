@@ -33,10 +33,14 @@ namespace Business
                 {
                     sedesDTO.Add(new SedeDto
                     {
-                        id = sede.id,
-                        name = sede.name,
-                        address = sede.addres,
-                        active = sede.active // si existe la entidad
+                        Id = sede.Id,
+                        Name = sede.Name,
+                        CodeSede = sede.CodeSede,
+                        Address = sede.Address,
+                        PhoneSede = sede.PhoneSede,
+                        EmailContact = sede.EmailContact,
+                        CenterId = sede.CenterId,
+                        Active = sede.Active // si existe la entidad
                     });
                 }
 
@@ -69,10 +73,14 @@ namespace Business
 
                 return new SedeDto
                 {
-                    id = sede.id,
-                    name = sede.name,
-                    address = sede.addres,
-                    active = sede.active // si existe la entidad
+                    Id = sede.Id,
+                    Name = sede.Name,
+                    CodeSede = sede.CodeSede,
+                    Address = sede.Address,
+                    PhoneSede = sede.PhoneSede,
+                    EmailContact = sede.EmailContact,
+                    CenterId = sede.CenterId,
+                    Active = sede.Active // si existe la entidad
                 };
             }
             catch (Exception ex)
@@ -91,24 +99,32 @@ namespace Business
 
                 var sede = new Sede
                 {
-                    name = sedeDto.name,
-                    addres = sedeDto.address,
-                    active = sedeDto.active // si existe en la entidad
+                    Name = sedeDto.Name,
+                    CodeSede = sedeDto.CodeSede,
+                    Address = sedeDto.Address,
+                    PhoneSede = sedeDto.PhoneSede,
+                    EmailContact = sedeDto.EmailContact,
+                    CenterId = sedeDto.CenterId,
+                    Active = sedeDto.Active // si existe la entidad
                 };
 
                 var sedeCreada = await _sedeData.CreateAsync(sede);
 
                 return new SedeDto
                 {
-                    id = sedeCreada.id,
-                    name = sedeCreada.name,
-                    address = sedeCreada.addres,
-                    active = sedeCreada.active // si existe la entidad
+                    Id = sede.Id,
+                    Name = sede.Name,
+                    CodeSede = sede.CodeSede,
+                    Address = sede.Address,
+                    PhoneSede = sede.PhoneSede,
+                    EmailContact = sede.EmailContact,
+                    CenterId = sede.CenterId,
+                    Active = sede.Active // si existe la entidad
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nueva sede: {Name}", sedeDto?.name ?? "null");
+                _logger.LogError(ex, "Error al crear nueva sede: {Name}", sedeDto?.Name ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear la sede", ex);
             }
         }
@@ -121,7 +137,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto Sede no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(sedeDto.name))
+            if (string.IsNullOrWhiteSpace(sedeDto.Name))
             {
                 _logger.LogWarning("Se intentó crear/actualizar una sede con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name de la sede es obligatorio");

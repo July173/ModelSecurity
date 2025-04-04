@@ -33,10 +33,10 @@ namespace Business
                 {
                     statesDTO.Add(new StateDto
                     {
-                        id = state.id,
-                        typeState = state.type_state,
-                        description = state.description,
-                        active = state.active // si existe la entidad
+                        Id = state.Id,
+                        TypeState = state.TypeState,
+                        Description = state.Description,
+                        Active = state.Active // si existe la entidad
                     });
                 }
 
@@ -69,10 +69,10 @@ namespace Business
 
                 return new StateDto
                 {
-                    id = state.id,
-                    typeState = state.type_state,
-                    description = state.description,
-                    active = state.active // si existe la entidad
+                    Id = state.Id,
+                    TypeState = state.TypeState,
+                    Description = state.Description,
+                    Active = state.Active // si existe la entidad
                 };
             }
             catch (Exception ex)
@@ -91,24 +91,24 @@ namespace Business
 
                 var state = new State
                 {
-                    type_state = stateDto.typeState,
-                    description = stateDto.description,
-                    active = stateDto.active // si existe en la entidad
+                    TypeState = stateDto.TypeState,
+                    Description = stateDto.Description,
+                    Active = stateDto.Active // si existe la entidad
                 };
 
                 var stateCreado = await _stateData.CreateAsync(state);
 
                 return new StateDto
                 {
-                    id = state.id,
-                    typeState = state.type_state,
-                    description = state.description,
-                    active = state.active // si existe la entidad
+                    Id = state.Id,
+                    TypeState = state.TypeState,
+                    Description = state.Description,
+                    Active = state.Active // si existe la entidad
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo estado: {Name}", stateDto?.typeState?? "null");
+                _logger.LogError(ex, "Error al crear nuevo estado: {Name}", stateDto?.TypeState?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el estado", ex);
             }
         }
@@ -121,7 +121,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto State no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(stateDto.typeState))
+            if (string.IsNullOrWhiteSpace(stateDto.TypeState))
             {
                 _logger.LogWarning("Se intentó crear/actualizar un estado con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name del estado es obligatorio");

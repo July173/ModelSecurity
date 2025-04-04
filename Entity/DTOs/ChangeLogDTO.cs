@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOs
 {
-    public class ChangeLogDTO
+    public class ChangeLogDto
     {
         public int Id { get; set; }
         public string TableName { get; set; }

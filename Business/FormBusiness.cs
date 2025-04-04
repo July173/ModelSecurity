@@ -33,9 +33,13 @@ namespace Business
                 {
                     formsDTO.Add(new FormDto
                     {
-                        id = form.id,
-                        name = form.name,
-                        description = form.description
+                        Id = form.Id,
+                        Name = form.Name,
+                        Description = form.Description,
+                        Cuestion = form.Cuestion,
+                        TypeCuestion = form.TypeCuestion,
+                        Answer = form.Answer,
+                        Active = form.Active,
                     });
                 }
 
@@ -68,9 +72,13 @@ namespace Business
 
                 return new FormDto
                 {
-                    id = form.id,
-                    name = form.name,
-                    description = form.description
+                    Id = form.Id,
+                    Name = form.Name,
+                    Description = form.Description,
+                    Cuestion = form.Cuestion,
+                    TypeCuestion = form.TypeCuestion,
+                    Answer = form.Answer,
+                    Active = form.Active
                 };
             }
             catch (Exception ex)
@@ -89,22 +97,30 @@ namespace Business
 
                 var form = new Form
                 {
-                    name = formDto.name,
-                    description = formDto.description
+                    Name = formDto.Name,
+                    Description = formDto.Description,
+                    Cuestion = formDto.Cuestion,
+                    TypeCuestion = formDto.TypeCuestion,
+                    Answer = formDto.Answer,
+                    Active = formDto.Active,
                 };
 
                 var formCreado = await _formData.CreateAsync(form);
 
                 return new FormDto
                 {
-                    id = formCreado.id,
-                    name = formCreado.name,
-                    description = formCreado.description
+                    Id = form.Id,
+                    Name = form.Name,
+                    Description = form.Description,
+                    Cuestion = form.Cuestion,
+                    TypeCuestion = form.TypeCuestion,
+                    Answer = form.Answer,
+                    Active = form.Active,
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo formulario: {Name}", formDto?.name ?? "null");
+                _logger.LogError(ex, "Error al crear nuevo formulario: {Name}", formDto?.Name ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el formulario", ex);
             }
         }
@@ -117,7 +133,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto formulario no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(formDto.name))
+            if (string.IsNullOrWhiteSpace(formDto.Name))
             {
                 _logger.LogWarning("Se intentó crear/actualizar un formulario con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name del formulario es obligatorio");

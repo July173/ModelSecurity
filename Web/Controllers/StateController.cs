@@ -93,7 +93,7 @@ namespace Web.Controllers
             try
             {
                 var createdState = await _stateBusiness.CreateStateAsync(stateDto);
-                return CreatedAtAction(nameof(GetStateById), new { id = createdState.id }, createdState);
+                return CreatedAtAction(nameof(GetStateById), new { id = createdState.Id }, createdState);
             }
             catch (ValidationException ex)
             {

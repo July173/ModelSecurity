@@ -93,7 +93,7 @@ namespace Web.Controllers
             try
             {
                 var createdRegisterySofia = await _registerySofiaBusiness.CreateRegisterySofiaAsync(registerySofiaDto);
-                return CreatedAtAction(nameof(GetRegisterySofiaById), new { id = createdRegisterySofia.id }, createdRegisterySofia);
+                return CreatedAtAction(nameof(GetRegisterySofiaById), new { id = createdRegisterySofia.Id }, createdRegisterySofia);
             }
             catch (ValidationException ex)
             {

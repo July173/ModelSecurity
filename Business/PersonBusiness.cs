@@ -33,8 +33,18 @@ namespace Business
                 {
                     personsDTO.Add(new PersonDto
                     {
-                        id = person.id,
-                        name = person.name,
+                        Id = person.Id,
+                        Name = person.Name,
+                        FirstName = person.FirstName,
+                        SecondName = person.SecondName,
+                        FirstLastName = person.FirstLastName,
+                        SecondLastName = person.SecondLastName,
+                        PhoneNumber = person.PhoneNumber,
+                        Email = person.Email,
+                        TypeIdentification = person.TypeIdentification,
+                        NumberIdentification = person.NumberIdentification,
+                        Signig = person.Signig,
+                        Active = person.Active
                     });
                 }
 
@@ -67,8 +77,18 @@ namespace Business
 
                 return new PersonDto
                 {
-                    id = person.id,
-                    name = person.name,
+                    Id = person.Id,
+                    Name = person.Name,
+                    FirstName = person.FirstName,
+                    SecondName = person.SecondName,
+                    FirstLastName = person.FirstLastName,
+                    SecondLastName = person.SecondLastName,
+                    PhoneNumber = person.PhoneNumber,
+                    Email = person.Email,
+                    TypeIdentification = person.TypeIdentification,
+                    NumberIdentification = person.NumberIdentification,
+                    Signig = person.Signig,
+                    Active = person.Active
                 };
             }
             catch (Exception ex)
@@ -87,20 +107,40 @@ namespace Business
 
                 var person = new Person
                 {
-                   name = personDto.name,
+                    Name = personDto.Name,
+                    FirstName = personDto.FirstName,
+                    SecondName = personDto.SecondName,
+                    FirstLastName = personDto.FirstLastName,
+                    SecondLastName = personDto.SecondLastName,
+                    PhoneNumber = personDto.PhoneNumber,
+                    Email = personDto.Email,
+                    TypeIdentification = personDto.TypeIdentification,
+                    NumberIdentification = personDto.NumberIdentification,
+                    Signig = personDto.Signig,
+                    Active = personDto.Active
                 };
 
                 var personCreada = await _personData.CreateAsync(person);
 
                 return new PersonDto
                 {
-                    id = person.id,
-                    name = person.name,
+                    Id = person.Id,
+                    Name = person.Name,
+                    FirstName = person.FirstName,
+                    SecondName = person.SecondName,
+                    FirstLastName = person.FirstLastName,
+                    SecondLastName = person.SecondLastName,
+                    PhoneNumber = person.PhoneNumber,
+                    Email = person.Email,
+                    TypeIdentification = person.TypeIdentification,
+                    NumberIdentification = person.NumberIdentification,
+                    Signig = person.Signig,
+                    Active = person.Active
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nueva persona: {Name}", personDto?.name ?? "null");
+                _logger.LogError(ex, "Error al crear nueva persona: {Name}", personDto?.Name ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear la persona", ex);
             }
         }
@@ -113,7 +153,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto persona no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(personDto.name))
+            if (string.IsNullOrWhiteSpace(personDto.Name))
             {
                 _logger.LogWarning("Se intentó crear/actualizar una persona con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name de la persona es obligatorio");

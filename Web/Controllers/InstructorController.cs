@@ -93,7 +93,7 @@ namespace Web.Controllers
             try
             {
                 var createdInstructor = await _instructorBusiness.CreateInstructorAsync(instructorDto);
-                return CreatedAtAction(nameof(GetInstructorById), new { id = createdInstructor.id }, createdInstructor);
+                return CreatedAtAction(nameof(GetInstructorById), new { id = createdInstructor.Id }, createdInstructor);
             }
             catch (ValidationException ex)
             {

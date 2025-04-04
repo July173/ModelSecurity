@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOautogestion
 {
-    public class EnterpriseDTO
+    public class EnterpriseDto
     {
         public int Id { get; set; }      
         public string Observation { get; set; }
@@ -15,5 +15,6 @@ namespace Entity.DTOautogestion
         public string Locate { get; set; }
         public string NitEnterprise { get; set; }
         public string EmailEnterprise { get; set; }
+        public bool Active { get; set; }
     }
 }

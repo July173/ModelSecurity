@@ -33,10 +33,10 @@ namespace Business
                 {
                     processesDTO.Add(new ProcessDto
                     {
-                        id = process.id,
-                        typeProcess = process.type_procces,
-                        observation = process.observation,
-                        active = process.active // si existe la entidad
+                        Id = process.Id,
+                        TypeProcess = process.TypeProcess,
+                        Observation = process.Observation,
+                        Active = process.Active // si existe la entidad
                     });
                 }
 
@@ -69,10 +69,10 @@ namespace Business
 
                 return new ProcessDto
                 {
-                    id = process.id,
-                    typeProcess = process.type_procces,
-                    observation = process.observation,
-                    active = process.active // si existe la entidad
+                    Id = process.Id,
+                    TypeProcess = process.TypeProcess,
+                    Observation = process.Observation,
+                    Active = process.Active // si existe la entidad
                 };
             }
             catch (Exception ex)
@@ -91,24 +91,24 @@ namespace Business
 
                 var process = new Process
                 {
-                    type_procces = processDto.typeProcess,
-                    observation = processDto.observation,
-                    active = processDto.active // si existe en la entidad
+                    TypeProcess = processDto.TypeProcess,
+                    Observation = processDto.Observation,
+                    Active = processDto.Active // si existe la entidad
                 };
 
                 var processCreado = await _processData.CreateAsync(process);
 
                 return new ProcessDto
                 {
-                    id = process.id,
-                    typeProcess = process.type_procces,
-                    observation = process.observation,
-                    active = process.active // si existe la entidad
+                    Id = process.Id,
+                    TypeProcess = process.TypeProcess,
+                    Observation = process.Observation,
+                    Active = process.Active // si existe la entidad
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo proceso: {Name}", processDto?.typeProcess ?? "null");
+                _logger.LogError(ex, "Error al crear nuevo proceso: {Name}", processDto?.TypeProcess ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el proceso", ex);
             }
         }
@@ -121,7 +121,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto Process no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(processDto.typeProcess))
+            if (string.IsNullOrWhiteSpace(processDto.TypeProcess))
             {
                 _logger.LogWarning("Se intentó crear/actualizar un proceso con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name del proceso es obligatorio");

@@ -32,8 +32,9 @@ namespace Business
                 {
                     instructorsDTO.Add(new InstructorDto
                     {
-                        id = instructor.id,
-                        userId = instructor.userId // Relación con la entidad User
+                        Id = instructor.Id,
+                        Active = instructor.Active,
+                        UserId = instructor.UserId // Relación con la entidad User
                     });
                 }
 
@@ -66,8 +67,9 @@ namespace Business
 
                 return new InstructorDto
                 {
-                    id = instructor.id,
-                    userId = instructor.userId // Relación con la entidad User
+                    Id = instructor.Id,
+                    Active = instructor.Active,
+                    UserId = instructor.UserId // Relación con la entidad User
                 };
             }
             catch (Exception ex)
@@ -86,15 +88,17 @@ namespace Business
 
                 var instructor = new Instructor
                 {
-                    userId = instructorDto.userId // Relación con la entidad User
+                    Active = instructorDto.Active,
+                    UserId = instructorDto.UserId // Relación con la entidad User
                 };
 
                 var instructorCreado = await _instructorData.CreateAsync(instructor);
 
                 return new InstructorDto
                 {
-                    id = instructorCreado.id,
-                    userId = instructorCreado.userId // Relación con la entidad User
+                    Id = instructor.Id,
+                    Active = instructor.Active,
+                    UserId = instructor.UserId // Relación con la entidad User
                 };
             }
             catch (Exception ex)
@@ -112,7 +116,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto Instructor no puede ser nulo");
             }
 
-            if (instructorDto.userId <= 0)
+            if (instructorDto.UserId <= 0)
             {
                 _logger.LogWarning("Se intentó crear/actualizar un instructor con UserId inválido");
                 throw new Utilities.Exceptions.ValidationException("UserId", "El UserId del instructor es obligatorio y debe ser mayor que cero");

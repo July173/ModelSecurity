@@ -93,7 +93,7 @@ namespace Web.Controllers
             try
             {
                 var createdConcept = await _conceptBusiness.CreateConceptAsync(conceptDto);
-                return CreatedAtAction(nameof(GetConceptById), new { id = createdConcept.id }, createdConcept);
+                return CreatedAtAction(nameof(GetConceptById), new { id = createdConcept.Id }, createdConcept);
             }
             catch (ValidationException ex)
             {

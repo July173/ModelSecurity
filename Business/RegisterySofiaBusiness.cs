@@ -33,10 +33,11 @@ namespace Business
                 {
                     registerySofiasDTO.Add(new RegisterySofiaDto
                     {
-                        id = registerySofia.id,
-                        name = registerySofia.name,
-                        description = registerySofia.description,
-                        active = registerySofia.active // si existe la entidad
+                        Id = registerySofia.Id,
+                        Name = registerySofia.Name,
+                        Description = registerySofia.Description,
+                        Document = registerySofia.Document,
+                        Active = registerySofia.Active // si existe la entidad
                     });
                 }
 
@@ -69,10 +70,11 @@ namespace Business
 
                 return new RegisterySofiaDto
                 {
-                    id = registerySofia.id,
-                    name = registerySofia.name,
-                    description = registerySofia.description,
-                    active = registerySofia.active // si existe la entidad
+                    Id = registerySofia.Id,
+                    Name = registerySofia.Name,
+                    Description = registerySofia.Description,
+                    Document = registerySofia.Document,
+                    Active = registerySofia.Active // si existe la entidad
                 };
             }
             catch (Exception ex)
@@ -91,24 +93,26 @@ namespace Business
 
                 var registerySofia = new RegisterySofia
                 {
-                    name = registerySofiaDto.name,
-                    description = registerySofiaDto.description,
-                    active = registerySofiaDto.active // si existe en la entidad
+                    Name = registerySofiaDto.Name,
+                    Description = registerySofiaDto.Description,
+                    Document = registerySofiaDto.Document,
+                    Active = registerySofiaDto.Active // si existe la entidad
                 };
 
                 var registerySofiaCreado = await _registerySofiaData.CreateAsync(registerySofia);
 
                 return new RegisterySofiaDto
                 {
-                    id = registerySofiaCreado.id,
-                    name = registerySofiaCreado.name,
-                    description = registerySofiaCreado.description,
-                    active = registerySofiaCreado.active // si existe la entidad
+                    Id = registerySofia.Id,
+                    Name = registerySofia.Name,
+                    Description = registerySofia.Description,
+                    Document = registerySofia.Document,
+                    Active = registerySofia.Active // si existe la entidad
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo registro de Sofia: {Name}", registerySofiaDto?.name ?? "null");
+                _logger.LogError(ex, "Error al crear nuevo registro de Sofia: {Name}", registerySofiaDto?.Name ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el registro de Sofia", ex);
             }
         }
@@ -121,7 +125,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto RegisterySofia no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(registerySofiaDto.name))
+            if (string.IsNullOrWhiteSpace(registerySofiaDto.Name))
             {
                 _logger.LogWarning("Se intentó crear/actualizar un registro de Sofia con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name del registro de Sofia es obligatorio");

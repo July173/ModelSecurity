@@ -94,7 +94,7 @@ namespace Web.Controllers
             try
             {
                 var createdUserSede = await _userSedeBusiness.CreateUserSedeAsync(userSedeDto);
-                return CreatedAtAction(nameof(GetUserSedeById), new { id = createdUserSede.id }, createdUserSede);
+                return CreatedAtAction(nameof(GetUserSedeById), new { id = createdUserSede.Id }, createdUserSede);
             }
             catch (ValidationException ex)
             {

@@ -33,10 +33,10 @@ namespace Business
                 {
                     typeModalitiesDTO.Add(new TypeModalityDto
                     {
-                        id = typeModality.id,
-                        name = typeModality.name,
-                        description = typeModality.description,
-                        active = typeModality.active // si existe la entidad
+                        Id = typeModality.Id,
+                        Name = typeModality.Name,
+                        Description = typeModality.Description,
+                        Active = typeModality.Active // si existe la entidad
                     });
                 }
 
@@ -60,7 +60,7 @@ namespace Business
 
             try
             {
-                var typeModality = await _typeModalityData.GetByidAsync(id);
+                var typeModality = await _typeModalityData.GetByIdAsync(id);
                 if (typeModality == null)
                 {
                     _logger.LogInformation("No se encontró ninguna modalidad con ID: {Id}", id);
@@ -69,10 +69,10 @@ namespace Business
 
                 return new TypeModalityDto
                 {
-                    id = typeModality.id,
-                    name = typeModality.name,
-                    description = typeModality.description,
-                    active = typeModality.active // si existe la entidad
+                    Id = typeModality.Id,
+                    Name = typeModality.Name,
+                    Description = typeModality.Description,
+                    Active = typeModality.Active // si existe la entidad
                 };
             }
             catch (Exception ex)
@@ -91,24 +91,24 @@ namespace Business
 
                 var typeModality = new TypeModality
                 {
-                    name = typeModalityDto.name,
-                    description = typeModalityDto.description,
-                    active = typeModalityDto.active // si existe en la entidad
+                    Name = typeModalityDto.Name,
+                    Description = typeModalityDto.Description,
+                    Active = typeModalityDto.Active // si existe la entidad
                 };
 
                 var typeModalityCreado = await _typeModalityData.CreateAsync(typeModality);
 
                 return new TypeModalityDto
                 {
-                    id = typeModalityCreado.id,
-                    name = typeModalityCreado.name,
-                    description = typeModalityCreado.description,
-                    active = typeModalityCreado.active // si existe la entidad
+                    Id = typeModality.Id,
+                    Name = typeModality.Name,
+                    Description = typeModality.Description,
+                    Active = typeModality.Active // si existe la entidad
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nueva modalidad: {Name}", typeModalityDto?.name ?? "null");
+                _logger.LogError(ex, "Error al crear nueva modalidad: {Name}", typeModalityDto?.Name ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear la modalidad", ex);
             }
         }
@@ -121,7 +121,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto TypeModality no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(typeModalityDto.name))
+            if (string.IsNullOrWhiteSpace(typeModalityDto.Name))
             {
                 _logger.LogWarning("Se intentó crear/actualizar una modalidad con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name de la modalidad es obligatorio");

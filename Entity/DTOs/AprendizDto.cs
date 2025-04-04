@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOautogestion
 {
-    public class AprendizDTO
+    public class AprendizDto
     {
         public int Id { get; set; }
         public string PreviuosProgram { get; set; }

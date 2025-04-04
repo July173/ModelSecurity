@@ -93,7 +93,7 @@ namespace Web.Controllers
             try
             {
                 var createdVerification = await _verificationBusiness.CreateVerificationAsync(verificationDto);
-                return CreatedAtAction(nameof(GetVerificationById), new { id = createdVerification.id }, createdVerification);
+                return CreatedAtAction(nameof(GetVerificationById), new { id = createdVerification.Id }, createdVerification);
             }
             catch (ValidationException ex)
             {

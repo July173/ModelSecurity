@@ -93,7 +93,7 @@ namespace Web.Controllers
             try
             {
                 var createdProcess = await _processBusiness.CreateProcessAsync(processDto);
-                return CreatedAtAction(nameof(GetProcessById), new { id = createdProcess.id }, createdProcess);
+                return CreatedAtAction(nameof(GetProcessById), new { id = createdProcess.Id }, createdProcess);
             }
             catch (ValidationException ex)
             {

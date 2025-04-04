@@ -93,7 +93,7 @@ namespace Web.Controllers
             try
             {
                 var createdProgram = await _programBusiness.CreateProgramAsync(programDto);
-                return CreatedAtAction(nameof(GetProgramById), new { id = createdProgram.id }, createdProgram);
+                return CreatedAtAction(nameof(GetProgramById), new { id = createdProgram.Id }, createdProgram);
             }
             catch (ValidationException ex)
             {

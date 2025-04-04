@@ -32,10 +32,14 @@ namespace Business
                 {
                     enterprisesDTO.Add(new EnterpriseDto
                     {
-                        id = enterprise.id,
-                        nameEnterprise = enterprise.name_enterprise,
-                        nitEnterprise = enterprise.nit_enterprise,
-                        locate = enterprise.locate
+                        Id = enterprise.Id,
+                        NameEnterprise = enterprise.NameEnterprise,
+                        NitEnterprise = enterprise.NitEnterprise,
+                        Locate = enterprise.Locate,
+                        Observation = enterprise.Observation,
+                        PhoneEnterprise = enterprise.PhoneEnterprise,
+                        EmailEnterprise = enterprise.EmailEnterprise,
+                        Active = enterprise.Active,
                     });
                 }
 
@@ -68,10 +72,14 @@ namespace Business
 
                 return new EnterpriseDto
                 {
-                    id = enterprise.id,
-                    nameEnterprise = enterprise.name_enterprise,
-                    nitEnterprise = enterprise.nit_enterprise,
-                    locate = enterprise.locate
+                    Id = enterprise.Id,
+                    NameEnterprise = enterprise.NameEnterprise,
+                    NitEnterprise = enterprise.NitEnterprise,
+                    Locate = enterprise.Locate,
+                    Observation = enterprise.Observation,
+                    PhoneEnterprise = enterprise.PhoneEnterprise,
+                    EmailEnterprise = enterprise.EmailEnterprise,
+                    Active = enterprise.Active,
                 };
             }
             catch (Exception ex)
@@ -90,24 +98,32 @@ namespace Business
 
                 var enterprise = new Enterprise
                 {
-                    name_enterprise = enterpriseDto.nameEnterprise,
-                    nit_enterprise = enterpriseDto.nitEnterprise,
-                    locate = enterpriseDto.locate
+                    NameEnterprise = enterpriseDto.NameEnterprise,
+                    NitEnterprise = enterpriseDto.NitEnterprise,
+                    Locate = enterpriseDto.Locate,
+                    Observation = enterpriseDto.Observation,
+                    PhoneEnterprise = enterpriseDto.PhoneEnterprise,
+                    EmailEnterprise = enterpriseDto.EmailEnterprise,
+                    Active = enterpriseDto.Active
                 };
 
                 var enterpriseCreado = await _enterpriseData.CreateAsync(enterprise);
 
                 return new EnterpriseDto
                 {
-                    id = enterprise.id,
-                    nameEnterprise = enterprise.name_enterprise,
-                    nitEnterprise = enterprise.nit_enterprise,
-                    locate = enterprise.locate
+                    Id = enterprise.Id,
+                    NameEnterprise = enterprise.NameEnterprise,
+                    NitEnterprise = enterprise.NitEnterprise,
+                    Locate = enterprise.Locate,
+                    Observation = enterprise.Observation,
+                    PhoneEnterprise = enterprise.PhoneEnterprise,
+                    EmailEnterprise = enterprise.EmailEnterprise,
+                    Active = enterprise.Active,
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nueva empresa: {Name}", enterpriseDto?.nameEnterprise ?? "null");
+                _logger.LogError(ex, "Error al crear nueva empresa: {Name}", enterpriseDto?.NameEnterprise ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear la empresa", ex);
             }
         }
@@ -120,7 +136,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto Enterprise no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(enterpriseDto.nameEnterprise))
+            if (string.IsNullOrWhiteSpace(enterpriseDto.NameEnterprise))
             {
                 _logger.LogWarning("Se intentó crear/actualizar una empresa con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name de la empresa es obligatorio");

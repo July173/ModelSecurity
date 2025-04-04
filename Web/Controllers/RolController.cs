@@ -38,7 +38,7 @@ namespace Web.Controllers
         /// <response code="200">Retorna la lista de permisos</response>
         /// <response code="500">Error interno del servidor</response>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<RolDTO>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<RolDto>), 200)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> GetAllRols()
         {
@@ -101,15 +101,15 @@ namespace Web.Controllers
         /// <response code="400">Datos del permiso no válidos</response>
         /// <response code="500">Error interno del servidor</response>
         [HttpPost]
-        [ProducesResponseType(typeof(RolDTO), 201)]
+        [ProducesResponseType(typeof(RolDto), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> CreateRol([FromBody] RolDTO RolDto)
+        public async Task<IActionResult> CreateRol([FromBody] RolDto RolDto)
         {
             try
             {
                 var createdRol = await _RolBusiness.CreateRolAsync(RolDto);
-                return CreatedAtAction(nameof(GetRolById), new { id = createdRol.id }, createdRol);
+                return CreatedAtAction(nameof(GetRolById), new { id = createdRol.Id }, createdRol);
             }
             catch (ValidationException ex)
             {

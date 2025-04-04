@@ -93,7 +93,7 @@ namespace Web.Controllers
             try
             {
                 var createdTypeModality = await _typeModalityBusiness.CreateTypeModalityAsync(typeModalityDto);
-                return CreatedAtAction(nameof(GetTypeModalityById), new { id = createdTypeModality.id }, createdTypeModality);
+                return CreatedAtAction(nameof(GetTypeModalityById), new { id = createdTypeModality.Id }, createdTypeModality);
             }
             catch (ValidationException ex)
             {

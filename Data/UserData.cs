@@ -24,7 +24,7 @@ namespace Data
             return await _context.Set<User>().ToListAsync();
         }
 
-        public async Task<User?> GetByidAsync(int id)
+        public async Task<User?> GetByIdAsync(int id)
         {
             try
             {

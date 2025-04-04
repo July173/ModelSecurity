@@ -32,16 +32,16 @@ namespace Business
                 {
                     relacionesDTO.Add(new AprendizProcessInstructorDto
                     {
-                        id = relacion.id,
-                        aprendizId = relacion.aprendizId,
-                        instructorId = relacion.instructorId,
-                        registerySofiaId = relacion.registerySofiaId,
-                        conceptId = relacion.conceptId,
-                        enterpriseId = relacion.enterpriseId,
-                        processId = relacion.processId,
-                        typeModalityId = relacion.typeModalityId,
-                        stateId = relacion.stateId,
-                        verificationId = relacion.verificationId
+                        Id = relacion.Id,
+                        AprendizId = relacion.AprendizId,
+                        InstructorId = relacion.InstructorId,
+                        RegisterySofiaId = relacion.RegisterySofiaId,
+                        ConceptId = relacion.ConceptId,
+                        EnterpriseId = relacion.EnterpriseId,
+                        ProcessId = relacion.ProcessId,
+                        TypeModalityId = relacion.TypeModalityId,
+                        StateId = relacion.StateId,
+                        VerificationId = relacion.VerificationId
                     });
                 }
 
@@ -74,16 +74,16 @@ namespace Business
 
                 return new AprendizProcessInstructorDto
                 {
-                    id = relacion.id,
-                    aprendizId = relacion.aprendizId,
-                    instructorId = relacion.instructorId,
-                    registerySofiaId = relacion.registerySofiaId,
-                    conceptId = relacion.conceptId,
-                    enterpriseId = relacion.enterpriseId,
-                    processId = relacion.processId,
-                    typeModalityId = relacion.typeModalityId,
-                    stateId = relacion.stateId,
-                    verificationId = relacion.verificationId
+                    Id = relacion.Id,
+                    AprendizId = relacion.AprendizId,
+                    InstructorId = relacion.InstructorId,
+                    RegisterySofiaId = relacion.RegisterySofiaId,
+                    ConceptId = relacion.ConceptId,
+                    EnterpriseId = relacion.EnterpriseId,
+                    ProcessId = relacion.ProcessId,
+                    TypeModalityId = relacion.TypeModalityId,
+                    StateId = relacion.StateId,
+                    VerificationId = relacion.VerificationId
                 };
             }
             catch (Exception ex)
@@ -102,31 +102,32 @@ namespace Business
 
                 var relacion = new AprendizProcessInstructor
                 {
-                    aprendizId = dto.aprendizId,
-                    instructorId = dto.instructorId,
-                    registerySofiaId = dto.registerySofiaId,
-                    conceptId = dto.conceptId,
-                    enterpriseId = dto.enterpriseId,
-                    processId = dto.processId,
-                    typeModalityId = dto.typeModalityId,
-                    stateId = dto.stateId,
-                    verificationId = dto.verificationId
+                    Id = dto.Id,
+                    AprendizId = dto.AprendizId,
+                    InstructorId = dto.InstructorId,
+                    RegisterySofiaId = dto.RegisterySofiaId,
+                    ConceptId = dto.ConceptId,
+                    EnterpriseId = dto.EnterpriseId,
+                    ProcessId = dto.ProcessId,
+                    TypeModalityId = dto.TypeModalityId,
+                    StateId = dto.StateId,
+                    VerificationId = dto.VerificationId
                 };
 
                 var creada = await _aprendizProcessInstructorData.CreateAsync(relacion);
 
                 return new AprendizProcessInstructorDto
                 {
-                    id = creada.id,
-                    aprendizId = creada.aprendizId,
-                    instructorId = creada.instructorId,
-                    registerySofiaId = creada.registerySofiaId,
-                    conceptId = creada.conceptId,
-                    enterpriseId = creada.enterpriseId,
-                    processId = creada.processId,
-                    typeModalityId = creada.typeModalityId,
-                    stateId = creada.stateId,
-                    verificationId = creada.verificationId
+                    Id = relacion.Id,
+                    AprendizId = relacion.AprendizId,
+                    InstructorId = relacion.InstructorId,
+                    RegisterySofiaId = relacion.RegisterySofiaId,
+                    ConceptId = relacion.ConceptId,
+                    EnterpriseId = relacion.EnterpriseId,
+                    ProcessId = relacion.ProcessId,
+                    TypeModalityId = relacion.TypeModalityId,
+                    StateId = relacion.StateId,
+                    VerificationId = relacion.VerificationId
                 };
             }
             catch (Exception ex)
@@ -144,7 +145,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto AprendizProcessInstructor no puede ser nulo");
             }
 
-            if (dto.aprendizId <= 0 || dto.instructorId <= 0 || dto.processId <= 0)
+            if (dto.AprendizId <= 0 || dto.InstructorId <= 0 || dto.ProcessId <= 0)
             {
                 _logger.LogWarning("Se intentó crear una relación con IDs inválidos");
                 throw new Utilities.Exceptions.ValidationException("IDs", "Los IDs deben ser mayores que cero");

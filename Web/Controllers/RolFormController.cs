@@ -94,7 +94,7 @@ namespace Web.Controllers
             try
             {
                 var createdRolForm = await _rolFormBusiness.CreateRolFormAsync(rolFormDto);
-                return CreatedAtAction(nameof(GetRolFormById), new { id = createdRolForm.id }, createdRolForm);
+                return CreatedAtAction(nameof(GetRolFormById), new { id = createdRolForm.Id }, createdRolForm);
             }
             catch (ValidationException ex)
             {

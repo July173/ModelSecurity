@@ -43,6 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbAutogestion.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DbAutogestion.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DbAutogestion.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DbAutogestion.tt</DependentUpon>
+    </Compile>
     <Compile Include="DbAutogestion.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -61,6 +71,21 @@
     <None Include="DbAutogestion.edmx.diagram">
       <DependentUpon>DbAutogestion.edmx</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DbAutogestion.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DbAutogestion.Context.cs</LastGenOutput>
+      <DependentUpon>DbAutogestion.edmx</DependentUpon>
+    </Content>
+    <Content Include="DbAutogestion.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DbAutogestion.cs</LastGenOutput>
+      <DependentUpon>DbAutogestion.edmx</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

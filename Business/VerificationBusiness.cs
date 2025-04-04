@@ -33,10 +33,10 @@ namespace Business
                 {
                     verificationsDTO.Add(new VerificationDto
                     {
-                        id = verification.id,
-                        name = verification.name,
-                        observation = verification.observation,
-                        active = verification.active //si existe la entidad
+                        Id = verification.Id,
+                        Name = verification.Name,
+                        Observation = verification.Observation,
+                        Active = verification.Active //si existe la entidad
                     });
                 }
 
@@ -60,7 +60,7 @@ namespace Business
 
             try
             {
-                var verification = await _verificationData.GetByidAsync(id);
+                var verification = await _verificationData.GetByIdAsync(id);
                 if (verification == null)
                 {
                     _logger.LogInformation("No se encontró ninguna verificacion con ID: {Id}", id);
@@ -69,10 +69,10 @@ namespace Business
 
                 return new VerificationDto
                 {
-                    id = verification.id,
-                    name = verification.name,
-                    observation = verification.observation,
-                    active = verification.active //si existe la entidad
+                    Id = verification.Id,
+                    Name = verification.Name,
+                    Observation = verification.Observation,
+                    Active = verification.Active //si existe la entidad
                 };
             }
             catch (Exception ex)
@@ -91,24 +91,24 @@ namespace Business
 
                 var verification = new Verification
                 {
-                    name = verificationDto.name,
-                    observation = verificationDto.observation,
-                    active = verificationDto.active // Si existe en la entidad
+                    Name = verificationDto.Name,
+                    Observation = verificationDto.Observation,
+                    Active = verificationDto.Active //si existe la entidad
                 };
            
                 var verificationCreado = await _verificationData.CreateAsync(verification);
 
                 return new VerificationDto
                 {
-                    id = verification.id,
-                    name = verification.name,
-                    observation = verification.observation,
-                    active = verification.active //si existe la entidad
+                    Id = verification.Id,
+                    Name = verification.Name,
+                    Observation = verification.Observation,
+                    Active = verification.Active //si existe la entidad
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nueva verificacion: {Name}", verificationDto?.name ?? "null");
+                _logger.LogError(ex, "Error al crear nueva verificacion: {Name}", verificationDto?.Name ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear la verificacion", ex);
             }
         }
@@ -121,7 +121,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto verificacion no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(verificationDto.name))
+            if (string.IsNullOrWhiteSpace(verificationDto.Name))
             {
                 _logger.LogWarning("Se intentó crear/actualizar una verificacion con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name de la verificacion es obligatorio");

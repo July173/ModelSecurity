@@ -34,9 +34,10 @@ namespace Business
                 {
                     userSedesDTO.Add(new UserSedeDto
                     {
-                        id = userSede.id,
-                        userId = userSede.userId,
-                        sedeId = userSede.sedeId,
+                        Id = userSede.Id,
+                        UserId = userSede.UserId,
+                        SedeId = userSede.SedeId,
+                        StatusProcedure = userSede.StatusProcedure
                     });
                 }
 
@@ -69,9 +70,10 @@ namespace Business
 
                 return new UserSedeDto
                 {
-                    id = userSede.id,
-                    userId = userSede.userId,
-                    sedeId = userSede.sedeId,
+                    Id = userSede.Id,
+                    UserId = userSede.UserId,
+                    SedeId = userSede.SedeId,
+                    StatusProcedure = userSede.StatusProcedure
                 };
             }
             catch (Exception ex)
@@ -90,22 +92,24 @@ namespace Business
 
                 var userSede = new UserSede
                 {
-                    userId = userSedeDto.userId,
-                    sedeId = userSedeDto.sedeId,
+                    UserId = userSedeDto.UserId,
+                    SedeId = userSedeDto.SedeId,
+                    StatusProcedure = userSedeDto.StatusProcedure
                 };
 
                 var userSedeCreado = await _userSedeData.CreateAsync(userSede);
 
                 return new UserSedeDto
                 {
-                    id = userSedeCreado.id,
-                    userId = userSedeCreado.userId,
-                    sedeId = userSedeCreado.sedeId,
+                    Id = userSede.Id,
+                    UserId = userSede.UserId,
+                    SedeId = userSede.SedeId,
+                    StatusProcedure = userSede.StatusProcedure
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nueva sede de usuario: {UserId}", userSedeDto?.userId ?? 0);
+                _logger.LogError(ex, "Error al crear nueva sede de usuario: {UserId}", userSedeDto?.UserId ?? 0);
                 throw new ExternalServiceException("Base de datos", "Error al crear la sede de usuario", ex);
             }
         }
@@ -118,13 +122,13 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto UserSede no puede ser nulo");
             }
 
-            if (userSedeDto.userId <= 0)
+            if (userSedeDto.UserId <= 0)
             {
                 _logger.LogWarning("Se intentó crear/actualizar una sede de usuario con UserId inválido");
                 throw new Utilities.Exceptions.ValidationException("UserId", "El UserId de la sede de usuario es obligatorio y debe ser mayor a cero");
             }
 
-            if (userSedeDto.sedeId <= 0)
+            if (userSedeDto.SedeId <= 0)
             {
                 _logger.LogWarning("Se intentó crear/actualizar una sede de usuario con SedeId inválido");
                 throw new Utilities.Exceptions.ValidationException("SedeId", "El SedeId de la sede de usuario es obligatorio y debe ser mayor a cero");

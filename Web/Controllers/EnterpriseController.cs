@@ -93,7 +93,7 @@ namespace Web.Controllers
             try
             {
                 var createdEnterprise = await _enterpriseBusiness.CreateEnterpriseAsync(enterpriseDto);
-                return CreatedAtAction(nameof(GetEnterpriseById), new { id = createdEnterprise.id }, createdEnterprise);
+                return CreatedAtAction(nameof(GetEnterpriseById), new { id = createdEnterprise.Id }, createdEnterprise);
             }
             catch (ValidationException ex)
             {

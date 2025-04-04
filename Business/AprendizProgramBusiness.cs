@@ -33,9 +33,9 @@ namespace Business
                 {
                     programsDTO.Add(new AprendizProgramDto
                     {
-                        id = program.id,
-                        aprendizId = program.id,
-                        programId = program.id,
+                        Id = program.Id,                        
+                        AprendizId = program.Id,
+                        ProgramId = program.ProgramId,                            
                     });
                 }
 
@@ -68,9 +68,9 @@ namespace Business
 
                 return new AprendizProgramDto
                 {
-                    id = program.id,
-                    aprendizId = program.id,
-                    programId = program.id,
+                    Id = program.Id,
+                    AprendizId = program.Id,
+                    ProgramId = program.ProgramId,
                 };
             }
             catch (Exception ex)
@@ -89,17 +89,17 @@ namespace Business
 
                 var program = new AprendizProgram
                 {
-                    aprendizId = aprendizProgramDto.id,
-                    programId = aprendizProgramDto.id,
+                    AprendizId = aprendizProgramDto.Id,
+                    ProgramId = aprendizProgramDto.ProgramId,
                 };
 
                 var programCreado = await _aprendizProgramData.CreateAsync(program);
 
                 return new AprendizProgramDto
                 {
-                    id = program.id,
-                    aprendizId = program.id,
-                    programId = program.id,
+                    Id = program.Id,
+                    AprendizId = program.Id,
+                    ProgramId = program.ProgramId,
                 };
             }
             catch (Exception ex)

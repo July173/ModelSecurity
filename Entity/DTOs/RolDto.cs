@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOautogestion
 {
-    public class RolDTO
+    public class RolDto
     {
         public int Id { get; set; }
         public string TypeRol { get; set; }

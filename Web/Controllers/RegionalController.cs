@@ -93,7 +93,7 @@ namespace Web.Controllers
             try
             {
                 var createdRegional = await _regionalBusiness.CreateRegionalAsync(regionalDto);
-                return CreatedAtAction(nameof(GetRegionalById), new { id = createdRegional.id }, createdRegional);
+                return CreatedAtAction(nameof(GetRegionalById), new { id = createdRegional.Id }, createdRegional);
             }
             catch (ValidationException ex)
             {

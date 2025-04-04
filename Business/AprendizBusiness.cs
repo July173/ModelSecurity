@@ -33,9 +33,10 @@ namespace Business
                 {
                     aprendicesDTO.Add(new AprendizDto
                     {
-                        id = aprendiz.id,
-                        previousProgram = aprendiz.previousProgram,
-                        active = aprendiz.active //si existe la entidad
+                        Id = aprendiz.Id,
+                        PreviuosProgram = aprendiz.PreviuosProgram,
+                        UserId = aprendiz.UserId,
+                        Active = aprendiz.Active //si existe la entidad
                     });
                 }
 
@@ -59,7 +60,7 @@ namespace Business
 
             try
             {
-                var aprendiz = await _aprendizData.GetByidAsync(id);
+                var aprendiz = await _aprendizData.GetByIdAsync(id);
                 if (aprendiz == null)
                 {
                     _logger.LogInformation("No se encontró ningún aprendiz con ID: {Id}", id);
@@ -68,9 +69,10 @@ namespace Business
 
                 return new AprendizDto
                 {
-                    id = aprendiz.id,
-                    previousProgram = aprendiz.previousProgram,
-                    active = aprendiz.active //si existe la entidad
+                    Id = aprendiz.Id,
+                    PreviuosProgram = aprendiz.PreviuosProgram,
+                    UserId = aprendiz.UserId,
+                    Active = aprendiz.Active //si existe la entidad
                 };
             }
             catch (Exception ex)
@@ -89,22 +91,24 @@ namespace Business
 
                 var aprendiz = new Aprendiz
                 {
-                    previousProgram = aprendizDto.previousProgram,
-                    active = aprendizDto.active // Si existe en la entidad
+                    PreviuosProgram = aprendizDto.PreviuosProgram,
+                    UserId = aprendizDto.UserId,
+                    Active = aprendizDto.Active //si existe la entidad
                 };
 
                 var aprendizCreado = await _aprendizData.CreateAsync(aprendiz);
 
                 return new AprendizDto
                 {
-                    id = aprendiz.id,
-                    previousProgram = aprendiz.previousProgram,
-                    active = aprendiz.active //si existe la entidad
+                    Id = aprendiz.Id,
+                    PreviuosProgram = aprendiz.PreviuosProgram,
+                    UserId = aprendiz.UserId,
+                    Active = aprendiz.Active //si existe la entidad
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo aprendiz: {Name}", aprendizDto?.previousProgram ?? "null");
+                _logger.LogError(ex, "Error al crear nuevo aprendiz: {Name}", aprendizDto?.PreviuosProgram ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el aprendiz", ex);
             }
         }

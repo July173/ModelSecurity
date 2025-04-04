@@ -1,5 +1,6 @@
 ﻿using Business;
 using Data;
+using Entity.DTOautogestion;
 using Entity.DTOautogestion.pivote;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -111,7 +112,7 @@ namespace Web.Controllers
             try
             {
                 var createdFormModule = await _FormModuleBusiness.CreateFormModuleAsync(formModuleDto);
-                return CreatedAtAction(nameof(GetFormModuleById), new { id = createdFormModule.id }, createdFormModule);
+                return CreatedAtAction(nameof(GetFormModuleById), new { id = createdFormModule.Id }, createdFormModule);
             }
             catch (ValidationException ex)
             {

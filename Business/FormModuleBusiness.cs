@@ -1,4 +1,5 @@
 ﻿using Data;
+using Entity.DTOautogestion;
 using Entity.DTOautogestion.pivote;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
@@ -33,9 +34,10 @@ namespace Business
                 {
                     formModulesDTO.Add(new FormModuleDto
                     {
-                        id = formModule.id,
-                        formId = formModule.formId,
-                        moduleId = formModule.moduleId
+                        Id = formModule.Id,
+                        StatusProcedure = formModule.StatusProcedure,
+                        FormId = formModule.FormId,
+                        ModuleId = formModule.ModuleId
                     });
                 }
 
@@ -68,9 +70,10 @@ namespace Business
 
                 return new FormModuleDto
                 {
-                    id = formModule.id,
-                    formId = formModule.formId,
-                    moduleId = formModule.moduleId
+                    Id = formModule.Id,
+                    StatusProcedure = formModule.StatusProcedure,
+                    FormId = formModule.FormId,
+                    ModuleId = formModule.ModuleId
                 };
             }
             catch (Exception ex)
@@ -89,17 +92,19 @@ namespace Business
 
                 var formModule = new FormModule
                 {
-                    formId = formModuleDto.formId,
-                    moduleId = formModuleDto.moduleId
+                    StatusProcedure = formModuleDto.StatusProcedure,
+                    FormId = formModuleDto.FormId,
+                    ModuleId = formModuleDto.ModuleId
                 };
 
                 var formModuleCreado = await _formModuleData.CreateAsync(formModule);
 
                 return new FormModuleDto
                 {
-                    id = formModuleCreado.id,
-                    formId = formModuleCreado.formId,
-                    moduleId = formModuleCreado.moduleId
+                    Id = formModule.Id,
+                    StatusProcedure = formModule.StatusProcedure,
+                    FormId = formModule.FormId,
+                    ModuleId = formModule.ModuleId
                 };
             }
             catch (Exception ex)
@@ -117,7 +122,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto módulo de formulario no puede ser nulo");
             }
 
-            if (formModuleDto.formId <= 0 || formModuleDto.moduleId <= 0)
+            if (formModuleDto.FormId <= 0 || formModuleDto.ModuleId <= 0)
             {
                 _logger.LogWarning("Se intentó crear/actualizar un módulo de formulario con FormId o ModuleId inválidos");
                 throw new Utilities.Exceptions.ValidationException("FormId/ModuleId", "El FormId y el ModuleId del módulo de formulario son obligatorios y deben ser mayores que cero");

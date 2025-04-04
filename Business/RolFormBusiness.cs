@@ -34,10 +34,10 @@ namespace Business
                 {
                     rolFormsDTO.Add(new RolFormDto
                     {
-                        id = rolForm.id,
-                        permission = rolForm.permission,
-                        rolId = rolForm.id,
-                        formId = rolForm.formId,
+                        Id = rolForm.Id,
+                        Permission = rolForm.Permission,
+                        RolId = rolForm.RolId,
+                        FormId = rolForm.FormId,
 
                     });
                 }
@@ -71,10 +71,10 @@ namespace Business
 
                 return new RolFormDto
                 {
-                    id = rolForm.id,
-                    permission = rolForm.permission,
-                    rolId = rolForm.id,
-                    formId = rolForm.formId,
+                    Id = rolForm.Id,
+                    Permission = rolForm.Permission,
+                    RolId = rolForm.RolId,
+                    FormId = rolForm.FormId,
                 };
             }
             catch (Exception ex)
@@ -93,24 +93,24 @@ namespace Business
 
                 var rolForm = new RolForm
                 {
-                     permission = rolFormDto.permission,
-                    rolId = rolFormDto.id,
-                    formId = rolFormDto.formId,
+                    Permission = rolFormDto.Permission,
+                    RolId = rolFormDto.RolId,
+                    FormId = rolFormDto.FormId
                 };
 
                 var rolFormCreado = await _rolFormData.CreateAsync(rolForm);
 
                 return new RolFormDto
                 {
-                    id = rolForm.id,
-                    permission = rolForm.permission,
-                    rolId = rolForm.id,
-                    formId = rolForm.formId,
+                    Id = rolForm.Id,
+                    Permission = rolForm.Permission,
+                    RolId = rolForm.RolId,
+                    FormId = rolForm.FormId,
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo rol de formulario: {Name}", rolFormDto?.permission ?? "null");
+                _logger.LogError(ex, "Error al crear nuevo rol de formulario: {Name}", rolFormDto?.Permission ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el rol de formulario", ex);
             }
         }
@@ -123,7 +123,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto RolForm no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(rolFormDto.permission))
+            if (string.IsNullOrWhiteSpace(rolFormDto.Permission))
             {
                 _logger.LogWarning("Se intentó crear/actualizar un rol de formulario con permiso vacío");
                 throw new Utilities.Exceptions.ValidationException("permission", "El permiso del rol de formulario es obligatorio");

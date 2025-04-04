@@ -33,10 +33,12 @@ namespace Business
                 {
                     programsDTO.Add(new ProgramDto
                     {
-                        id = program.id,
-                        name = program.name,
-                        description = program.description,
-                        active = program.active // si existe la entidad
+                        Id = program.Id,
+                        Name = program.Name,
+                        Description = program.Description,
+                        CodeProgram = program.CodeProgram,
+                        TypeProgram = program.TypeProgram,
+                        Active = program.Active // si existe la entidad
                     });
                 }
 
@@ -69,10 +71,12 @@ namespace Business
 
                 return new ProgramDto
                 {
-                    id = program.id,
-                    name = program.name,
-                    description = program.description,
-                    active = program.active // si existe la entidad
+                    Id = program.Id,
+                    Name = program.Name,
+                    Description = program.Description,
+                    CodeProgram = program.CodeProgram,
+                    TypeProgram = program.TypeProgram,
+                    Active = program.Active // si existe la entidad
                 };
             }
             catch (Exception ex)
@@ -91,24 +95,28 @@ namespace Business
 
                 var program = new Program
                 {
-                    name = programDto.name,
-                    description = programDto.description,
-                    active = programDto.active // si existe en la entidad
+                    Name = programDto.Name,
+                    Description = programDto.Description,
+                    CodeProgram = programDto.CodeProgram,
+                    TypeProgram = programDto.TypeProgram,
+                    Active = programDto.Active // si existe la entidad
                 };
 
                 var programCreado = await _programData.CreateAsync(program);
 
                 return new ProgramDto
                 {
-                    id = programCreado.id,
-                    name = programCreado.name,
-                    description = programCreado.description,
-                    active = programCreado.active // si existe la entidad
+                    Id = program.Id,
+                    Name = program.Name,
+                    Description = program.Description,
+                    CodeProgram = program.CodeProgram,
+                    TypeProgram = program.TypeProgram,
+                    Active = program.Active // si existe la entidad
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo programa: {Name}", programDto?.name ?? "null");
+                _logger.LogError(ex, "Error al crear nuevo programa: {Name}", programDto?.Name ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el programa", ex);
             }
         }
@@ -121,7 +129,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto Program no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(programDto.name))
+            if (string.IsNullOrWhiteSpace(programDto.Name))
             {
                 _logger.LogWarning("Se intentó crear/actualizar un programa con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name del programa es obligatorio");

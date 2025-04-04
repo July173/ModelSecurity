@@ -8,12 +8,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Data
 {
-    public class RolUserData
+    public class UserRolData
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger _logger;
 
-        public RolUserData(ApplicationDbContext context, ILogger logger)
+        public UserRolData(ApplicationDbContext context, ILogger logger)
         {
             _context = context;
             _logger = logger;

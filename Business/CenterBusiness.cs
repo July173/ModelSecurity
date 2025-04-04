@@ -32,9 +32,12 @@ namespace Business
                 {
                     centersDTO.Add(new CenterDto
                     {
-                        id = center.id,
-                        name = center.name,
-                        address = center.address
+                        Id = center.Id,
+                        Name = center.Name,
+                        CodeCenter = center.CodeCenter,
+                        Active = center.Active,
+                        RegionalId = center.RegionalId,
+                        Address = center.Address
           
                     });
                 }
@@ -68,9 +71,12 @@ namespace Business
 
                 return new CenterDto
                 {
-                    id = center.id,
-                    name = center.name,
-                    address = center.address
+                    Id = center.Id,
+                    Name = center.Name,
+                    CodeCenter = center.CodeCenter,
+                    Active = center.Active,
+                    RegionalId = center.RegionalId,
+                    Address = center.Address
                 };
             }
             catch (Exception ex)
@@ -89,22 +95,28 @@ namespace Business
 
                 var center = new Center
                 {
-                    name = centerDto.name,
-                    address = centerDto.address
+                    Name = centerDto.Name,
+                    CodeCenter = centerDto.CodeCenter,
+                    Active = centerDto.Active,
+                    RegionalId = centerDto.RegionalId,
+                    Address = centerDto.Address
                 };
 
                 var centerCreado = await _centerData.CreateAsync(center);
 
                 return new CenterDto
                 {
-                    id = centerCreado.id,
-                    name = centerCreado.name,
-                    address = centerCreado.address
+                    Id = center.Id,
+                    Name = center.Name,
+                    CodeCenter = center.CodeCenter,
+                    Active = center.Active,
+                    RegionalId = center.RegionalId,
+                    Address = center.Address
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo centro: {Name}", centerDto?.name ?? "null");
+                _logger.LogError(ex, "Error al crear nuevo centro: {Name}", centerDto?.Name ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el centro", ex);
             }
         }
@@ -117,7 +129,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto Center no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(centerDto.name))
+            if (string.IsNullOrWhiteSpace(centerDto.Name))
             {
                 _logger.LogWarning("Se intentó crear/actualizar un centro con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name del centro es obligatorio");

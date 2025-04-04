@@ -34,9 +34,9 @@ namespace Business
                 {
                     instructorProgramsDTO.Add(new InstructorProgramDto
                     {
-                        id = instructorProgram.id,
-                        instructorId = instructorProgram.instructorId,
-                        programId = instructorProgram.programId,
+                        Id = instructorProgram.Id,
+                        InstructorId = instructorProgram.InstructorId,
+                        ProgramId = instructorProgram.ProgramId,
                     });
                 }
 
@@ -69,9 +69,9 @@ namespace Business
 
                 return new InstructorProgramDto
                 {
-                    id = instructorProgram.id,
-                    instructorId = instructorProgram.instructorId,
-                    programId = instructorProgram.programId,
+                    Id = instructorProgram.Id,
+                    InstructorId = instructorProgram.InstructorId,
+                    ProgramId = instructorProgram.ProgramId,
                 };
             }
             catch (Exception ex)
@@ -90,17 +90,17 @@ namespace Business
 
                 var instructorProgram = new InstructorProgram
                 {
-                    instructorId = instructorProgramDto.instructorId,
-                    programId = instructorProgramDto.programId,
+                    InstructorId = instructorProgramDto.InstructorId,
+                    ProgramId = instructorProgramDto.ProgramId
                 };
 
                 var instructorProgramCreado = await _instructorProgramData.CreateAsync(instructorProgram);
 
                 return new InstructorProgramDto
                 {
-                    id = instructorProgramCreado.id,
-                    instructorId = instructorProgramCreado.instructorId,
-                    programId = instructorProgramCreado.programId,
+                    Id = instructorProgram.Id,
+                    InstructorId = instructorProgram.InstructorId,
+                    ProgramId = instructorProgram.ProgramId,
                 };
             }
             catch (Exception ex)
@@ -118,13 +118,13 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto InstructorProgram no puede ser nulo");
             }
 
-            if (instructorProgramDto.instructorId <= 0)
+            if (instructorProgramDto.InstructorId <= 0)
             {
                 _logger.LogWarning("Se intentó crear/actualizar un programa de instructor con InstructorId inválido");
                 throw new Utilities.Exceptions.ValidationException("InstructorId", "El InstructorId es obligatorio y debe ser mayor que cero");
             }
 
-            if (instructorProgramDto.programId <= 0)
+            if (instructorProgramDto.ProgramId <= 0)
             {
                 _logger.LogWarning("Se intentó crear/actualizar un programa de instructor con ProgramId inválido");
                 throw new Utilities.Exceptions.ValidationException("ProgramId", "El ProgramId es obligatorio y debe ser mayor que cero");

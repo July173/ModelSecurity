@@ -93,7 +93,7 @@ namespace Web.Controllers
             try
             {
                 var createdCenter = await _centerBusiness.CreateCenterAsync(centerDto);
-                return CreatedAtAction(nameof(GetCenterById), new { id = createdCenter.id }, createdCenter);
+                return CreatedAtAction(nameof(GetCenterById), new { id = createdCenter.Id }, createdCenter);
             }
             catch (ValidationException ex)
             {

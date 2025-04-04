@@ -1,5 +1,6 @@
 ﻿using Business;
 using Data;
+using Entity.DTOautogestion;
 using Entity.DTOautogestion.pivote;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,7 @@ namespace Web.Controllers
     [Produces("application/json")]
     public class RolUserController : ControllerBase
     {
-        private readonly RolUserBusiness _RolUserBusiness;
+        private readonly UserRolBusiness _RolUserBusiness;
         private readonly ILogger<RolUserController> _logger;
 
         /// <summary>
@@ -27,7 +28,7 @@ namespace Web.Controllers
         /// </summary>
         /// <param name="RolUserBusiness">Capa de negocio de relaciones entre roles y usuarios</param>
         /// <param name="logger">Logger para registro de eventos</param>
-        public RolUserController(RolUserBusiness RolUserBusiness, ILogger<RolUserController> logger)
+        public RolUserController(UserRolBusiness RolUserBusiness, ILogger<RolUserController> logger)
         {
             _RolUserBusiness = RolUserBusiness;
             _logger = logger;
@@ -111,7 +112,7 @@ namespace Web.Controllers
             try
             {
                 var createdRolUser = await _RolUserBusiness.CreateRolUserAsync(RolUserDto);
-                return CreatedAtAction(nameof(GetRolUserById), new { id = createdRolUser.id }, createdRolUser);
+                return CreatedAtAction(nameof(GetRolUserById), new { id = createdRolUser.Id }, createdRolUser);
             }
             catch (ValidationException ex)
             {

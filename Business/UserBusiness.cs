@@ -33,10 +33,10 @@ namespace Business
                 {
                     usersDTO.Add(new UserDto
                     {
-                        id = user.id,
-                        username = user.username,
-                        email = user.email,
-                        active = user.active //si existe la entidad
+                        Id = user.Id,
+                        Username = user.Username,
+                        Email = user.Email,
+                        Active = user.Active //si existe la entidad
                      });
                     }
 
@@ -60,7 +60,7 @@ namespace Business
 
             try
             {
-                var user = await _userData.GetByidAsync(id);
+                var user = await _userData.GetByIdAsync(id);
                 if (user == null)
                 {
                     _logger.LogInformation("No se encontró ningún usuario con ID: {UserId}", id);
@@ -69,10 +69,10 @@ namespace Business
 
                 return new UserDto
                 {
-                    id = user.id,
-                    username = user.username,
-                    email = user.email,
-                    active = user.active
+                    Id = user.Id,
+                    Username = user.Username,
+                    Email = user.Email,
+                    Active = user.Active //si existe la entidad
                 };
             }
             catch (Exception ex)
@@ -91,24 +91,24 @@ namespace Business
 
                 var user = new User
                 {
-                    username = userDto.username,
-                    email = userDto.email,
-                    active = userDto.active // Si existe en la entidad
+                    Username = userDto.Username,
+                    Email = userDto.Email,
+                    Active = userDto.Active //si existe la entidad
                 };
 
                 var userCreado = await _userData.CreateAsync(user);
 
                 return new UserDto
                 {
-                    id = user.id,
-                    username = user.username,
-                    email = user.email,
-                    active = user.active  // Si existe en la entidad
+                    Id = user.Id,
+                    Username = user.Username,
+                    Email = user.Email,
+                    Active = user.Active //si existe la entidad
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo usuario: {UserName}", userDto?.username ?? "null");
+                _logger.LogError(ex, "Error al crear nuevo usuario: {UserName}", userDto?.Username ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el usuario", ex);
             }
         }
@@ -121,13 +121,13 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto usuario no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(userDto.username))
+            if (string.IsNullOrWhiteSpace(userDto.Username))
             {
                 _logger.LogWarning("Se intentó crear/actualizar un usuario con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name del usuario es obligatorio");
             }
 
-            if (string.IsNullOrWhiteSpace(userDto.email))
+            if (string.IsNullOrWhiteSpace(userDto.Email))
             {
                 _logger.LogWarning("Se intentó crear/actualizar un usuario con Email vacío");
                 throw new Utilities.Exceptions.ValidationException("Email", "El Email del usuario es obligatorio");

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOautogestion
 {
-    public class ProgramDTO
+    public class ProgramDto
     {
         public int Id { get; set; }
         public decimal CodeProgram { get; set; }

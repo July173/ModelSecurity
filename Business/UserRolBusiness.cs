@@ -1,4 +1,5 @@
 ﻿using Data;
+using Entity.DTOautogestion;
 using Entity.DTOautogestion.pivote;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
@@ -10,12 +11,12 @@ namespace Business
     /// <summary>
     /// Clase de negocio encargada de la lógica relacionada con los usuarios y sus roles en el sistema.
     /// </summary>
-    public class RolUserBusiness
+    public class UserRolBusiness
     {
-        private readonly RolUserData _rolUserData;
+        private readonly UserRolData _rolUserData;
         private readonly ILogger _logger;
 
-        public RolUserBusiness(RolUserData rolUserData, ILogger logger)
+        public UserRolBusiness(UserRolData rolUserData, ILogger logger)
         {
             _rolUserData = rolUserData;
             _logger = logger;
@@ -33,9 +34,9 @@ namespace Business
                 {
                     rolUsersDTO.Add(new UserRolDto
                     {
-                        id = rolUser.id,
-                        userId = rolUser.userId,
-                        rolId = rolUser.rolId
+                        Id = rolUser.Id,
+                        UserId = rolUser.UserId,
+                        RolId = rolUser.RolId
                     });
                 }
 
@@ -68,9 +69,9 @@ namespace Business
 
                 return new UserRolDto
                 {
-                    id = rolUser.id,
-                    userId = rolUser.userId,
-                    rolId = rolUser.rolId
+                    Id = rolUser.Id,
+                    UserId = rolUser.UserId,
+                    RolId = rolUser.RolId
                 };
             }
             catch (Exception ex)
@@ -89,22 +90,22 @@ namespace Business
 
                 var rolUser = new UserRol
                 {
-                    userId = rolUserDto.userId,
-                    rolId = rolUserDto.rolId
+                    UserId = rolUserDto.UserId,
+                    RolId = rolUserDto.RolId
                 };
 
                 var rolUserCreado = await _rolUserData.CreateAsync(rolUser);
 
                 return new UserRolDto
                 {
-                    id = rolUserCreado.id,
-                    userId = rolUserCreado.userId,
-                    rolId = rolUserCreado.rolId
+                    Id = rolUser.Id,
+                    UserId = rolUser.UserId,
+                    RolId = rolUser.RolId
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo rol de usuario: {UserId}, {RolId}", rolUserDto?.userId ?? 0, rolUserDto?.rolId ?? 0);
+                _logger.LogError(ex, "Error al crear nuevo rol de usuario: {UserId}, {RolId}", rolUserDto?.UserId ?? 0, rolUserDto?.RolId ?? 0);
                 throw new ExternalServiceException("Base de datos", "Error al crear el rol de usuario", ex);
             }
         }
@@ -117,13 +118,13 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto rol de usuario no puede ser nulo");
             }
 
-            if (rolUserDto.userId <= 0)
+            if (rolUserDto.UserId <= 0)
             {
                 _logger.LogWarning("Se intentó crear/actualizar un rol de usuario con UserId inválido");
                 throw new Utilities.Exceptions.ValidationException("UserId", "El UserId del rol de usuario es obligatorio y debe ser mayor que cero");
             }
 
-            if (rolUserDto.rolId <= 0)
+            if (rolUserDto.RolId <= 0)
             {
                 _logger.LogWarning("Se intentó crear/actualizar un rol de usuario con RolId inválido");
                 throw new Utilities.Exceptions.ValidationException("RolId", "El RolId del rol de usuario es obligatorio y debe ser mayor que cero");

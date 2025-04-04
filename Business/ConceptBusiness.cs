@@ -32,9 +32,11 @@ namespace Business
                 {
                     conceptsDTO.Add(new ConceptDto
                     {
-                        id = concept.id,
-                        name = concept.name,
-                        observation = concept.observation
+                        Id = concept.Id,
+                        Name = concept.Name,
+                        Observation = concept.Observation,
+                        Active = concept.Active
+
                     });
                 }
 
@@ -67,9 +69,10 @@ namespace Business
 
                 return new ConceptDto
                 {
-                    id = concept.id,
-                    name = concept.name,
-                    observation = concept.observation
+                    Id = concept.Id,
+                    Name = concept.Name,
+                    Observation = concept.Observation,
+                    Active = concept.Active
                 };
             }
             catch (Exception ex)
@@ -88,22 +91,24 @@ namespace Business
 
                 var concept = new Concept
                 {
-                    name = conceptDto.name,
-                    observation = conceptDto.observation
+                    Name = conceptDto.Name,
+                    Observation = conceptDto.Observation,
+                    Active = conceptDto.Active
                 };
 
                 var conceptCreado = await _conceptData.CreateAsync(concept);
 
                 return new ConceptDto
                 {
-                    id = concept.id,
-                    name = concept.name,
-                    observation = concept.observation
+                    Id = concept.Id,
+                    Name = concept.Name,
+                    Observation = concept.Observation,
+                    Active = concept.Active
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo concepto: {Name}", conceptDto?.name ?? "null");
+                _logger.LogError(ex, "Error al crear nuevo concepto: {Name}", conceptDto?.Name ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el concepto", ex);
             }
         }
@@ -116,7 +121,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto Concept no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(conceptDto.name))
+            if (string.IsNullOrWhiteSpace(conceptDto.Name))
             {
                 _logger.LogWarning("Se intentó crear/actualizar un concepto con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name del concepto es obligatorio");

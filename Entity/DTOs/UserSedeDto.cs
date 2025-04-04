@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOs
 {
-    public class UserSedeDTO
+    public class UserSedeDto
     {
         public int Id { get; set; }
         public string StatusProcedure { get; set; }

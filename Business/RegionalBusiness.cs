@@ -33,10 +33,12 @@ namespace Business
                 {
                     regionalsDTO.Add(new RegionalDto
                     {
-                        id = regional.id,
-                        name = regional.name,
-                        description = regional.description,
-                        active = regional.active // si existe la entidad
+                        Id = regional.Id,
+                        Name = regional.Name,
+                        Description = regional.Description,
+                        CodeRegional = regional.CodeRegional,
+                        Address = regional.Address,
+                        Active = regional.Active // si existe la entidad
                     });
                 }
 
@@ -69,10 +71,12 @@ namespace Business
 
                 return new RegionalDto
                 {
-                    id = regional.id,
-                    name = regional.name,
-                    description = regional.description,
-                    active = regional.active // si existe la entidad
+                    Id = regional.Id,
+                    Name = regional.Name,
+                    Description = regional.Description,
+                    CodeRegional = regional.CodeRegional,
+                    Address = regional.Address,
+                    Active = regional.Active // si existe la entidad
                 };
             }
             catch (Exception ex)
@@ -91,24 +95,28 @@ namespace Business
 
                 var regional = new Regional
                 {
-                    name = regionalDto.name,
-                    description = regionalDto.description,
-                    active = regionalDto.active // si existe en la entidad
+                    Name = regionalDto.Name,
+                    Description = regionalDto.Description,
+                    CodeRegional = regionalDto.CodeRegional,
+                    Address = regionalDto.Address,
+                    Active = regionalDto.Active // si existe la entidad
                 };
 
                 var regionalCreado = await _regionalData.CreateAsync(regional);
 
                 return new RegionalDto
                 {
-                    id = regionalCreado.id,
-                    name = regionalCreado.name,
-                    description = regionalCreado.description,
-                    active = regionalCreado.active // si existe la entidad
+                    Id = regional.Id,
+                    Name = regional.Name,
+                    Description = regional.Description,
+                    CodeRegional = regional.CodeRegional,
+                    Address = regional.Address,
+                    Active = regional.Active // si existe la entidad
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nueva regional: {Name}", regionalDto?.name ?? "null");
+                _logger.LogError(ex, "Error al crear nueva regional: {Name}", regionalDto?.Name ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear la regional", ex);
             }
         }
@@ -121,7 +129,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto Regional no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(regionalDto.name))
+            if (string.IsNullOrWhiteSpace(regionalDto.Name))
             {
                 _logger.LogWarning("Se intentó crear/actualizar una regional con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name de la regional es obligatorio");
