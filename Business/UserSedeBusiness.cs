@@ -28,20 +28,8 @@ namespace Business
             try
             {
                 var userSedes = await _userSedeData.GetAllAsync();
-                var userSedesDTO = new List<UserSedeDto>();
+                return MapToDTOList(userSedes);
 
-                foreach (var userSede in userSedes)
-                {
-                    userSedesDTO.Add(new UserSedeDto
-                    {
-                        Id = userSede.Id,
-                        UserId = userSede.UserId,
-                        SedeId = userSede.SedeId,
-                        StatusProcedure = userSede.StatusProcedure
-                    });
-                }
-
-                return userSedesDTO;
             }
             catch (Exception ex)
             {
@@ -68,13 +56,7 @@ namespace Business
                     throw new EntityNotFoundException("userSede", id);
                 }
 
-                return new UserSedeDto
-                {
-                    Id = userSede.Id,
-                    UserId = userSede.UserId,
-                    SedeId = userSede.SedeId,
-                    StatusProcedure = userSede.StatusProcedure
-                };
+                return MapToDTO(userSede);
             }
             catch (Exception ex)
             {
@@ -90,22 +72,11 @@ namespace Business
             {
                 ValidateUserSede(userSedeDto);
 
-                var userSede = new UserSede
-                {
-                    UserId = userSedeDto.UserId,
-                    SedeId = userSedeDto.SedeId,
-                    StatusProcedure = userSedeDto.StatusProcedure
-                };
+                var userSede = MapToEntity(userSedeDto);
 
                 var userSedeCreado = await _userSedeData.CreateAsync(userSede);
 
-                return new UserSedeDto
-                {
-                    Id = userSede.Id,
-                    UserId = userSede.UserId,
-                    SedeId = userSede.SedeId,
-                    StatusProcedure = userSede.StatusProcedure
-                };
+                return MapToDTO(userSedeCreado);
             }
             catch (Exception ex)
             {
@@ -133,6 +104,39 @@ namespace Business
                 _logger.LogWarning("Se intentó crear/actualizar una sede de usuario con SedeId inválido");
                 throw new Utilities.Exceptions.ValidationException("SedeId", "El SedeId de la sede de usuario es obligatorio y debe ser mayor a cero");
             }
+        }
+
+        //Metodo para mapear de UserSede a UserSedeDto
+        private UserSedeDto MapToDTO(UserSede userSede)
+        {
+            return new UserSedeDto
+            {
+                Id = userSede.Id,
+                UserId = userSede.UserId,
+                SedeId = userSede.SedeId,
+                StatusProcedure = userSede.StatusProcedure
+            };
+        }
+        //Metodo para mapear de UserSedeDto a UserSede
+        private UserSede MapToEntity(UserSedeDto userSedeDto)
+        {
+            return new UserSede
+            {
+                Id = userSedeDto.Id,
+                UserId = userSedeDto.UserId,
+                SedeId = userSedeDto.SedeId,
+                StatusProcedure = userSedeDto.StatusProcedure
+            };
+        }
+        //Metodo para mapear una lista de UserSede a una lista de UserSedeDto
+        private IEnumerable<UserSedeDto> MapToDTOList(IEnumerable<UserSede> userSedes)
+        {
+            var userSedesDto = new List<UserSedeDto>();
+            foreach (var userSede in userSedes)
+            {
+                userSedesDto.Add(MapToDTO(userSede));
+            }
+            return userSedesDto;
         }
     }
 }

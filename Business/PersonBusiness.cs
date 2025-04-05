@@ -159,5 +159,39 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name de la persona es obligatorio");
             }
         }
+        //Metodo para mapear de Person a PersonDTO
+        private RolDto MapToDTO(Rol rol)
+        {
+            return new RolDto
+            {
+                Id = rol.Id,
+                TypeRol = rol.TypeRol,
+                Description = rol.Description,
+                Active = rol.Active //si existe la entidad
+            };
+        }
+        //Metodo para mapear de RolDto a Rol 
+        private Rol MapToEntity(RolDto rolDto)
+        {
+            return new Rol
+            {
+                Id = rolDto.Id,
+                TypeRol = rolDto.TypeRol,
+                Description = rolDto.Description,
+                Active = rolDto.Active //si existe la entidad
+            };
+        }
+        //Metodo para mapear una lista de Rol a una lista de RolDto
+        private IEnumerable<RolDto> MapToDTOList(IEnumerable<Rol> roles)
+        {
+            var rolesDto = new List<RolDto>();
+            foreach (var rol in roles)
+            {
+                rolesDto.Add(MapToDTO(rol));
+            }
+            return rolesDto;
+        }
+
+
     }
 }

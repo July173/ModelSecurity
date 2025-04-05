@@ -27,20 +27,7 @@ namespace Business
             try
             {
                 var verifications = await _verificationData.GetAllAsync();
-                var verificationsDTO = new List<VerificationDto>();
-
-                foreach (var verification in verifications)
-                {
-                    verificationsDTO.Add(new VerificationDto
-                    {
-                        Id = verification.Id,
-                        Name = verification.Name,
-                        Observation = verification.Observation,
-                        Active = verification.Active //si existe la entidad
-                    });
-                }
-
-                return verificationsDTO;
+               return MapToDTOList(verifications);
             }
             catch (Exception ex)
             {
@@ -67,13 +54,7 @@ namespace Business
                     throw new EntityNotFoundException("verification", id);
                 }
 
-                return new VerificationDto
-                {
-                    Id = verification.Id,
-                    Name = verification.Name,
-                    Observation = verification.Observation,
-                    Active = verification.Active //si existe la entidad
-                };
+                return MapToDTO(verification);
             }
             catch (Exception ex)
             {
@@ -89,22 +70,11 @@ namespace Business
             {
                 ValidateUser(verificationDto);
 
-                var verification = new Verification
-                {
-                    Name = verificationDto.Name,
-                    Observation = verificationDto.Observation,
-                    Active = verificationDto.Active //si existe la entidad
-                };
-           
+                var verification = MapToEntity(verificationDto);
+                
                 var verificationCreado = await _verificationData.CreateAsync(verification);
 
-                return new VerificationDto
-                {
-                    Id = verification.Id,
-                    Name = verification.Name,
-                    Observation = verification.Observation,
-                    Active = verification.Active //si existe la entidad
-                };
+                return MapToDTO(verificationCreado);
             }
             catch (Exception ex)
             {
@@ -127,7 +97,39 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name de la verificacion es obligatorio");
             }
 
-         
         }
+        //Metodo para mapear de verification a VerificationDto
+        private VerificationDto MapToDTO(Verification verification)
+        {
+            return new VerificationDto
+            {
+                Id = verification.Id,
+                Name = verification.Name,
+                Observation = verification.Observation,
+                Active = verification.Active //si existe la entidad
+            };
+        }
+        //Metodo para mapear de VerificationDto a Verification 
+        private Verification MapToEntity(VerificationDto verificationDto)
+        {
+            return new Verification
+            {
+                Id = verificationDto.Id,
+                Name = verificationDto.Name,
+                Observation = verificationDto.Observation,
+                Active = verificationDto.Active //si existe la entidad
+            };
+        }
+        //Metodo para mapear una lista de Verification a una lista de VerificationDto
+        private IEnumerable<VerificationDto> MapToDTOList(IEnumerable<Verification> verifications)
+        {
+            var verificationsDto = new List<VerificationDto>();
+            foreach (var verification in verifications)
+            {
+                verificationsDto.Add(MapToDTO(verification));
+            }
+            return verificationsDto;
+        }
+
     }
 }

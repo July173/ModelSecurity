@@ -29,19 +29,7 @@ namespace Business
             try
             {
                 var roles = await _rolData.GetAllAsync();
-                var rolesDTO = new List<RolDto>();
-
-                foreach (var rol in roles)
-                {
-                    rolesDTO.Add(new RolDto
-                    {
-                        Id = rol.Id,
-                        TypeRol = rol.TypeRol,
-                        Description = rol.Description,
-                        Active = rol.Active //si existe la entidad
-                    });
-                }
-                return rolesDTO;
+                return MapToDTOList(roles);
 
             }
             catch (Exception ex)
@@ -66,13 +54,7 @@ namespace Business
                     _logger.LogInformation("No se encontró el rol con ID {RolId}", id);
                     throw new EntityNotFoundException("Rol", id);
                 }
-                return new RolDto
-                {
-                    Id = rol.Id,
-                    TypeRol = rol.TypeRol,
-                    Description = rol.Description,
-                    Active = rol.Active //si existe la entidad
-                };
+                return MapToDTO(rol);
             }
             catch (Exception ex)
             {
@@ -87,25 +69,12 @@ namespace Business
             {
                 ValidateRol(RolDto);
 
-                var rol = new Rol
-                {
-                    Id = RolDto.Id,
-                    TypeRol = RolDto.TypeRol,
-                    Description = RolDto.Description,
-                    Active = RolDto.Active //si existe la entidad
-                };
+                var rol = MapToEntity(RolDto);
 
                 var rolCreado = await _rolData.CreateAsync(rol);
 
-                return new RolDto
-                {
-                    Id = rol.Id,
-                    TypeRol = rol.TypeRol,
-                    Description = rol.Description,
-                    Active = rol.Active //si existe la entidad
-
-                };
-              }
+                return MapToDTO(rolCreado);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al crear un nuevo rol: {RolNombre}", RolDto?.TypeRol?? "null");
@@ -125,6 +94,39 @@ namespace Business
                 _logger.LogWarning("Se intentó crear/actualizar un rol con nombre vacio");
                 throw new Utilities.Exceptions.ValidationException("Name", "El nombre del rol nes obligatorio");
             }
+        }
+
+        //Metodo para mapear de Rol a RolDTO
+        private RolDto MapToDTO(Rol rol)
+        {
+            return new RolDto
+            {
+                Id = rol.Id,
+                TypeRol = rol.TypeRol,
+                Description = rol.Description,
+                Active = rol.Active //si existe la entidad
+            };
+        }
+        //Metodo para mapear de RolDto a Rol 
+        private Rol MapToEntity(RolDto rolDto)
+        {
+            return new Rol
+            {
+                Id = rolDto.Id,
+                TypeRol = rolDto.TypeRol,
+                Description = rolDto.Description,
+                Active = rolDto.Active //si existe la entidad
+            };
+        }
+        //Metodo para mapear una lista de Rol a una lista de RolDto
+        private IEnumerable<RolDto> MapToDTOList(IEnumerable<Rol> roles)
+        {
+            var rolesDto = new List<RolDto>();
+            foreach (var rol in roles)
+            {
+                rolesDto.Add(MapToDTO(rol));
+            }
+            return rolesDto;
         }
     }
 }

@@ -28,21 +28,8 @@ namespace Business
             try
             {
                 var rolForms = await _rolFormData.GetAllAsync();
-                var rolFormsDTO = new List<RolFormDto>();
-
-                foreach (var rolForm in rolForms)
-                {
-                    rolFormsDTO.Add(new RolFormDto
-                    {
-                        Id = rolForm.Id,
-                        Permission = rolForm.Permission,
-                        RolId = rolForm.RolId,
-                        FormId = rolForm.FormId,
-
-                    });
-                }
-
-                return rolFormsDTO;
+                
+                return MapToDTOList(rolForms);
             }
             catch (Exception ex)
             {
@@ -69,13 +56,7 @@ namespace Business
                     throw new EntityNotFoundException("rolForm", id);
                 }
 
-                return new RolFormDto
-                {
-                    Id = rolForm.Id,
-                    Permission = rolForm.Permission,
-                    RolId = rolForm.RolId,
-                    FormId = rolForm.FormId,
-                };
+                return MapToDTO(rolForm);
             }
             catch (Exception ex)
             {
@@ -91,22 +72,10 @@ namespace Business
             {
                 ValidateRolForm(rolFormDto);
 
-                var rolForm = new RolForm
-                {
-                    Permission = rolFormDto.Permission,
-                    RolId = rolFormDto.RolId,
-                    FormId = rolFormDto.FormId
-                };
-
+                var rolForm = MapToEntity(rolFormDto);
                 var rolFormCreado = await _rolFormData.CreateAsync(rolForm);
 
-                return new RolFormDto
-                {
-                    Id = rolForm.Id,
-                    Permission = rolForm.Permission,
-                    RolId = rolForm.RolId,
-                    FormId = rolForm.FormId,
-                };
+                return MapToDTO(rolFormCreado);
             }
             catch (Exception ex)
             {
@@ -129,5 +98,41 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("permission", "El permiso del rol de formulario es obligatorio");
             }
         }
+
+
+        //Metodo para mapear de RolForm a RolFormDTO
+        private RolFormDto MapToDTO(RolForm rolForm)
+        {
+            return new RolFormDto
+            {
+                Id = rolForm.Id,
+                Permission = rolForm.Permission,
+                RolId = rolForm.RolId,
+                FormId = rolForm.FormId,
+            };
+        }
+        //Metodo para mapear de RolFormDto a RolForm
+        private RolForm MapToEntity(RolFormDto rolFormDto)
+        {
+            return new RolForm
+            {
+                Id = rolFormDto.Id,
+                Permission = rolFormDto.Permission,
+                RolId = rolFormDto.RolId,
+                FormId = rolFormDto.FormId,
+
+            };
+        }
+        //Metodo para mapear una lista de RolForm a una lista de RolFormDto
+        private IEnumerable<RolFormDto> MapToDTOList(IEnumerable<RolForm> rolForms)
+        {
+            var rolFormsDto = new List<RolFormDto>();
+            foreach (var rolForm in rolForms)
+            {
+                rolFormsDto.Add(MapToDTO(rolForm));
+            }
+            return rolFormsDto;
+        }
+
     }
 }
