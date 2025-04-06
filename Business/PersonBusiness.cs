@@ -23,13 +23,13 @@ namespace Business
         }
 
         // Método para obtener todas las personas como DTOs
-        public async Task<IEnumerable<PersonDto>> GetAllPersonsAsync()
+        public async Task<IEnumerable<PersonDto>> GetAllPeopleAsync()
         {
             try
             {
-                var persons = await _personData.GetAllAsync();
+                var people = await _personData.GetAllAsync();
 
-                return MapToDTOList(persons);
+                return MapToDTOList(people);
             }
             catch (Exception ex)
             {
@@ -99,7 +99,8 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name de la persona es obligatorio");
             }
         }
-        //Metodo para mapear de Person a PersonDto
+
+        // Metodo para mapear de Person a PersonDto
         private PersonDto MapToDTO(Person person)
         {
             return new PersonDto
@@ -118,7 +119,8 @@ namespace Business
                 Active = person.Active
             };
         }
-        //Metodo para mapear de PersonDto a Person 
+
+        // Metodo para mapear de PersonDto a Person 
         private Person MapToEntity(PersonDto personDto)
         {
             return new Person
@@ -137,17 +139,16 @@ namespace Business
                 Active = personDto.Active
             };
         }
-        //Metodo para mapear una lista de Person a una lista de PersonDto
-        private IEnumerable<PersonDto> MapToDTOList(IEnumerable<Person> persons)
+
+        // Metodo para mapear una lista de Person a una lista de PersonDto
+        private IEnumerable<PersonDto> MapToDTOList(IEnumerable<Person> people)
         {
-            var personsDto = new List<PersonDto>();
-            foreach (var person in persons)
+            var peopleDto = new List<PersonDto>();
+            foreach (var person in people)
             {
-                personsDto.Add(MapToDTO(person));
+                peopleDto.Add(MapToDTO(person));
             }
-            return personsDto;
+            return peopleDto;
         }
-
-
     }
 }

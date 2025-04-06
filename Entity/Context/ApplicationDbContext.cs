@@ -1,10 +1,14 @@
 ﻿using Dapper;
+using Entity.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Reflection;
 using System.Reflection.Emit;
+using Module = Entity.Model.Module;
+using Process = Entity.Model.Process;
+
 
 namespace Entity.Contexts
 {
@@ -30,16 +34,52 @@ namespace Entity.Contexts
             _configuration = configuration;
         }
 
-        /// <summary>
-        /// Configura los modelos de la base de datos aplicando configuraciones desde ensamblados.
-        /// </summary>
-        /// <param name="modelBuilder">Constructor del modelo de base de datos.</param>
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        ///DB SETS
+        public DbSet<Rol> Rol { get; set; }
+        public DbSet<Verification> Verification { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<Person> Person { get; set; }
+        public DbSet<UserRol> UserRol { get; set; }
+        public DbSet<Sede> Sede { get; set; }
+        public DbSet<UserSede> UserSede { get; set; }
+        public DbSet<Aprendiz> Aprendiz { get; set; }
+        public DbSet<Instructor> Instructor { get; set; }
+        public DbSet<Process> Process { get; set; }
+        public DbSet<Program> Program { get; set; }
+        public DbSet<InstructorProgram> InstructorProgram { get; set; }
+        public DbSet<AprendizProgram> AprendizProgram { get; set; }
+        public DbSet<AprendizProcessInstructor> AprendizProcessInstructor { get; set; }
+        public DbSet<Form> Form { get; set; }
+        public DbSet<Module> Module { get; set; }
+        public DbSet<FormModule> FormModule { get; set; }
+        public DbSet<RolForm> RolForm { get; set; }
+        public DbSet<TypeModality> TypeModality { get; set; }
+        public DbSet<State> State { get; set; }
+        public DbSet<RegisterySofia> RegisterySofia { get; set; }
+        public DbSet<Regional> Regional { get; set; }
+        public DbSet<Center> Center { get; set; }
+        public DbSet<Enterprise> Enterprise { get; set; }
+        public DbSet<ChangeLog> ChangeLog { get; set; }
+        public DbSet<Concept> Concept { get; set; }
+
+
+
+/// <summary>
+/// Configura los modelos de la base de datos aplicando configuraciones desde ensamblados.
+/// </summary>
+/// <param name="modelBuilder">Constructor del modelo de base de datos.</param>
+protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            //relaciones de las entidades, se colocan las que tienen llaves foraneas 
+
+            modelBuilder.Entity<Person>()
+                .HasOne(p => p.User)
+                .WithOne(u => u.Person)
+                .HasForeignKey<User>(u => u.PersonId);
 
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            
         }
 
         /// <summary>
