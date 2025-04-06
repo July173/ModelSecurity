@@ -27,23 +27,8 @@ namespace Business
             try
             {
                 var forms = await _formData.GetAllAsync();
-                var formsDTO = new List<FormDto>();
-
-                foreach (var form in forms)
-                {
-                    formsDTO.Add(new FormDto
-                    {
-                        Id = form.Id,
-                        Name = form.Name,
-                        Description = form.Description,
-                        Cuestion = form.Cuestion,
-                        TypeCuestion = form.TypeCuestion,
-                        Answer = form.Answer,
-                        Active = form.Active,
-                    });
-                }
-
-                return formsDTO;
+               
+                return MapToDTOList(forms);
             }
             catch (Exception ex)
             {
@@ -70,16 +55,7 @@ namespace Business
                     throw new EntityNotFoundException("Form", id);
                 }
 
-                return new FormDto
-                {
-                    Id = form.Id,
-                    Name = form.Name,
-                    Description = form.Description,
-                    Cuestion = form.Cuestion,
-                    TypeCuestion = form.TypeCuestion,
-                    Answer = form.Answer,
-                    Active = form.Active
-                };
+                return MapToDTO(form);
             }
             catch (Exception ex)
             {
@@ -95,28 +71,11 @@ namespace Business
             {
                 ValidateForm(formDto);
 
-                var form = new Form
-                {
-                    Name = formDto.Name,
-                    Description = formDto.Description,
-                    Cuestion = formDto.Cuestion,
-                    TypeCuestion = formDto.TypeCuestion,
-                    Answer = formDto.Answer,
-                    Active = formDto.Active,
-                };
+                var form = MapToEntity(formDto);
 
                 var formCreado = await _formData.CreateAsync(form);
 
-                return new FormDto
-                {
-                    Id = form.Id,
-                    Name = form.Name,
-                    Description = form.Description,
-                    Cuestion = form.Cuestion,
-                    TypeCuestion = form.TypeCuestion,
-                    Answer = form.Answer,
-                    Active = form.Active,
-                };
+                return MapToDTO(formCreado);
             }
             catch (Exception ex)
             {
@@ -138,6 +97,46 @@ namespace Business
                 _logger.LogWarning("Se intentó crear/actualizar un formulario con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name del formulario es obligatorio");
             }
+        }
+
+        //Metodo para mapear de Form a  FormDto
+        private FormDto MapToDTO(Form form)
+        {
+            return new FormDto
+            {
+                Id = form.Id,
+                Name = form.Name,
+                Description = form.Description,
+                Cuestion = form.Cuestion,
+                TypeCuestion = form.TypeCuestion,
+                Answer = form.Answer,
+                Active = form.Active
+            };
+        }
+
+        //Metodo para mapear de FormDto a Form 
+        private Form MapToEntity(FormDto formDto)
+        {
+            return new Form
+            {
+                Id = formDto.Id,
+                Name = formDto.Name,
+                Description = formDto.Description,
+                Cuestion = formDto.Cuestion,
+                TypeCuestion = formDto.TypeCuestion,
+                Answer = formDto.Answer,
+                Active = formDto.Active,
+            };
+        }
+        //Metodo para mapear una lista de FormDto a una lista de Form
+        private IEnumerable<FormDto> MapToDTOList(IEnumerable<Form> forms)
+        {
+            var formsDto = new List<FormDto>();
+            foreach (var form in forms)
+            {
+                formsDto.Add(MapToDTO(form));
+            }
+            return formsDto;
         }
     }
 }

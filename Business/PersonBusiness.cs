@@ -2,6 +2,7 @@
 using Entity.DTOautogestion;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
+using System;
 using System.ComponentModel.DataAnnotations;
 using Utilities.Exceptions;
 
@@ -27,28 +28,8 @@ namespace Business
             try
             {
                 var persons = await _personData.GetAllAsync();
-                var personsDTO = new List<PersonDto>();
 
-                foreach (var person in persons)
-                {
-                    personsDTO.Add(new PersonDto
-                    {
-                        Id = person.Id,
-                        Name = person.Name,
-                        FirstName = person.FirstName,
-                        SecondName = person.SecondName,
-                        FirstLastName = person.FirstLastName,
-                        SecondLastName = person.SecondLastName,
-                        PhoneNumber = person.PhoneNumber,
-                        Email = person.Email,
-                        TypeIdentification = person.TypeIdentification,
-                        NumberIdentification = person.NumberIdentification,
-                        Signig = person.Signig,
-                        Active = person.Active
-                    });
-                }
-
-                return personsDTO;
+                return MapToDTOList(persons);
             }
             catch (Exception ex)
             {
@@ -75,21 +56,7 @@ namespace Business
                     throw new EntityNotFoundException("Person", id);
                 }
 
-                return new PersonDto
-                {
-                    Id = person.Id,
-                    Name = person.Name,
-                    FirstName = person.FirstName,
-                    SecondName = person.SecondName,
-                    FirstLastName = person.FirstLastName,
-                    SecondLastName = person.SecondLastName,
-                    PhoneNumber = person.PhoneNumber,
-                    Email = person.Email,
-                    TypeIdentification = person.TypeIdentification,
-                    NumberIdentification = person.NumberIdentification,
-                    Signig = person.Signig,
-                    Active = person.Active
-                };
+                return MapToDTO(person);
             }
             catch (Exception ex)
             {
@@ -105,38 +72,11 @@ namespace Business
             {
                 ValidatePerson(personDto);
 
-                var person = new Person
-                {
-                    Name = personDto.Name,
-                    FirstName = personDto.FirstName,
-                    SecondName = personDto.SecondName,
-                    FirstLastName = personDto.FirstLastName,
-                    SecondLastName = personDto.SecondLastName,
-                    PhoneNumber = personDto.PhoneNumber,
-                    Email = personDto.Email,
-                    TypeIdentification = personDto.TypeIdentification,
-                    NumberIdentification = personDto.NumberIdentification,
-                    Signig = personDto.Signig,
-                    Active = personDto.Active
-                };
+                var person = MapToEntity(personDto);
 
                 var personCreada = await _personData.CreateAsync(person);
 
-                return new PersonDto
-                {
-                    Id = person.Id,
-                    Name = person.Name,
-                    FirstName = person.FirstName,
-                    SecondName = person.SecondName,
-                    FirstLastName = person.FirstLastName,
-                    SecondLastName = person.SecondLastName,
-                    PhoneNumber = person.PhoneNumber,
-                    Email = person.Email,
-                    TypeIdentification = person.TypeIdentification,
-                    NumberIdentification = person.NumberIdentification,
-                    Signig = person.Signig,
-                    Active = person.Active
-                };
+                return MapToDTO(personCreada);
             }
             catch (Exception ex)
             {
@@ -159,37 +99,53 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name de la persona es obligatorio");
             }
         }
-        //Metodo para mapear de Person a PersonDTO
-        private RolDto MapToDTO(Rol rol)
+        //Metodo para mapear de Person a PersonDto
+        private PersonDto MapToDTO(Person person)
         {
-            return new RolDto
+            return new PersonDto
             {
-                Id = rol.Id,
-                TypeRol = rol.TypeRol,
-                Description = rol.Description,
-                Active = rol.Active //si existe la entidad
+                Id = person.Id,
+                Name = person.Name,
+                FirstName = person.FirstName,
+                SecondName = person.SecondName,
+                FirstLastName = person.FirstLastName,
+                SecondLastName = person.SecondLastName,
+                PhoneNumber = person.PhoneNumber,
+                Email = person.Email,
+                TypeIdentification = person.TypeIdentification,
+                NumberIdentification = person.NumberIdentification,
+                Signig = person.Signig,
+                Active = person.Active
             };
         }
-        //Metodo para mapear de RolDto a Rol 
-        private Rol MapToEntity(RolDto rolDto)
+        //Metodo para mapear de PersonDto a Person 
+        private Person MapToEntity(PersonDto personDto)
         {
-            return new Rol
+            return new Person
             {
-                Id = rolDto.Id,
-                TypeRol = rolDto.TypeRol,
-                Description = rolDto.Description,
-                Active = rolDto.Active //si existe la entidad
+                Id = personDto.Id,
+                Name = personDto.Name,
+                FirstName = personDto.FirstName,
+                SecondName = personDto.SecondName,
+                FirstLastName = personDto.FirstLastName,
+                SecondLastName = personDto.SecondLastName,
+                PhoneNumber = personDto.PhoneNumber,
+                Email = personDto.Email,
+                TypeIdentification = personDto.TypeIdentification,
+                NumberIdentification = personDto.NumberIdentification,
+                Signig = personDto.Signig,
+                Active = personDto.Active
             };
         }
-        //Metodo para mapear una lista de Rol a una lista de RolDto
-        private IEnumerable<RolDto> MapToDTOList(IEnumerable<Rol> roles)
+        //Metodo para mapear una lista de Person a una lista de PersonDto
+        private IEnumerable<PersonDto> MapToDTOList(IEnumerable<Person> persons)
         {
-            var rolesDto = new List<RolDto>();
-            foreach (var rol in roles)
+            var personsDto = new List<PersonDto>();
+            foreach (var person in persons)
             {
-                rolesDto.Add(MapToDTO(rol));
+                personsDto.Add(MapToDTO(person));
             }
-            return rolesDto;
+            return personsDto;
         }
 
 

@@ -26,23 +26,8 @@ namespace Business
             try
             {
                 var centers = await _centerData.GetAllAsync();
-                var centersDTO = new List<CenterDto>();
-
-                foreach (var center in centers)
-                {
-                    centersDTO.Add(new CenterDto
-                    {
-                        Id = center.Id,
-                        Name = center.Name,
-                        CodeCenter = center.CodeCenter,
-                        Active = center.Active,
-                        RegionalId = center.RegionalId,
-                        Address = center.Address
-          
-                    });
-                }
-
-                return centersDTO;
+               
+                return MapToDTOList(centers);
             }
             catch (Exception ex)
             {
@@ -69,15 +54,7 @@ namespace Business
                     throw new EntityNotFoundException("center", id);
                 }
 
-                return new CenterDto
-                {
-                    Id = center.Id,
-                    Name = center.Name,
-                    CodeCenter = center.CodeCenter,
-                    Active = center.Active,
-                    RegionalId = center.RegionalId,
-                    Address = center.Address
-                };
+                return MapToDTO(center);
             }
             catch (Exception ex)
             {
@@ -93,26 +70,11 @@ namespace Business
             {
                 ValidateCenter(centerDto);
 
-                var center = new Center
-                {
-                    Name = centerDto.Name,
-                    CodeCenter = centerDto.CodeCenter,
-                    Active = centerDto.Active,
-                    RegionalId = centerDto.RegionalId,
-                    Address = centerDto.Address
-                };
+                var center = MapToEntity(centerDto);
 
                 var centerCreado = await _centerData.CreateAsync(center);
 
-                return new CenterDto
-                {
-                    Id = center.Id,
-                    Name = center.Name,
-                    CodeCenter = center.CodeCenter,
-                    Active = center.Active,
-                    RegionalId = center.RegionalId,
-                    Address = center.Address
-                };
+                return MapToDTO(centerCreado);   
             }
             catch (Exception ex)
             {
@@ -134,6 +96,43 @@ namespace Business
                 _logger.LogWarning("Se intentó crear/actualizar un centro con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name del centro es obligatorio");
             }
+        }
+
+        //Metodo para mapear de Center a CenterDto
+        private CenterDto MapToDTO(Center center)
+        {
+            return new CenterDto
+            {
+                Id = center.Id,
+                Name = center.Name,
+                CodeCenter = center.CodeCenter,
+                Active = center.Active,
+                RegionalId = center.RegionalId,
+                Address = center.Address
+            };
+        }
+        //Metodo para mapear de CenterDto a Center 
+        private Center MapToEntity(CenterDto centerDto)
+        {
+            return new Center
+            {
+                Id = centerDto.Id,
+                Name = centerDto.Name,
+                CodeCenter = centerDto.CodeCenter,
+                Active = centerDto.Active,
+                RegionalId = centerDto.RegionalId,
+                Address = centerDto.Address
+            };
+        }
+        //Metodo para mapear una lista de Center a una lista de CenterDto
+        private IEnumerable<CenterDto> MapToDTOList(IEnumerable<Center> centers)
+        {
+            var centersDto = new List<CenterDto>();
+            foreach (var center in centers)
+            {
+                centersDto.Add(MapToDTO(center));
+            }
+            return centersDto;
         }
     }
 }
