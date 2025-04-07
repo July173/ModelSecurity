@@ -23,7 +23,7 @@ namespace Entity.Model
         public int InstructorId { get; set; }
         public Instructor Instructor { get; set; }
         public int AprendizId { get; set; }
-        public Aprendiz Aprendiz { get;
+        public Aprendiz Aprendiz { get; set; }
 
     }
 }
