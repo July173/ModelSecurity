@@ -27,7 +27,6 @@ namespace Business
             try
             {
                 var states = await _stateData.GetAllAsync();
-          
                 return MapToDTOList(states);
             }
             catch (Exception ex)
@@ -75,11 +74,11 @@ namespace Business
 
                 var stateCreado = await _stateData.CreateAsync(state);
 
-                return MapToDTO(state);
+                return MapToDTO(stateCreado);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo estado: {Name}", stateDto?.TypeState?? "null");
+                _logger.LogError(ex, "Error al crear nuevo estado: {Name}", stateDto?.TypeState ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el estado", ex);
             }
         }
@@ -99,33 +98,41 @@ namespace Business
             }
         }
 
-
-        //Metodo para mapear de State a StateDTO
+        // Método para mapear de State a StateDto
         private StateDto MapToDTO(State state)
         {
             return new StateDto
             {
-                
+                Id = state.Id,
+                TypeState = state.TypeState,
+                Description = state.Description,
+                Active = state.Active,
+                AprendizProcessInstructorId = state.AprendizProcessInstructorId
             };
         }
-        //Metodo para mapear de StateDto a State 
-        private State MapToEntity(StateDto rolDto)
+
+        // Método para mapear de StateDto a State
+        private State MapToEntity(StateDto stateDto)
         {
             return new State
             {
-                
+                Id = stateDto.Id,
+                TypeState = stateDto.TypeState,
+                Description = stateDto.Description,
+                Active = stateDto.Active,
+                AprendizProcessInstructorId = stateDto.AprendizProcessInstructorId,
             };
         }
-        //Metodo para mapear una lista de State a una lista de StateDto
+
+        // Método para mapear una lista de State a una lista de StateDto
         private IEnumerable<StateDto> MapToDTOList(IEnumerable<State> states)
         {
-            var statesDto = new List<StateDto>();
+            var statesDTO = new List<StateDto>();
             foreach (var state in states)
             {
-                statesDto.Add(MapToDTO(state));
+                statesDTO.Add(MapToDTO(state));
             }
-            return statesDto;
+            return statesDTO;
         }
-
     }
 }

@@ -106,7 +106,8 @@ namespace Business
                 Id = verification.Id,
                 Name = verification.Name,
                 Observation = verification.Observation,
-                Active = verification.Active //si existe la entidad
+                Active = verification.Active, //si existe la entidad
+                AprendizProcessInstructorId = verification.AprendizProcessInstructorId,
             };
         }
         //Metodo para mapear de VerificationDto a Verification 
@@ -117,7 +118,8 @@ namespace Business
                 Id = verificationDto.Id,
                 Name = verificationDto.Name,
                 Observation = verificationDto.Observation,
-                Active = verificationDto.Active //si existe la entidad
+                Active = verificationDto.Active, //si existe la entidad
+                AprendizProcessInstructorId = verificationDto.AprendizProcessInstructorId,
             };
         }
         //Metodo para mapear una lista de Verification a una lista de VerificationDto

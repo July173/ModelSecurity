@@ -114,7 +114,8 @@ namespace Business
                 Id = userSede.Id,
                 UserId = userSede.UserId,
                 SedeId = userSede.SedeId,
-                StatusProcedure = userSede.StatusProcedure
+                StatusProcedure = userSede.StatusProcedure,
+                
             };
         }
         //Metodo para mapear de UserSedeDto a UserSede
@@ -125,7 +126,8 @@ namespace Business
                 Id = userSedeDto.Id,
                 UserId = userSedeDto.UserId,
                 SedeId = userSedeDto.SedeId,
-                StatusProcedure = userSedeDto.StatusProcedure
+                StatusProcedure = userSedeDto.StatusProcedure,
+            
             };
         }
         //Metodo para mapear una lista de UserSede a una lista de UserSedeDto

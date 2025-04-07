@@ -108,7 +108,10 @@ namespace Business
                 CodeCenter = center.CodeCenter,
                 Active = center.Active,
                 RegionalId = center.RegionalId,
-                Address = center.Address
+                Address = center.Address,
+                SedeId = center.Sedeid,
+               
+
             };
         }
         //Metodo para mapear de CenterDto a Center 
@@ -121,7 +124,10 @@ namespace Business
                 CodeCenter = centerDto.CodeCenter,
                 Active = centerDto.Active,
                 RegionalId = centerDto.RegionalId,
-                Address = centerDto.Address
+                Address = centerDto.Address,
+                Sedeid = centerDto.SedeId,
+
+
             };
         }
         //Metodo para mapear una lista de Center a una lista de CenterDto

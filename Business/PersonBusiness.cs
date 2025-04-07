@@ -116,7 +116,8 @@ namespace Business
                 TypeIdentification = person.TypeIdentification,
                 NumberIdentification = person.NumberIdentification,
                 Signig = person.Signig,
-                Active = person.Active
+                Active = person.Active,
+                UserId = person.UserId,
             };
         }
 
@@ -136,7 +137,8 @@ namespace Business
                 TypeIdentification = personDto.TypeIdentification,
                 NumberIdentification = personDto.NumberIdentification,
                 Signig = personDto.Signig,
-                Active = personDto.Active
+                Active = personDto.Active,
+                UserId = personDto.UserId,
             };
         }
 

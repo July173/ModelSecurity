@@ -107,7 +107,8 @@ namespace Business
                 Id = concept.Id,
                 Name = concept.Name,
                 Observation = concept.Observation,
-                Active = concept.Active
+                Active = concept.Active,
+                AprendizProcessInstructorId = concept.AprendizProcessInstructorId
             };
         }
         //Metodo para mapear de ConceptDto a Concept 
@@ -118,7 +119,8 @@ namespace Business
                 Id = conceptDto.Id,
                 Name = conceptDto.Name,
                 Observation = conceptDto.Observation,
-                Active = conceptDto.Active
+                Active = conceptDto.Active,
+                AprendizProcessInstructorId = conceptDto.AprendizProcessInstructorId
             };
         }
         //Metodo para mapear una lista de Concept a una lista de ConceptDto

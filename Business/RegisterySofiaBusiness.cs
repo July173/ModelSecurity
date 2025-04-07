@@ -109,7 +109,8 @@ namespace Business
                 Name = registerySofia.Name,
                 Description = registerySofia.Description,
                 Document = registerySofia.Document,
-                Active = registerySofia.Active // si existe la entidad
+                Active = registerySofia.Active, // si existe la entidad
+                AprendizProcessInstructorId = registerySofia.AprendizProcessInstructorId
             };
         }
         //Metodo para mapear de RegisterySofiaDto a RegisterySofia 
@@ -121,7 +122,8 @@ namespace Business
                 Name = registerySofiaDto.Name,
                 Description = registerySofiaDto.Description,
                 Document = registerySofiaDto.Document,
-                Active = registerySofiaDto.Active // si existe la entidad
+                Active = registerySofiaDto.Active, // si existe la entidad
+                AprendizProcessInstructorId = registerySofiaDto.AprendizProcessInstructorId,
             };
         }
         //Metodo para mapear una lista de RegisterySofia a una lista de RegisterySofiaDto

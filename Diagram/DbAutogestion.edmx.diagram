@@ -15,7 +15,7 @@
         <AssociationConnector Association="DbAutogestion.RolRolForm" />
         <AssociationConnector Association="DbAutogestion.RolFormForm" />
         <EntityTypeShape EntityType="DbAutogestion.UserRol" Width="1.5" PointX="17.75" PointY="8.25" />
-        <EntityTypeShape EntityType="DbAutogestion.Person" Width="1.5" PointX="17.75" PointY="10.5" />
+        <EntityTypeShape EntityType="DbAutogestion.Person" Width="1.5" PointX="17" PointY="10.75" />
         <AssociationConnector Association="DbAutogestion.UsuarioRolRol" />
         <EntityTypeShape EntityType="DbAutogestion.User" Width="1.5" PointX="19.875" PointY="9.25" />
         <EntityTypeShape EntityType="DbAutogestion.UserSede" Width="1.5" PointX="20" PointY="14.5" />

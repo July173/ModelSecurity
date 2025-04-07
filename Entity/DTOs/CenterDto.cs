@@ -14,5 +14,6 @@ namespace Entity.DTOautogestion
         public bool Active { get; set; }
         public int RegionalId { get; set; }
         public string Address { get; set; }
+        public int SedeId { get; set; }
     }
 }

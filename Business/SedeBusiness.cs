@@ -111,7 +111,8 @@ namespace Business
                 PhoneSede = sede.PhoneSede,
                 EmailContact = sede.EmailContact,
                 CenterId = sede.CenterId,
-                Active = sede.Active // si existe la entidad
+                Active = sede.Active, // si existe la entidad
+                UserSedeId = sede.UserSedeId,
             };
         }
         //Metodo para mapear de SedeDto a Sede
@@ -126,8 +127,8 @@ namespace Business
                 PhoneSede = sedeDto.PhoneSede,
                 EmailContact = sedeDto.EmailContact,
                 CenterId = sedeDto.CenterId,
-                Active = sedeDto.Active // si existe la entidad 
-            };
+                Active = sedeDto.Active, // si existe la entidad 
+                UserSedeId = sedeDto.UserSedeId            };
         }
         //Metodo para mapear una lista de Sede a una lista de SedeDto
         private IEnumerable<SedeDto> MapToDTOList(IEnumerable<Sede> sedes)

@@ -100,7 +100,9 @@ namespace Business
                 Id = aprendiz.Id,
                 PreviuosProgram = aprendiz.PreviuosProgram,
                 UserId = aprendiz.UserId,
-                Active = aprendiz.Active
+                Active = aprendiz.Active,
+                AprendizProgramId = aprendiz.AprendizProgramId,
+                AprendizProcessInstructorId = aprendiz.AprendizProcessInstructorId,
             };
         }
 
@@ -112,7 +114,10 @@ namespace Business
                 Id = aprendizDto.Id,
                 PreviuosProgram = aprendizDto.PreviuosProgram,
                 UserId = aprendizDto.UserId,
-                Active = aprendizDto.Active
+                Active = aprendizDto.Active,
+                AprendizProgramId = aprendizDto.AprendizProgramId,
+                AprendizProcessInstructorId = aprendizDto.AprendizProcessInstructorId,
+            
             };
         }
 

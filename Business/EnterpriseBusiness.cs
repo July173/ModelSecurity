@@ -110,7 +110,9 @@ namespace Business
                 Observation = enterprise.Observation,
                 PhoneEnterprise = enterprise.PhoneEnterprise,
                 EmailEnterprise = enterprise.EmailEnterprise,
-                Active = enterprise.Active
+                Active = enterprise.Active,
+                AprendizProcessInstructorId = enterprise.AprendizProcessInstructorId,
+
             };
         }
         //Metodo para mapear de EnterpriseDto a Enterprise 
@@ -125,7 +127,8 @@ namespace Business
                 Observation = enterpriseDto.Observation,
                 PhoneEnterprise = enterpriseDto.PhoneEnterprise,
                 EmailEnterprise = enterpriseDto.EmailEnterprise,
-                Active = enterpriseDto.Active
+                Active = enterpriseDto.Active,
+                AprendizProcessInstructorId = enterpriseDto.AprendizProcessInstructorId
             };
         }
         //Metodo para mapear una lista de Enterprise a una lista de EnterpriseDto

@@ -109,7 +109,8 @@ namespace Business
                 Description = regional.Description,
                 CodeRegional = regional.CodeRegional,
                 Address = regional.Address,
-                Active = regional.Active // si existe la entidad
+                Active = regional.Active, // si existe la entidad
+                CenterId = regional.CenterId,
             };
         }
         //Metodo para mapear de RegionalDto a Regional 
@@ -122,7 +123,8 @@ namespace Business
                 Description = regionalDto.Description,
                 CodeRegional = regionalDto.CodeRegional,
                 Address = regionalDto.Address,
-                Active = regionalDto.Active // si existe la entidad
+                Active = regionalDto.Active, // si existe la entidad
+                CenterId= regionalDto.CenterId,
             };
         }
         //Metodo para mapear una lista de Regional a una lista de RegionalDto

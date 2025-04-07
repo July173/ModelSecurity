@@ -108,7 +108,9 @@ namespace Business
                 Description = program.Description,
                 CodeProgram = program.CodeProgram,
                 TypeProgram = program.TypeProgram,
-                Active = program.Active // si existe la entidad 
+                Active = program.Active, // si existe la entidad 
+                InstructorProgramId = program.InstructorProgramId,
+                AprendizProgramId = program.AprendizProgramId,
             };
         }
         //Metodo para mapear de ProgramDto a Program 
@@ -121,7 +123,9 @@ namespace Business
                 Description = programDto.Description,
                 CodeProgram = programDto.CodeProgram,
                 TypeProgram = programDto.TypeProgram,
-                Active = programDto.Active // si existe la entidad
+                Active = programDto.Active, // si existe la entidad
+                InstructorProgramId= programDto.InstructorProgramId,
+                AprendizProgramId=  programDto.AprendizProgramId
             };
         }
         //Metodo para mapear una lista de Program a una lista de ProgramDto

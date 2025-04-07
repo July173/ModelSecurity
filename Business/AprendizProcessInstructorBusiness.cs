@@ -114,6 +114,8 @@ namespace Business
                 TypeModalityId = aprendizProcessInstructor.TypeModalityId,
                 StateId = aprendizProcessInstructor.StateId,
                 VerificationId = aprendizProcessInstructor.VerificationId,
+                 
+
             };
         }
 

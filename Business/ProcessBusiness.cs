@@ -110,7 +110,8 @@ namespace Business
                 Id = process.Id,
                 TypeProcess = process.TypeProcess,
                 Observation = process.Observation,
-                Active = process.Active // si existe la entidad
+                Active = process.Active, // si existe la entidad
+                AprendizProcessInstructorId = process.AprendizProcessInstructorId,
             };
         }
         //Metodo para mapear de ProcessDto a Process 
@@ -121,7 +122,8 @@ namespace Business
                 Id = processDto.Id,
                 TypeProcess = processDto.TypeProcess,
                 Observation = processDto.Observation,
-                Active = processDto.Active // si existe la entidad
+                Active = processDto.Active, // si existe la entidad
+                AprendizProcessInstructorId = processDto.AprendizProcessInstructorId,
             };
         }
         //Metodo para mapear una lista de Process a una lista de ProcessDto

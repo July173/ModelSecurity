@@ -104,7 +104,9 @@ namespace Business
                 Id = rol.Id,
                 TypeRol = rol.TypeRol,
                 Description = rol.Description,
-                Active = rol.Active //si existe la entidad
+                Active = rol.Active, //si existe la entidad
+                RolFormId = rol.RolFormId,
+                UserRolId = rol.UserRolId,
             };
         }
         //Metodo para mapear de RolDto a Rol 
@@ -115,7 +117,9 @@ namespace Business
                 Id = rolDto.Id,
                 TypeRol = rolDto.TypeRol,
                 Description = rolDto.Description,
-                Active = rolDto.Active //si existe la entidad
+                Active = rolDto.Active, //si existe la entidad
+                RolFormId = rolDto.RolFormId,
+                UserRolId = rolDto.UserRolId,
             };
         }
         //Metodo para mapear una lista de Rol a una lista de RolDto

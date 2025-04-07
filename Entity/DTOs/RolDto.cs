@@ -12,5 +12,7 @@ namespace Entity.DTOautogestion
         public string TypeRol { get; set; }
         public string Description { get; set; }
         public bool Active { get; set; }
+        public int UserRolId { get; set; }
+        public int RolFormId { get; set; }
     }
 }

@@ -115,7 +115,12 @@ namespace Business
                 Id = user.Id,
                 Username = user.Username,
                 Email = user.Email,
-                Active = user.Active //si existe la entidad
+                Active = user.Active,//si existe la entidad
+                PersonId = user.PersonId,
+                UserRolId = user.UserRolId,
+                UserSedeId = user.UserSedeId,
+                InstructorId = user.InstructorId,
+                AprendizId = user.AprendizId,
             };
         }
         //Metodo para mapear de UserDto a User 
@@ -126,7 +131,13 @@ namespace Business
                 Id = userDto.Id,
                 Username = userDto.Username,
                 Email = userDto.Email,
-                Active = userDto.Active //si existe la entidad
+                Active = userDto.Active, //si existe la entidad
+                UserSedeId= userDto.UserSedeId,
+                InstructorId= userDto.InstructorId,
+                AprendizId= userDto.AprendizId,
+                PersonId= userDto.PersonId,
+                UserRolId= userDto.UserRolId,
+
             };
         }
         //Metodo para mapear una lista de User a una lista de UserDto
