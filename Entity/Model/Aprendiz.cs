@@ -15,8 +15,8 @@ namespace Entity.Model
         public User User { get; set; }
 
         public int AprendizProgramId { get; set; }
-        public AprendizProgram AprendizProgram { get; set; }
-        public AprendizProcessInstructor AprendizProcessInstructor { get; set; }
+        public ICollection<AprendizProgram> AprendizProgram { get; set; }
+        public ICollection<AprendizProcessInstructor> AprendizProcessInstructor { get; set; }
         public int AprendizProcessInstructorId { get; set; }
     }
 }

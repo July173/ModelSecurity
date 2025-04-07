@@ -18,8 +18,8 @@ namespace Entity.Model
         public DateTime UpdateDate { get; set; }
         public bool Active { get; set; }
         public int InstructorProgramId { get; set; }
-        public InstructorProgram InstructorProgram { get; set; }
+        public ICollection<InstructorProgram> InstructorProgram { get; set; }
         public int AprendizProgramId { get; set; }
-        public AprendizProgram AprendizProgram { get; set; }
+        public ICollection<AprendizProgram> AprendizProgram { get; set; }
     }
 }

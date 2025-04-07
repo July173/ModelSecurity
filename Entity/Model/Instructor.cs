@@ -13,10 +13,10 @@ namespace Entity.Model
         public int UserId { get; set; }
         public User User { get; set; }
         public int InstructorProgramid { get; set; }
-        public InstructorProgram InstructorProgram { get; set; }
+        public ICollection<InstructorProgram> InstructorProgram { get; set; }
         public int AprendizProgramInstructorId { get; set; }
-        public AprendizProcessInstructor AprendizProcessInstructor { get; set; }
-       
+        public ICollection<AprendizProcessInstructor> AprendizProcessInstructor { get; set; }
+
 
     }
 }

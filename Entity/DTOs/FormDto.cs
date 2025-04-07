@@ -16,5 +16,6 @@ namespace Entity.DTOautogestion
         public string Answer { get; set; }
         public bool Active { get; set; }
        public int FormModuleId { get; set; }
+       public int RolFormId { get; set; }
     }
 }

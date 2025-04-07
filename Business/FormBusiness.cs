@@ -111,7 +111,8 @@ namespace Business
                 TypeCuestion = form.TypeCuestion,
                 Answer = form.Answer,
                 Active = form.Active,
-                FormModuleId = form.FormModuleid
+                FormModuleId = form.FormModuleId,
+                RolFormId = form.RolFormId
             };
         }
 
@@ -127,7 +128,8 @@ namespace Business
                 TypeCuestion = formDto.TypeCuestion,
                 Answer = formDto.Answer,
                 Active = formDto.Active,
-                FormModuleid = formDto.FormModuleId
+                FormModuleId = formDto.FormModuleId,
+                RolFormId = formDto.RolFormId
             };
         }
         //Metodo para mapear una lista de FormDto a una lista de Form
