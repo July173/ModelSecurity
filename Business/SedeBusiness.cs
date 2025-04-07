@@ -27,24 +27,8 @@ namespace Business
             try
             {
                 var sedes = await _sedeData.GetAllAsync();
-                var sedesDTO = new List<SedeDto>();
-
-                foreach (var sede in sedes)
-                {
-                    sedesDTO.Add(new SedeDto
-                    {
-                        Id = sede.Id,
-                        Name = sede.Name,
-                        CodeSede = sede.CodeSede,
-                        Address = sede.Address,
-                        PhoneSede = sede.PhoneSede,
-                        EmailContact = sede.EmailContact,
-                        CenterId = sede.CenterId,
-                        Active = sede.Active // si existe la entidad
-                    });
-                }
-
-                return sedesDTO;
+                
+                return MapToDTOList(sedes);
             }
             catch (Exception ex)
             {
@@ -71,17 +55,7 @@ namespace Business
                     throw new EntityNotFoundException("sede", id);
                 }
 
-                return new SedeDto
-                {
-                    Id = sede.Id,
-                    Name = sede.Name,
-                    CodeSede = sede.CodeSede,
-                    Address = sede.Address,
-                    PhoneSede = sede.PhoneSede,
-                    EmailContact = sede.EmailContact,
-                    CenterId = sede.CenterId,
-                    Active = sede.Active // si existe la entidad
-                };
+                return MapToDTO(sede);
             }
             catch (Exception ex)
             {
@@ -97,30 +71,11 @@ namespace Business
             {
                 ValidateSede(sedeDto);
 
-                var sede = new Sede
-                {
-                    Name = sedeDto.Name,
-                    CodeSede = sedeDto.CodeSede,
-                    Address = sedeDto.Address,
-                    PhoneSede = sedeDto.PhoneSede,
-                    EmailContact = sedeDto.EmailContact,
-                    CenterId = sedeDto.CenterId,
-                    Active = sedeDto.Active // si existe la entidad
-                };
+                var sede = MapToEntity(sedeDto);
 
                 var sedeCreada = await _sedeData.CreateAsync(sede);
 
-                return new SedeDto
-                {
-                    Id = sede.Id,
-                    Name = sede.Name,
-                    CodeSede = sede.CodeSede,
-                    Address = sede.Address,
-                    PhoneSede = sede.PhoneSede,
-                    EmailContact = sede.EmailContact,
-                    CenterId = sede.CenterId,
-                    Active = sede.Active // si existe la entidad
-                };
+                return MapToDTO(sedeCreada);
             }
             catch (Exception ex)
             {
@@ -142,6 +97,48 @@ namespace Business
                 _logger.LogWarning("Se intentó crear/actualizar una sede con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name de la sede es obligatorio");
             }
+        }
+
+        //Metodo para mapear de Sede a SedeDTO
+        private SedeDto MapToDTO(Sede sede)
+        {
+            return new SedeDto
+            {
+                Id = sede.Id,
+                Name = sede.Name,
+                CodeSede = sede.CodeSede,
+                Address = sede.Address,
+                PhoneSede = sede.PhoneSede,
+                EmailContact = sede.EmailContact,
+                CenterId = sede.CenterId,
+                Active = sede.Active, // si existe la entidad
+                UserSedeId = sede.UserSedeId,
+            };
+        }
+        //Metodo para mapear de SedeDto a Sede
+        private Sede MapToEntity(SedeDto sedeDto)
+        {
+            return new Sede
+            {
+                Id = sedeDto.Id,
+                Name = sedeDto.Name,
+                CodeSede = sedeDto.CodeSede,
+                Address = sedeDto.Address,
+                PhoneSede = sedeDto.PhoneSede,
+                EmailContact = sedeDto.EmailContact,
+                CenterId = sedeDto.CenterId,
+                Active = sedeDto.Active, // si existe la entidad 
+                UserSedeId = sedeDto.UserSedeId            };
+        }
+        //Metodo para mapear una lista de Sede a una lista de SedeDto
+        private IEnumerable<SedeDto> MapToDTOList(IEnumerable<Sede> sedes)
+        {
+            var sedesDto = new List<SedeDto>();
+            foreach (var sede in sedes)
+            {
+                sedesDto.Add(MapToDTO(sede));
+            }
+            return sedesDto;
         }
     }
 }

@@ -27,20 +27,9 @@ namespace Business
             try
             {
                 var users = await _userData.GetAllAsync();
-                var usersDTO = new List<UserDto>();
+                return MapToDTOList(users);
 
-                foreach (var user in users)
-                {
-                    usersDTO.Add(new UserDto
-                    {
-                        Id = user.Id,
-                        Username = user.Username,
-                        Email = user.Email,
-                        Active = user.Active //si existe la entidad
-                     });
-                    }
-
-                return usersDTO;
+                
             }
             catch (Exception ex)
             {
@@ -67,13 +56,8 @@ namespace Business
                     throw new EntityNotFoundException("User", id);
                 }
 
-                return new UserDto
-                {
-                    Id = user.Id,
-                    Username = user.Username,
-                    Email = user.Email,
-                    Active = user.Active //si existe la entidad
-                };
+                return MapToDTO(user);
+               
             }
             catch (Exception ex)
             {
@@ -89,22 +73,12 @@ namespace Business
             {
                 ValidateUser(userDto);
 
-                var user = new User
-                {
-                    Username = userDto.Username,
-                    Email = userDto.Email,
-                    Active = userDto.Active //si existe la entidad
-                };
+                var user = MapToEntity(userDto);
+
 
                 var userCreado = await _userData.CreateAsync(user);
 
-                return new UserDto
-                {
-                    Id = user.Id,
-                    Username = user.Username,
-                    Email = user.Email,
-                    Active = user.Active //si existe la entidad
-                };
+                return MapToDTO(userCreado);
             }
             catch (Exception ex)
             {
@@ -133,5 +107,49 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("Email", "El Email del usuario es obligatorio");
             }
         }
+        //Metodo para mapear de User a UserDTO
+        private UserDto MapToDTO(User user)
+        {
+            return new UserDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                Active = user.Active,//si existe la entidad
+                PersonId = user.PersonId,
+                UserRolId = user.UserRolId,
+                UserSedeId = user.UserSedeId,
+                InstructorId = user.InstructorId,
+                AprendizId = user.AprendizId,
+            };
+        }
+        //Metodo para mapear de UserDto a User 
+        private User MapToEntity(UserDto userDto)
+        {
+            return new User
+            {
+                Id = userDto.Id,
+                Username = userDto.Username,
+                Email = userDto.Email,
+                Active = userDto.Active, //si existe la entidad
+                UserSedeId= userDto.UserSedeId,
+                InstructorId= userDto.InstructorId,
+                AprendizId= userDto.AprendizId,
+                PersonId= userDto.PersonId,
+                UserRolId= userDto.UserRolId,
+
+            };
+        }
+        //Metodo para mapear una lista de User a una lista de UserDto
+        private IEnumerable<UserDto> MapToDTOList(IEnumerable<User> users)
+        {
+            var usersDto = new List<UserDto>();
+            foreach (var user in users)
+            {
+                usersDto.Add(MapToDTO(user));
+            }
+            return usersDto;
+        }
+
     }
 }

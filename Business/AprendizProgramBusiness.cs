@@ -1,6 +1,5 @@
 ﻿using Data;
 using Entity.DTOautogestion;
-using Entity.DTOautogestion.pivote;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using Utilities.Exceptions;
@@ -8,7 +7,7 @@ using Utilities.Exceptions;
 namespace Business
 {
     /// <summary>
-    /// Clase de negocio encargada de la lógica relacionada con los programas de aprendizaje en el sistema.
+    /// Clase de negocio encargada de la lógica relacionada con los aprendices en programas en el sistema.
     /// </summary>
     public class AprendizProgramBusiness
     {
@@ -21,91 +20,66 @@ namespace Business
             _logger = logger;
         }
 
-        // Método para obtener todos los programas de aprendizaje como DTOs
+        // Método para obtener todos los AprendizProgram como DTOs
         public async Task<IEnumerable<AprendizProgramDto>> GetAllAprendizProgramsAsync()
         {
             try
             {
-                var programs = await _aprendizProgramData.GetAllAsync();
-                var programsDTO = new List<AprendizProgramDto>();
-
-                foreach (var program in programs)
-                {
-                    programsDTO.Add(new AprendizProgramDto
-                    {
-                        Id = program.Id,                        
-                        AprendizId = program.Id,
-                        ProgramId = program.ProgramId,                            
-                    });
-                }
-
-                return programsDTO;
+                var aprendizPrograms = await _aprendizProgramData.GetAllAsync();
+                return MapToDTOList(aprendizPrograms);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener todos los programas de aprendizaje");
-                throw new ExternalServiceException("Base de datos", "Error al recuperar la lista de programas de aprendizaje", ex);
+                _logger.LogError(ex, "Error al obtener todos los Aprendices en programas");
+                throw new ExternalServiceException("Base de datos", "Error al recuperar la lista de Aprendices en programas", ex);
             }
         }
 
-        // Método para obtener un programa de aprendizaje por ID como DTO
+        // Método para obtener un Aprendiz en programa por ID como DTO
         public async Task<AprendizProgramDto> GetAprendizProgramByIdAsync(int id)
         {
             if (id <= 0)
             {
-                _logger.LogWarning("Se intentó obtener un programa de aprendizaje con ID inválido: {Id}", id);
-                throw new Utilities.Exceptions.ValidationException("id", "El ID del programa de aprendizaje debe ser mayor que cero");
+                _logger.LogWarning("Se intentó obtener un Aprendiz en programa con ID inválido: {Id}", id);
+                throw new ValidationException("id", "El ID del Aprendiz en programa debe ser mayor que cero");
             }
 
             try
             {
-                var program = await _aprendizProgramData.GetByIdAsync(id);
-                if (program == null)
+                var aprendizProgram = await _aprendizProgramData.GetByIdAsync(id);
+                if (aprendizProgram == null)
                 {
-                    _logger.LogInformation("No se encontró ningún programa de aprendizaje con ID: {Id}", id);
-                    throw new EntityNotFoundException("aprendizProgram", id);
+                    _logger.LogInformation("No se encontró ningún Aprendiz en programa con ID: {Id}", id);
+                    throw new EntityNotFoundException("AprendizProgram", id);
                 }
 
-                return new AprendizProgramDto
-                {
-                    Id = program.Id,
-                    AprendizId = program.Id,
-                    ProgramId = program.ProgramId,
-                };
+                return MapToDTO(aprendizProgram);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener el programa de aprendizaje con ID: {Id}", id);
-                throw new ExternalServiceException("Base de datos", $"Error al recuperar el programa de aprendizaje con ID {id}", ex);
+                _logger.LogError(ex, "Error al obtener el Aprendiz en programa con ID: {Id}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al recuperar el Aprendiz en programa con ID {id}", ex);
             }
         }
 
-        // Método para crear un programa de aprendizaje desde un DTO
+        // Método para crear un Aprendiz en programa desde un DTO
         public async Task<AprendizProgramDto> CreateAprendizProgramAsync(AprendizProgramDto aprendizProgramDto)
         {
             try
             {
                 ValidateAprendizProgram(aprendizProgramDto);
 
-                var program = new AprendizProgram
-                {
-                    AprendizId = aprendizProgramDto.Id,
-                    ProgramId = aprendizProgramDto.ProgramId,
-                };
+                var aprendizProgram = MapToEntity(aprendizProgramDto);
 
-                var programCreado = await _aprendizProgramData.CreateAsync(program);
+                var aprendizProgramCreado = await _aprendizProgramData.CreateAsync(aprendizProgram);
 
-                return new AprendizProgramDto
-                {
-                    Id = program.Id,
-                    AprendizId = program.Id,
-                    ProgramId = program.ProgramId,
-                };
+                return MapToDTO(aprendizProgramCreado);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo programa de aprendizaje");
-                throw new ExternalServiceException("Base de datos", "Error al crear el programa de aprendizaje", ex);
+                _logger.LogError(ex, "Error al crear nuevo Aprendiz en programa: AprendizId={AprendizId}, ProgramId={ProgramId}",
+                    aprendizProgramDto?.AprendizId ?? 0, aprendizProgramDto?.ProgramId ?? 0);
+                throw new ExternalServiceException("Base de datos", "Error al crear el Aprendiz en programa", ex);
             }
         }
 
@@ -114,10 +88,53 @@ namespace Business
         {
             if (aprendizProgramDto == null)
             {
-                throw new Utilities.Exceptions.ValidationException("El objeto AprendizProgram no puede ser nulo");
+                throw new ValidationException("El objeto AprendizProgram no puede ser nulo");
             }
 
-           
+            if (aprendizProgramDto.AprendizId <= 0)
+            {
+                _logger.LogWarning("AprendizId inválido: {AprendizId}", aprendizProgramDto.AprendizId);
+                throw new ValidationException("AprendizId", "El AprendizId debe ser mayor a cero");
+            }
+
+            if (aprendizProgramDto.ProgramId <= 0)
+            {
+                _logger.LogWarning("ProgramId inválido: {ProgramId}", aprendizProgramDto.ProgramId);
+                throw new ValidationException("ProgramId", "El ProgramId debe ser mayor a cero");
+            }
+        }
+
+        // Método para mapear de AprendizProgram a AprendizProgramDto
+        private AprendizProgramDto MapToDTO(AprendizProgram aprendizProgram)
+        {
+            return new AprendizProgramDto
+            {
+                Id = aprendizProgram.Id,
+                AprendizId = aprendizProgram.AprendizId,
+                ProgramId = aprendizProgram.ProgramId,
+            };
+        }
+
+        // Método para mapear de AprendizProgramDto a AprendizProgram
+        private AprendizProgram MapToEntity(AprendizProgramDto aprendizProgramDto)
+        {
+            return new AprendizProgram
+            {
+                Id = aprendizProgramDto.Id,
+                AprendizId = aprendizProgramDto.AprendizId,
+                ProgramId = aprendizProgramDto.ProgramId,
+            };
+        }
+
+        // Método para mapear una lista de AprendizProgram a lista de AprendizProgramDto
+        private IEnumerable<AprendizProgramDto> MapToDTOList(IEnumerable<AprendizProgram> aprendizPrograms)
+        {
+            var aprendizProgramsDto = new List<AprendizProgramDto>();
+            foreach (var aprendizProgram in aprendizPrograms)
+            {
+                aprendizProgramsDto.Add(MapToDTO(aprendizProgram));
+            }
+            return aprendizProgramsDto;
         }
     }
 }

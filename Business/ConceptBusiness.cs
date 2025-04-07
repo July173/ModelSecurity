@@ -26,21 +26,8 @@ namespace Business
             try
             {
                 var concepts = await _conceptData.GetAllAsync();
-                var conceptsDTO = new List<ConceptDto>();
-
-                foreach (var concept in concepts)
-                {
-                    conceptsDTO.Add(new ConceptDto
-                    {
-                        Id = concept.Id,
-                        Name = concept.Name,
-                        Observation = concept.Observation,
-                        Active = concept.Active
-
-                    });
-                }
-
-                return conceptsDTO;
+               
+                return MapToDTOList(concepts);
             }
             catch (Exception ex)
             {
@@ -67,13 +54,7 @@ namespace Business
                     throw new EntityNotFoundException("concept", id);
                 }
 
-                return new ConceptDto
-                {
-                    Id = concept.Id,
-                    Name = concept.Name,
-                    Observation = concept.Observation,
-                    Active = concept.Active
-                };
+                return MapToDTO(concept);
             }
             catch (Exception ex)
             {
@@ -89,22 +70,11 @@ namespace Business
             {
                 ValidateConcept(conceptDto);
 
-                var concept = new Concept
-                {
-                    Name = conceptDto.Name,
-                    Observation = conceptDto.Observation,
-                    Active = conceptDto.Active
-                };
+                var concept = MapToEntity(conceptDto);
 
                 var conceptCreado = await _conceptData.CreateAsync(concept);
 
-                return new ConceptDto
-                {
-                    Id = concept.Id,
-                    Name = concept.Name,
-                    Observation = concept.Observation,
-                    Active = concept.Active
-                };
+                return MapToDTO (conceptCreado);
             }
             catch (Exception ex)
             {
@@ -126,6 +96,42 @@ namespace Business
                 _logger.LogWarning("Se intentó crear/actualizar un concepto con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name del concepto es obligatorio");
             }
+        }
+
+
+        //Metodo para mapear de Concept a ConceptDto
+        private ConceptDto MapToDTO(Concept concept)
+        {
+            return new ConceptDto
+            {
+                Id = concept.Id,
+                Name = concept.Name,
+                Observation = concept.Observation,
+                Active = concept.Active,
+                AprendizProcessInstructorId = concept.AprendizProcessInstructorId
+            };
+        }
+        //Metodo para mapear de ConceptDto a Concept 
+        private Concept MapToEntity(ConceptDto conceptDto)
+        {
+            return new Concept
+            {   
+                Id = conceptDto.Id,
+                Name = conceptDto.Name,
+                Observation = conceptDto.Observation,
+                Active = conceptDto.Active,
+                AprendizProcessInstructorId = conceptDto.AprendizProcessInstructorId
+            };
+        }
+        //Metodo para mapear una lista de Concept a una lista de ConceptDto
+        private IEnumerable<ConceptDto> MapToDTOList(IEnumerable<Concept> concepts)
+        {
+            var conceptsDto = new List<ConceptDto>();
+            foreach (var concept in concepts)
+            {
+                conceptsDto.Add(MapToDTO(concept));
+            }
+            return conceptsDto;
         }
     }
 }

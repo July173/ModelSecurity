@@ -27,22 +27,8 @@ namespace Business
             try
             {
                 var regionals = await _regionalData.GetAllAsync();
-                var regionalsDTO = new List<RegionalDto>();
-
-                foreach (var regional in regionals)
-                {
-                    regionalsDTO.Add(new RegionalDto
-                    {
-                        Id = regional.Id,
-                        Name = regional.Name,
-                        Description = regional.Description,
-                        CodeRegional = regional.CodeRegional,
-                        Address = regional.Address,
-                        Active = regional.Active // si existe la entidad
-                    });
-                }
-
-                return regionalsDTO;
+         
+                return MapToDTOList(regionals);
             }
             catch (Exception ex)
             {
@@ -69,15 +55,7 @@ namespace Business
                     throw new EntityNotFoundException("regional", id);
                 }
 
-                return new RegionalDto
-                {
-                    Id = regional.Id,
-                    Name = regional.Name,
-                    Description = regional.Description,
-                    CodeRegional = regional.CodeRegional,
-                    Address = regional.Address,
-                    Active = regional.Active // si existe la entidad
-                };
+                return MapToDTO(regional);
             }
             catch (Exception ex)
             {
@@ -93,26 +71,11 @@ namespace Business
             {
                 ValidateRegional(regionalDto);
 
-                var regional = new Regional
-                {
-                    Name = regionalDto.Name,
-                    Description = regionalDto.Description,
-                    CodeRegional = regionalDto.CodeRegional,
-                    Address = regionalDto.Address,
-                    Active = regionalDto.Active // si existe la entidad
-                };
+                var regional = MapToEntity(regionalDto);
 
                 var regionalCreado = await _regionalData.CreateAsync(regional);
 
-                return new RegionalDto
-                {
-                    Id = regional.Id,
-                    Name = regional.Name,
-                    Description = regional.Description,
-                    CodeRegional = regional.CodeRegional,
-                    Address = regional.Address,
-                    Active = regional.Active // si existe la entidad
-                };
+                return MapToDTO(regionalCreado);
             }
             catch (Exception ex)
             {
@@ -134,6 +97,45 @@ namespace Business
                 _logger.LogWarning("Se intentó crear/actualizar una regional con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name de la regional es obligatorio");
             }
+        }
+
+        //Metodo para mapear de Regional a RegionalDto
+        private RegionalDto MapToDTO(Regional regional)
+        {
+            return new RegionalDto
+            {
+                Id = regional.Id,
+                Name = regional.Name,
+                Description = regional.Description,
+                CodeRegional = regional.CodeRegional,
+                Address = regional.Address,
+                Active = regional.Active, // si existe la entidad
+                CenterId = regional.CenterId,
+            };
+        }
+        //Metodo para mapear de RegionalDto a Regional 
+        private Regional MapToEntity(RegionalDto regionalDto)
+        {
+            return new Regional
+            {
+                Id = regionalDto.Id,
+                Name = regionalDto.Name,
+                Description = regionalDto.Description,
+                CodeRegional = regionalDto.CodeRegional,
+                Address = regionalDto.Address,
+                Active = regionalDto.Active, // si existe la entidad
+                CenterId= regionalDto.CenterId,
+            };
+        }
+        //Metodo para mapear una lista de Regional a una lista de RegionalDto
+        private IEnumerable<RegionalDto> MapToDTOList(IEnumerable<Regional> regionals)
+        {
+            var regionalsDto = new List<RegionalDto>();
+            foreach (var regional in regionals)
+            {
+                regionalsDto.Add(MapToDTO(regional));
+            }
+            return regionalsDto;
         }
     }
 }

@@ -26,26 +26,9 @@ namespace Business
             try
             {
                 var relaciones = await _aprendizProcessInstructorData.GetAllAsync();
-                var relacionesDTO = new List<AprendizProcessInstructorDto>();
+              
 
-                foreach (var relacion in relaciones)
-                {
-                    relacionesDTO.Add(new AprendizProcessInstructorDto
-                    {
-                        Id = relacion.Id,
-                        AprendizId = relacion.AprendizId,
-                        InstructorId = relacion.InstructorId,
-                        RegisterySofiaId = relacion.RegisterySofiaId,
-                        ConceptId = relacion.ConceptId,
-                        EnterpriseId = relacion.EnterpriseId,
-                        ProcessId = relacion.ProcessId,
-                        TypeModalityId = relacion.TypeModalityId,
-                        StateId = relacion.StateId,
-                        VerificationId = relacion.VerificationId
-                    });
-                }
-
-                return relacionesDTO;
+                return MapToDTOList(relaciones);
             }
             catch (Exception ex)
             {
@@ -72,19 +55,7 @@ namespace Business
                     throw new EntityNotFoundException("AprendizProcessInstructor", id);
                 }
 
-                return new AprendizProcessInstructorDto
-                {
-                    Id = relacion.Id,
-                    AprendizId = relacion.AprendizId,
-                    InstructorId = relacion.InstructorId,
-                    RegisterySofiaId = relacion.RegisterySofiaId,
-                    ConceptId = relacion.ConceptId,
-                    EnterpriseId = relacion.EnterpriseId,
-                    ProcessId = relacion.ProcessId,
-                    TypeModalityId = relacion.TypeModalityId,
-                    StateId = relacion.StateId,
-                    VerificationId = relacion.VerificationId
-                };
+                return MapToDTO(relacion);
             }
             catch (Exception ex)
             {
@@ -100,35 +71,11 @@ namespace Business
             {
                 ValidateAprendizProcessInstructor(dto);
 
-                var relacion = new AprendizProcessInstructor
-                {
-                    Id = dto.Id,
-                    AprendizId = dto.AprendizId,
-                    InstructorId = dto.InstructorId,
-                    RegisterySofiaId = dto.RegisterySofiaId,
-                    ConceptId = dto.ConceptId,
-                    EnterpriseId = dto.EnterpriseId,
-                    ProcessId = dto.ProcessId,
-                    TypeModalityId = dto.TypeModalityId,
-                    StateId = dto.StateId,
-                    VerificationId = dto.VerificationId
-                };
+                var relacion = MapToEntity(dto);
 
                 var creada = await _aprendizProcessInstructorData.CreateAsync(relacion);
 
-                return new AprendizProcessInstructorDto
-                {
-                    Id = relacion.Id,
-                    AprendizId = relacion.AprendizId,
-                    InstructorId = relacion.InstructorId,
-                    RegisterySofiaId = relacion.RegisterySofiaId,
-                    ConceptId = relacion.ConceptId,
-                    EnterpriseId = relacion.EnterpriseId,
-                    ProcessId = relacion.ProcessId,
-                    TypeModalityId = relacion.TypeModalityId,
-                    StateId = relacion.StateId,
-                    VerificationId = relacion.VerificationId
-                };
+                return MapToDTO(creada);
             }
             catch (Exception ex)
             {
@@ -151,5 +98,55 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("IDs", "Los IDs deben ser mayores que cero");
             }
         }
+
+        // Método para mapear de AprendizProcessInstructor a AprendizProcessInstructorDto
+        private AprendizProcessInstructorDto MapToDTO(AprendizProcessInstructor aprendizProcessInstructor)
+        {
+            return new AprendizProcessInstructorDto
+            {
+                Id = aprendizProcessInstructor.Id,
+                AprendizId = aprendizProcessInstructor.AprendizId,
+                InstructorId = aprendizProcessInstructor.InstructorId,
+                RegisterySofiaId = aprendizProcessInstructor.RegisterySofiaId,
+                ConceptId = aprendizProcessInstructor.ConceptId,
+                EnterpriseId = aprendizProcessInstructor.EnterpriseId,
+                ProcessId = aprendizProcessInstructor.ProcessId,
+                TypeModalityId = aprendizProcessInstructor.TypeModalityId,
+                StateId = aprendizProcessInstructor.StateId,
+                VerificationId = aprendizProcessInstructor.VerificationId,
+                 
+
+            };
+        }
+
+        // Método para mapear de AprendizProcessInstructorDto a AprendizProcessInstructor
+        private AprendizProcessInstructor MapToEntity(AprendizProcessInstructorDto aprendizProcessInstructorDto)
+        {
+            return new AprendizProcessInstructor
+            {
+                Id = aprendizProcessInstructorDto.Id,
+                AprendizId = aprendizProcessInstructorDto.AprendizId,
+                InstructorId = aprendizProcessInstructorDto.InstructorId,
+                RegisterySofiaId = aprendizProcessInstructorDto.RegisterySofiaId,
+                ConceptId = aprendizProcessInstructorDto.ConceptId,
+                EnterpriseId = aprendizProcessInstructorDto.EnterpriseId,
+                ProcessId = aprendizProcessInstructorDto.ProcessId,
+                TypeModalityId = aprendizProcessInstructorDto.TypeModalityId,
+                StateId = aprendizProcessInstructorDto.StateId,
+                VerificationId = aprendizProcessInstructorDto.VerificationId,
+            };
+        }
+
+        // Método para mapear una lista de AprendizProcessInstructor a lista de AprendizProcessInstructorDto
+        private IEnumerable<AprendizProcessInstructorDto> MapToDTOList(IEnumerable<AprendizProcessInstructor> aprendizProcessInstructors)
+        {
+            var aprendizProcessInstructorsDto = new List<AprendizProcessInstructorDto>();
+            foreach (var aprendizProcessInstructor in aprendizProcessInstructors)
+            {
+                aprendizProcessInstructorsDto.Add(MapToDTO(aprendizProcessInstructor));
+            }
+            return aprendizProcessInstructorsDto;
+        }
+
     }
 }

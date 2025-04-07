@@ -13,5 +13,10 @@ namespace Entity.Model
         public bool Active { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
+
+        public int AprendizProgramId { get; set; }
+        public ICollection<AprendizProgram> AprendizProgram { get; set; }
+        public ICollection<AprendizProcessInstructor> AprendizProcessInstructor { get; set; }
+        public int AprendizProcessInstructorId { get; set; }
     }
 }

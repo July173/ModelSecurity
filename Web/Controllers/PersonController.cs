@@ -46,7 +46,7 @@ namespace Web.Controllers
         {
             try
             {
-                var persons = await _PersonBusiness.GetAllPersonsAsync();
+                var persons = await _PersonBusiness.GetAllPeopleAsync();
                 return Ok(persons);
             }
             catch (ExternalServiceException ex)

@@ -1,6 +1,7 @@
 ﻿using Data;
 using Entity.DTOautogestion;
 using Entity.DTOautogestion.pivote;
+using Entity.DTOs;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
@@ -28,19 +29,9 @@ namespace Business
             try
             {
                 var rolUsers = await _rolUserData.GetAllAsync();
-                var rolUsersDTO = new List<UserRolDto>();
 
-                foreach (var rolUser in rolUsers)
-                {
-                    rolUsersDTO.Add(new UserRolDto
-                    {
-                        Id = rolUser.Id,
-                        UserId = rolUser.UserId,
-                        RolId = rolUser.RolId
-                    });
-                }
+                return MapToDTOList(rolUsers);
 
-                return rolUsersDTO;
             }
             catch (Exception ex)
             {
@@ -67,12 +58,7 @@ namespace Business
                     throw new EntityNotFoundException("RolUser", id);
                 }
 
-                return new UserRolDto
-                {
-                    Id = rolUser.Id,
-                    UserId = rolUser.UserId,
-                    RolId = rolUser.RolId
-                };
+                return MapToDTO(rolUser);
             }
             catch (Exception ex)
             {
@@ -88,20 +74,10 @@ namespace Business
             {
                 ValidateRolUser(rolUserDto);
 
-                var rolUser = new UserRol
-                {
-                    UserId = rolUserDto.UserId,
-                    RolId = rolUserDto.RolId
-                };
-
+                var rolUser = MapToEntity(rolUserDto);
                 var rolUserCreado = await _rolUserData.CreateAsync(rolUser);
 
-                return new UserRolDto
-                {
-                    Id = rolUser.Id,
-                    UserId = rolUser.UserId,
-                    RolId = rolUser.RolId
-                };
+                return MapToDTO(rolUserCreado);
             }
             catch (Exception ex)
             {
@@ -129,6 +105,37 @@ namespace Business
                 _logger.LogWarning("Se intentó crear/actualizar un rol de usuario con RolId inválido");
                 throw new Utilities.Exceptions.ValidationException("RolId", "El RolId del rol de usuario es obligatorio y debe ser mayor que cero");
             }
+        }
+
+        //Metodo para mapear de UserRol a UserRolDto
+        private UserRolDto MapToDTO(UserRol userRol)
+        {
+            return new UserRolDto
+            {
+                Id = userRol.Id,
+                UserId = userRol.UserId,
+                RolId = userRol.RolId
+            };
+        }
+        //Metodo para mapear de UserRolDto a UserRol
+        private UserRol MapToEntity(UserRolDto userRolDto)
+        {
+            return new UserRol
+            {
+                Id = userRolDto.Id,
+                UserId = userRolDto.UserId,
+                RolId = userRolDto.RolId
+            };
+        }
+        //Metodo para mapear una lista de UserRol a una lista de UserRolDto
+        private IEnumerable<UserRolDto> MapToDTOList(IEnumerable<UserRol> userRoles)
+        {
+            var userRolesDto = new List<UserRolDto>();
+            foreach (var userRol in userRoles)
+            {
+                userRolesDto.Add(MapToDTO(userRol));
+            }
+            return userRolesDto;
         }
     }
 }

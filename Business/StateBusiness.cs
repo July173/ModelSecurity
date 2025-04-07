@@ -27,20 +27,7 @@ namespace Business
             try
             {
                 var states = await _stateData.GetAllAsync();
-                var statesDTO = new List<StateDto>();
-
-                foreach (var state in states)
-                {
-                    statesDTO.Add(new StateDto
-                    {
-                        Id = state.Id,
-                        TypeState = state.TypeState,
-                        Description = state.Description,
-                        Active = state.Active // si existe la entidad
-                    });
-                }
-
-                return statesDTO;
+                return MapToDTOList(states);
             }
             catch (Exception ex)
             {
@@ -67,13 +54,7 @@ namespace Business
                     throw new EntityNotFoundException("state", id);
                 }
 
-                return new StateDto
-                {
-                    Id = state.Id,
-                    TypeState = state.TypeState,
-                    Description = state.Description,
-                    Active = state.Active // si existe la entidad
-                };
+                return MapToDTO(state);
             }
             catch (Exception ex)
             {
@@ -89,26 +70,15 @@ namespace Business
             {
                 ValidateState(stateDto);
 
-                var state = new State
-                {
-                    TypeState = stateDto.TypeState,
-                    Description = stateDto.Description,
-                    Active = stateDto.Active // si existe la entidad
-                };
+                var state = MapToEntity(stateDto);
 
                 var stateCreado = await _stateData.CreateAsync(state);
 
-                return new StateDto
-                {
-                    Id = state.Id,
-                    TypeState = state.TypeState,
-                    Description = state.Description,
-                    Active = state.Active // si existe la entidad
-                };
+                return MapToDTO(stateCreado);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo estado: {Name}", stateDto?.TypeState?? "null");
+                _logger.LogError(ex, "Error al crear nuevo estado: {Name}", stateDto?.TypeState ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el estado", ex);
             }
         }
@@ -126,6 +96,43 @@ namespace Business
                 _logger.LogWarning("Se intentó crear/actualizar un estado con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name del estado es obligatorio");
             }
+        }
+
+        // Método para mapear de State a StateDto
+        private StateDto MapToDTO(State state)
+        {
+            return new StateDto
+            {
+                Id = state.Id,
+                TypeState = state.TypeState,
+                Description = state.Description,
+                Active = state.Active,
+                AprendizProcessInstructorId = state.AprendizProcessInstructorId
+            };
+        }
+
+        // Método para mapear de StateDto a State
+        private State MapToEntity(StateDto stateDto)
+        {
+            return new State
+            {
+                Id = stateDto.Id,
+                TypeState = stateDto.TypeState,
+                Description = stateDto.Description,
+                Active = stateDto.Active,
+                AprendizProcessInstructorId = stateDto.AprendizProcessInstructorId,
+            };
+        }
+
+        // Método para mapear una lista de State a una lista de StateDto
+        private IEnumerable<StateDto> MapToDTOList(IEnumerable<State> states)
+        {
+            var statesDTO = new List<StateDto>();
+            foreach (var state in states)
+            {
+                statesDTO.Add(MapToDTO(state));
+            }
+            return statesDTO;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Data;
 using Entity.DTOautogestion;
+using Entity.DTOs;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using Utilities.Exceptions;
@@ -26,19 +27,8 @@ namespace Business
             try
             {
                 var instructors = await _instructorData.GetAllAsync();
-                var instructorsDTO = new List<InstructorDto>();
-
-                foreach (var instructor in instructors)
-                {
-                    instructorsDTO.Add(new InstructorDto
-                    {
-                        Id = instructor.Id,
-                        Active = instructor.Active,
-                        UserId = instructor.UserId // Relación con la entidad User
-                    });
-                }
-
-                return instructorsDTO;
+              
+                return MapToDTOList(instructors);
             }
             catch (Exception ex)
             {
@@ -65,12 +55,7 @@ namespace Business
                     throw new EntityNotFoundException("instructor", id);
                 }
 
-                return new InstructorDto
-                {
-                    Id = instructor.Id,
-                    Active = instructor.Active,
-                    UserId = instructor.UserId // Relación con la entidad User
-                };
+                return MapToDTO(instructor);
             }
             catch (Exception ex)
             {
@@ -86,20 +71,11 @@ namespace Business
             {
                 ValidateInstructor(instructorDto);
 
-                var instructor = new Instructor
-                {
-                    Active = instructorDto.Active,
-                    UserId = instructorDto.UserId // Relación con la entidad User
-                };
+                var instructor = MapToEntity(instructorDto);
 
                 var instructorCreado = await _instructorData.CreateAsync(instructor);
 
-                return new InstructorDto
-                {
-                    Id = instructor.Id,
-                    Active = instructor.Active,
-                    UserId = instructor.UserId // Relación con la entidad User
-                };
+                return MapToDTO(instructorCreado);
             }
             catch (Exception ex)
             {
@@ -121,6 +97,39 @@ namespace Business
                 _logger.LogWarning("Se intentó crear/actualizar un instructor con UserId inválido");
                 throw new Utilities.Exceptions.ValidationException("UserId", "El UserId del instructor es obligatorio y debe ser mayor que cero");
             }
+        }
+
+        //Metodo para mapear de Instructor a InstructorDto
+        private InstructorDto MapToDTO(Instructor instructor)
+        {
+            return new InstructorDto
+            {
+                Id = instructor.Id,
+                Active = instructor.Active,
+                UserId = instructor.UserId, // Relación con la entidad User
+                InstructorProgramId = instructor.InstructorProgramid
+            };
+        }
+        //Metodo para mapear de InstructorDto a Instructor
+        private Instructor MapToEntity(InstructorDto instructorDto)
+        {
+            return new Instructor
+            {
+                Id = instructorDto.Id,
+                Active = instructorDto.Active,
+                UserId = instructorDto.UserId, // Relación con la entidad User
+                InstructorProgramid = instructorDto.AprendizProcessInstructorId,
+            };
+        }
+        //Metodo para mapear una lista de Instructor a una lista de InstructorDto
+        private IEnumerable<InstructorDto> MapToDTOList(IEnumerable<Instructor> instructors)
+        {
+            var instructorsDto = new List<InstructorDto>();
+            foreach (var instructor in instructors)
+            {
+                instructorsDto.Add(MapToDTO(instructor));
+            }
+            return instructorsDto;
         }
     }
 }
