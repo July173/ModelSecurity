@@ -14,12 +14,12 @@ namespace Data
     public class RolData
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger _logger;
+        private readonly ILogger<RolData> _logger;
         /// <summary>
         /// Constructor que recibe el contexto de la base de datos 
         /// </summary>
         /// <param name="context"> instancia de <see cref="ApplicationDbContext"/>para la conexion con la base de datos</param>
-        public RolData(ApplicationDbContext context, ILogger logger)
+        public RolData(ApplicationDbContext context, ILogger<RolData> logger)
         {
             _context = context;
             _logger = logger;

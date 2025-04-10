@@ -11,9 +11,9 @@ namespace Data
     public class PersonData
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger _logger;
+        private readonly ILogger<PersonData> _logger;
 
-        public PersonData(ApplicationDbContext context, ILogger logger)
+        public PersonData(ApplicationDbContext context, ILogger<PersonData> logger)
         {
             _context = context;
             _logger = logger;
