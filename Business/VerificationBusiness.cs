@@ -13,9 +13,9 @@ namespace Business
     public class VerificationBusiness
     {
         private readonly VerificationData _verificationData;
-        private readonly ILogger _logger;
+        private readonly ILogger<VerificationData> _logger;
 
-        public VerificationBusiness(VerificationData verificationData, ILogger logger)
+        public VerificationBusiness(VerificationData verificationData, ILogger<VerificationData> logger)
         {
             _verificationData = verificationData;
             _logger = logger;
@@ -107,7 +107,6 @@ namespace Business
                 Name = verification.Name,
                 Observation = verification.Observation,
                 Active = verification.Active, //si existe la entidad
-                AprendizProcessInstructorId = verification.AprendizProcessInstructorId,
             };
         }
         //Metodo para mapear de VerificationDto a Verification 
@@ -119,7 +118,6 @@ namespace Business
                 Name = verificationDto.Name,
                 Observation = verificationDto.Observation,
                 Active = verificationDto.Active, //si existe la entidad
-                AprendizProcessInstructorId = verificationDto.AprendizProcessInstructorId,
             };
         }
         //Metodo para mapear una lista de Verification a una lista de VerificationDto

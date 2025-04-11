@@ -13,9 +13,9 @@ namespace Business
     public class SedeBusiness
     {
         private readonly SedeData _sedeData;
-        private readonly ILogger _logger;
+        private readonly ILogger<SedeData> _logger;
 
-        public SedeBusiness(SedeData sedeData, ILogger logger)
+        public SedeBusiness(SedeData sedeData, ILogger<SedeData> logger)
         {
             _sedeData = sedeData;
             _logger = logger;
@@ -112,7 +112,6 @@ namespace Business
                 EmailContact = sede.EmailContact,
                 CenterId = sede.CenterId,
                 Active = sede.Active, // si existe la entidad
-                UserSedeId = sede.UserSedeId,
             };
         }
         //Metodo para mapear de SedeDto a Sede
@@ -128,7 +127,7 @@ namespace Business
                 EmailContact = sedeDto.EmailContact,
                 CenterId = sedeDto.CenterId,
                 Active = sedeDto.Active, // si existe la entidad 
-                UserSedeId = sedeDto.UserSedeId            };
+            };
         }
         //Metodo para mapear una lista de Sede a una lista de SedeDto
         private IEnumerable<SedeDto> MapToDTOList(IEnumerable<Sede> sedes)

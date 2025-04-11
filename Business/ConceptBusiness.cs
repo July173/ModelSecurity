@@ -12,9 +12,9 @@ namespace Business
     public class ConceptBusiness
     {
         private readonly ConceptData _conceptData;
-        private readonly ILogger _logger;
+        private readonly ILogger<ConceptData> _logger;
 
-        public ConceptBusiness(ConceptData conceptData, ILogger logger)
+        public ConceptBusiness(ConceptData conceptData, ILogger<ConceptData> logger)
         {
             _conceptData = conceptData;
             _logger = logger;
@@ -108,7 +108,6 @@ namespace Business
                 Name = concept.Name,
                 Observation = concept.Observation,
                 Active = concept.Active,
-                AprendizProcessInstructorId = concept.AprendizProcessInstructorId
             };
         }
         //Metodo para mapear de ConceptDto a Concept 
@@ -120,7 +119,6 @@ namespace Business
                 Name = conceptDto.Name,
                 Observation = conceptDto.Observation,
                 Active = conceptDto.Active,
-                AprendizProcessInstructorId = conceptDto.AprendizProcessInstructorId
             };
         }
         //Metodo para mapear una lista de Concept a una lista de ConceptDto

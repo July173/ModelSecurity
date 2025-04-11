@@ -14,9 +14,9 @@ namespace Business
     public class ChangeLogBusiness
     {
         private readonly ChangeLogData _changeLogData;
-        private readonly ILogger _logger;
+        private readonly ILogger<ChangeLogData> _logger;
 
-        public ChangeLogBusiness(ChangeLogData changeLogData, ILogger<ChangeLogBusiness> logger)
+        public ChangeLogBusiness(ChangeLogData changeLogData, ILogger<ChangeLogData> logger)
         {
             _changeLogData = changeLogData;
             _logger = logger;

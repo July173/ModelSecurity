@@ -17,6 +17,5 @@ namespace Entity.Model
         public DateTime DeleteDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public ICollection<AprendizProcessInstructor> AprendizProcessInstructor { get; set; }
-        public int AprendizProcessInstructorId { get; set; }
     }
 }

@@ -13,9 +13,9 @@ namespace Business
     public class RegisterySofiaBusiness
     {
         private readonly RegisterySofiaData _registerySofiaData;
-        private readonly ILogger _logger;
+        private readonly ILogger<RegisterySofiaData> _logger;
 
-        public RegisterySofiaBusiness(RegisterySofiaData registerySofiaData, ILogger logger)
+        public RegisterySofiaBusiness(RegisterySofiaData registerySofiaData, ILogger<RegisterySofiaData> logger)
         {
             _registerySofiaData = registerySofiaData;
             _logger = logger;
@@ -110,7 +110,6 @@ namespace Business
                 Description = registerySofia.Description,
                 Document = registerySofia.Document,
                 Active = registerySofia.Active, // si existe la entidad
-                AprendizProcessInstructorId = registerySofia.AprendizProcessInstructorId
             };
         }
         //Metodo para mapear de RegisterySofiaDto a RegisterySofia 
@@ -123,7 +122,6 @@ namespace Business
                 Description = registerySofiaDto.Description,
                 Document = registerySofiaDto.Document,
                 Active = registerySofiaDto.Active, // si existe la entidad
-                AprendizProcessInstructorId = registerySofiaDto.AprendizProcessInstructorId,
             };
         }
         //Metodo para mapear una lista de RegisterySofia a una lista de RegisterySofiaDto

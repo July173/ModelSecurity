@@ -21,7 +21,7 @@ namespace Data
         /// </summary>
         /// <param name="context">Instancia de <see cref="ApplicationDbContext"/> para la conexión con la base de datos.</param>
         /// <param name="logger">Instancia de <see cref="ILogger"/> para el registro de logs.</param>
-        public ProgramData(ApplicationDbContext context, ILogger<ProcessData> logger)
+        public ProgramData(ApplicationDbContext context, ILogger<ProgramData> logger)
         {
             _context = context;
             _logger = logger;

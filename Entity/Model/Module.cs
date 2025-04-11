@@ -12,7 +12,6 @@ namespace Entity.Model
         public bool Active { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int FormModuleId { get; set; }
         public ICollection<FormModule> FormModule { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime DeleteDate { get; set; }

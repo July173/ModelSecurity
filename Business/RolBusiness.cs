@@ -16,9 +16,9 @@ namespace Business
     public class RolBusiness
     {
         private readonly RolData _rolData;
-        private readonly ILogger _logger;
+        private readonly ILogger<RolData> _logger;
 
-        public RolBusiness(RolData rolData, ILogger logger)
+        public RolBusiness(RolData rolData, ILogger<RolData> logger)
         {
             _rolData = rolData;
             _logger = logger;
@@ -105,8 +105,7 @@ namespace Business
                 TypeRol = rol.TypeRol,
                 Description = rol.Description,
                 Active = rol.Active, //si existe la entidad
-                RolFormId = rol.RolFormId,
-                UserRolId = rol.UserRolId,
+               
             };
         }
         //Metodo para mapear de RolDto a Rol 
@@ -118,8 +117,7 @@ namespace Business
                 TypeRol = rolDto.TypeRol,
                 Description = rolDto.Description,
                 Active = rolDto.Active, //si existe la entidad
-                RolFormId = rolDto.RolFormId,
-                UserRolId = rolDto.UserRolId,
+                
             };
         }
         //Metodo para mapear una lista de Rol a una lista de RolDto

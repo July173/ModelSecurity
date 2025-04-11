@@ -14,9 +14,9 @@ namespace Business
     public class FormModuleBusiness
     {
         private readonly FormModuleData _formModuleData;
-        private readonly ILogger _logger;
+        private readonly ILogger<FormModuleData> _logger;
 
-        public FormModuleBusiness(FormModuleData formModuleData, ILogger logger)
+        public FormModuleBusiness(FormModuleData formModuleData, ILogger<FormModuleData> logger)
         {
             _formModuleData = formModuleData;
             _logger = logger;

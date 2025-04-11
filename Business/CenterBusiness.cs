@@ -12,9 +12,9 @@ namespace Business
     public class CenterBusiness
     {
         private readonly CenterData _centerData;
-        private readonly ILogger _logger;
+        private readonly ILogger<CenterData> _logger;
 
-        public CenterBusiness(CenterData centerData, ILogger logger)
+        public CenterBusiness(CenterData centerData, ILogger<CenterData> logger)
         {
             _centerData = centerData;
             _logger = logger;
@@ -109,7 +109,6 @@ namespace Business
                 Active = center.Active,
                 RegionalId = center.RegionalId,
                 Address = center.Address,
-                SedeId = center.Sedeid,
                
 
             };
@@ -125,7 +124,6 @@ namespace Business
                 Active = centerDto.Active,
                 RegionalId = centerDto.RegionalId,
                 Address = centerDto.Address,
-                Sedeid = centerDto.SedeId,
 
 
             };

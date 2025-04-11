@@ -14,9 +14,9 @@ namespace Business
     public class PersonBusiness
     {
         private readonly PersonData _personData;
-        private readonly ILogger _logger;
+        private readonly ILogger<PersonData> _logger;
 
-        public PersonBusiness(PersonData personData, ILogger logger)
+        public PersonBusiness(PersonData personData, ILogger<PersonData> logger)
         {
             _personData = personData;
             _logger = logger;
@@ -117,7 +117,6 @@ namespace Business
                 NumberIdentification = person.NumberIdentification,
                 Signig = person.Signig,
                 Active = person.Active,
-                UserId = person.UserId,
             };
         }
 
@@ -138,7 +137,6 @@ namespace Business
                 NumberIdentification = personDto.NumberIdentification,
                 Signig = personDto.Signig,
                 Active = personDto.Active,
-                UserId = personDto.UserId,
             };
         }
 

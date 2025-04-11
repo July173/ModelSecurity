@@ -13,9 +13,9 @@ namespace Business
     public class ModuleBusiness
     {
         private readonly ModuleData _moduleData;
-        private readonly ILogger _logger;
+        private readonly ILogger<ModuleData> _logger;
 
-        public ModuleBusiness(ModuleData moduleData, ILogger logger)
+        public ModuleBusiness(ModuleData moduleData, ILogger<ModuleData> logger)
         {
             _moduleData = moduleData;
             _logger = logger;
@@ -109,7 +109,6 @@ namespace Business
                 Name = module.Name,
                 Description = module.Description,
                 Active = module.Active,
-                FormModuleId = module.FormModuleId,
             };
         }
 
@@ -122,7 +121,6 @@ namespace Business
                 Name = moduleDto.Name,
                 Description = moduleDto.Description,
                 Active = moduleDto.Active,
-                FormModuleId = moduleDto.FormModuleId,
             };
         }
         //Metodo para mapear una lista de Module a una lista de ModuleDto

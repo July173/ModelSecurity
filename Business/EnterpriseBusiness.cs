@@ -12,9 +12,9 @@ namespace Business
     public class EnterpriseBusiness
     {
         private readonly EnterpriseData _enterpriseData;
-        private readonly ILogger _logger;
+        private readonly ILogger<EnterpriseData> _logger;
 
-        public EnterpriseBusiness(EnterpriseData enterpriseData, ILogger logger)
+        public EnterpriseBusiness(EnterpriseData enterpriseData, ILogger<EnterpriseData> logger)
         {
             _enterpriseData = enterpriseData;
             _logger = logger;
@@ -111,7 +111,6 @@ namespace Business
                 PhoneEnterprise = enterprise.PhoneEnterprise,
                 EmailEnterprise = enterprise.EmailEnterprise,
                 Active = enterprise.Active,
-                AprendizProcessInstructorId = enterprise.AprendizProcessInstructorId,
 
             };
         }
@@ -128,7 +127,6 @@ namespace Business
                 PhoneEnterprise = enterpriseDto.PhoneEnterprise,
                 EmailEnterprise = enterpriseDto.EmailEnterprise,
                 Active = enterpriseDto.Active,
-                AprendizProcessInstructorId = enterpriseDto.AprendizProcessInstructorId
             };
         }
         //Metodo para mapear una lista de Enterprise a una lista de EnterpriseDto

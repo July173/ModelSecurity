@@ -21,7 +21,6 @@ namespace Entity.Model
         public int NumberIdentification { get; set; }
         public bool Signig { get; set; }
         public bool Active { get; set; }
-        public int UserId { get; set; }
         public User User { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime DeleteDate { get; set; }

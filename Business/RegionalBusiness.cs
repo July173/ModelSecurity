@@ -13,9 +13,9 @@ namespace Business
     public class RegionalBusiness
     {
         private readonly RegionalData _regionalData;
-        private readonly ILogger _logger;
+        private readonly ILogger<RegionalData> _logger;
 
-        public RegionalBusiness(RegionalData regionalData, ILogger logger)
+        public RegionalBusiness(RegionalData regionalData, ILogger<RegionalData> logger)
         {
             _regionalData = regionalData;
             _logger = logger;
@@ -110,7 +110,6 @@ namespace Business
                 CodeRegional = regional.CodeRegional,
                 Address = regional.Address,
                 Active = regional.Active, // si existe la entidad
-                CenterId = regional.CenterId,
             };
         }
         //Metodo para mapear de RegionalDto a Regional 
@@ -124,7 +123,6 @@ namespace Business
                 CodeRegional = regionalDto.CodeRegional,
                 Address = regionalDto.Address,
                 Active = regionalDto.Active, // si existe la entidad
-                CenterId= regionalDto.CenterId,
             };
         }
         //Metodo para mapear una lista de Regional a una lista de RegionalDto

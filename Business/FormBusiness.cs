@@ -13,9 +13,9 @@ namespace Business
     public class FormBusiness
     {
         private readonly FormData _formData;
-        private readonly ILogger _logger;
+        private readonly ILogger<FormData> _logger;
 
-        public FormBusiness(FormData formData, ILogger logger)
+        public FormBusiness(FormData formData, ILogger<FormData> logger)
         {
             _formData = formData;
             _logger = logger;
@@ -111,8 +111,7 @@ namespace Business
                 TypeCuestion = form.TypeCuestion,
                 Answer = form.Answer,
                 Active = form.Active,
-                FormModuleId = form.FormModuleId,
-                RolFormId = form.RolFormId
+               
             };
         }
 
@@ -128,8 +127,7 @@ namespace Business
                 TypeCuestion = formDto.TypeCuestion,
                 Answer = formDto.Answer,
                 Active = formDto.Active,
-                FormModuleId = formDto.FormModuleId,
-                RolFormId = formDto.RolFormId
+               
             };
         }
         //Metodo para mapear una lista de FormDto a una lista de Form

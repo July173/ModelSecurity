@@ -15,9 +15,9 @@ namespace Business
     public class ProcessBusiness
     {
         private readonly ProcessData _processData;
-        private readonly ILogger _logger;
+        private readonly ILogger<ProcessData> _logger;
 
-        public ProcessBusiness(ProcessData processData, ILogger logger)
+        public ProcessBusiness(ProcessData processData, ILogger<ProcessData> logger)
         {
             _processData = processData;
             _logger = logger;
@@ -111,7 +111,6 @@ namespace Business
                 TypeProcess = process.TypeProcess,
                 Observation = process.Observation,
                 Active = process.Active, // si existe la entidad
-                AprendizProcessInstructorId = process.AprendizProcessInstructorId,
             };
         }
         //Metodo para mapear de ProcessDto a Process 
@@ -123,7 +122,6 @@ namespace Business
                 TypeProcess = processDto.TypeProcess,
                 Observation = processDto.Observation,
                 Active = processDto.Active, // si existe la entidad
-                AprendizProcessInstructorId = processDto.AprendizProcessInstructorId,
             };
         }
         //Metodo para mapear una lista de Process a una lista de ProcessDto

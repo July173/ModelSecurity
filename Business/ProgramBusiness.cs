@@ -13,9 +13,9 @@ namespace Business
     public class ProgramBusiness
     {
         private readonly ProgramData _programData;
-        private readonly ILogger _logger;
+        private readonly ILogger<ProgramData> _logger;
 
-        public ProgramBusiness(ProgramData programData, ILogger logger)
+        public ProgramBusiness(ProgramData programData, ILogger<ProgramData> logger)
         {
             _programData = programData;
             _logger = logger;
@@ -109,8 +109,7 @@ namespace Business
                 CodeProgram = program.CodeProgram,
                 TypeProgram = program.TypeProgram,
                 Active = program.Active, // si existe la entidad 
-                InstructorProgramId = program.InstructorProgramId,
-                AprendizProgramId = program.AprendizProgramId,
+               
             };
         }
         //Metodo para mapear de ProgramDto a Program 
@@ -124,8 +123,7 @@ namespace Business
                 CodeProgram = programDto.CodeProgram,
                 TypeProgram = programDto.TypeProgram,
                 Active = programDto.Active, // si existe la entidad
-                InstructorProgramId= programDto.InstructorProgramId,
-                AprendizProgramId=  programDto.AprendizProgramId
+               
             };
         }
         //Metodo para mapear una lista de Program a una lista de ProgramDto
