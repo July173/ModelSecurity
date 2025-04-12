@@ -16,8 +16,8 @@ namespace Entity.Model
         public string EmailContact { get; set; }
         public bool Active { get; set; }
         public DateTime CreateDate { get; set; }
-        public DateTime DeleteDate { get; set; }
-        public DateTime UpdateDate { get; set; }
+        public DateTime? DeleteDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
         public int CenterId { get; set; }
         public Center Center { get; set; }
         public ICollection<UserSede> UserSede { get; set; }

@@ -14,7 +14,7 @@ namespace Entity.Model
         public string Description { get; set; }
         public ICollection<FormModule> FormModule { get; set; }
         public DateTime CreateDate { get; set; }
-        public DateTime DeleteDate { get; set; }
-        public DateTime UpdateDate { get; set; }
+        public DateTime? DeleteDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
     }
 }

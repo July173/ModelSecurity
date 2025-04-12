@@ -72,7 +72,9 @@ namespace Business
             {
                 ValidatePerson(personDto);
 
+
                 var person = MapToEntity(personDto);
+                person.CreateDate = DateTime.Now;
 
                 var personCreada = await _personData.CreateAsync(person);
 
@@ -115,7 +117,7 @@ namespace Business
                 Email = person.Email,
                 TypeIdentification = person.TypeIdentification,
                 NumberIdentification = person.NumberIdentification,
-                Signig = person.Signig,
+                Signing = person.Signing,
                 Active = person.Active,
             };
         }
@@ -129,13 +131,13 @@ namespace Business
                 Name = personDto.Name,
                 FirstName = personDto.FirstName,
                 SecondName = personDto.SecondName,
-                FirstLastName = personDto.FirstLastName,
+                FirstLastName = personDto.FirstLastName, 
                 SecondLastName = personDto.SecondLastName,
                 PhoneNumber = personDto.PhoneNumber,
                 Email = personDto.Email,
                 TypeIdentification = personDto.TypeIdentification,
                 NumberIdentification = personDto.NumberIdentification,
-                Signig = personDto.Signig,
+                Signing = personDto.Signing,
                 Active = personDto.Active,
             };
         }

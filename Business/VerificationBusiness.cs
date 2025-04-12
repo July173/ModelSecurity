@@ -71,7 +71,8 @@ namespace Business
                 ValidateUser(verificationDto);
 
                 var verification = MapToEntity(verificationDto);
-                
+                verification.CreateDate = DateTime.Now;
+
                 var verificationCreado = await _verificationData.CreateAsync(verification);
 
                 return MapToDTO(verificationCreado);

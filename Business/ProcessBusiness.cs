@@ -74,6 +74,7 @@ namespace Business
                 ValidateProcess(processDto);
 
                 var process = MapToEntity(processDto);
+                process.CreateDate = DateTime.Now;
 
                 var processCreado = await _processData.CreateAsync(process);
 
@@ -111,6 +112,7 @@ namespace Business
                 TypeProcess = process.TypeProcess,
                 Observation = process.Observation,
                 Active = process.Active, // si existe la entidad
+                StartAprendiz = process.StartAprendiz
             };
         }
         //Metodo para mapear de ProcessDto a Process 
@@ -122,6 +124,7 @@ namespace Business
                 TypeProcess = processDto.TypeProcess,
                 Observation = processDto.Observation,
                 Active = processDto.Active, // si existe la entidad
+                StartAprendiz = processDto.StartAprendiz
             };
         }
         //Metodo para mapear una lista de Process a una lista de ProcessDto

@@ -117,6 +117,7 @@ namespace Business
                 Email = user.Email,
                 Active = user.Active,//si existe la entidad
                 PersonId = user.PersonId,
+                Password = user.Password
             
             };
         }
@@ -129,7 +130,8 @@ namespace Business
                 Username = userDto.Username,
                 Email = userDto.Email,
                 Active = userDto.Active, //si existe la entidad
-                PersonId= userDto.PersonId,
+                PersonId = userDto.PersonId,
+                Password = userDto.Password
               
             };
         }

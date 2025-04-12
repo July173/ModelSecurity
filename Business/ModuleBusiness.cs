@@ -72,6 +72,7 @@ namespace Business
                 ValidateModule(moduleDto);
 
                 var module = MapToEntity(moduleDto);
+                module.CreateDate = DateTime.Now;
 
                 var moduleCreado = await _moduleData.CreateAsync(module);
 

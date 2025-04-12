@@ -3,6 +3,7 @@ using Entity.DTOautogestion;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using Utilities.Exceptions;
 
 namespace Business
@@ -72,6 +73,7 @@ namespace Business
                 ValidateRegisterySofia(registerySofiaDto);
 
                 var registerySofia = MapToEntity(registerySofiaDto);
+                registerySofia.CreateDate = DateTime.Now;
 
                 var registerySofiaCreado = await _registerySofiaData.CreateAsync(registerySofia);
 

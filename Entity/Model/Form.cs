@@ -20,7 +20,7 @@ namespace Entity.Model
         public ICollection<RolForm> RolForm { get; set; }
 
         public DateTime CreateDate { get; set; }
-        public DateTime DeleteDate { get; set; }
-        public DateTime UpdateDate { get; set; }
+        public DateTime? DeleteDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
     }
 }

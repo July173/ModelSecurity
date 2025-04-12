@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using System;
+using Data;
 using Entity.DTOautogestion;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
@@ -71,6 +72,7 @@ namespace Business
                 ValidateEnterprise(enterpriseDto);
 
                 var enterprise = MapToEntity(enterpriseDto);
+                enterprise.CreateDate = DateTime.Now;
 
                 var enterpriseCreado = await _enterpriseData.CreateAsync(enterprise);
 

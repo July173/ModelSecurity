@@ -9,9 +9,10 @@ namespace Entity.Model
     public class Aprendiz
     {
         public int Id { get; set; }
-        public string PreviuosProgram { get; set; }
+        public string PreviousProgram { get; set; }
         public bool Active { get; set; }
         public User User { get; set; }
+        public int UserId { get; set; }
 
         public ICollection<AprendizProgram> AprendizProgram { get; set; }
         public ICollection<AprendizProcessInstructor> AprendizProcessInstructor { get; set; }

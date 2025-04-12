@@ -36,11 +36,11 @@ namespace Data
                 throw;
             }
         }
-
         public async Task<Person> CreateAsync(Person person)
         {
             try
             {
+                
                 await _context.Set<Person>().AddAsync(person);
                 await _context.SaveChangesAsync();
                 return person;

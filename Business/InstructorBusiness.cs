@@ -102,6 +102,7 @@ namespace Business
             {
                 Id = instructor.Id,
                 Active = instructor.Active,
+                UserId = instructor.UserId,
                 
             };
         }
@@ -112,6 +113,7 @@ namespace Business
             {
                 Id = instructorDto.Id,
                 Active = instructorDto.Active,
+                UserId = instructorDto.UserId,
                
             };
         }

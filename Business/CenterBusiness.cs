@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using System;
+using Data;
 using Entity.DTOautogestion;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
@@ -71,6 +72,8 @@ namespace Business
                 ValidateCenter(centerDto);
 
                 var center = MapToEntity(centerDto);
+                center.CreateDate = DateTime.Now;
+
 
                 var centerCreado = await _centerData.CreateAsync(center);
 
