@@ -14,7 +14,6 @@ namespace Entity.Model
         public string Description { get; set; }
         public string Address { get; set; }
         public bool Active { get; set; }
-        public int CenterId { get; set; }
         public ICollection<Center> Center { get; set; }
     }
 }

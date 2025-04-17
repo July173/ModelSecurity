@@ -11,9 +11,9 @@ namespace Data
     public class UserRolData
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger _logger;
+        private readonly ILogger<UserRolData>_logger;
 
-        public UserRolData(ApplicationDbContext context, ILogger logger)
+        public UserRolData(ApplicationDbContext context, ILogger<UserRolData> logger)
         {
             _context = context;
             _logger = logger;

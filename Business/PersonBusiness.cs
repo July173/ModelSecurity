@@ -14,9 +14,9 @@ namespace Business
     public class PersonBusiness
     {
         private readonly PersonData _personData;
-        private readonly ILogger _logger;
+        private readonly ILogger<PersonData> _logger;
 
-        public PersonBusiness(PersonData personData, ILogger logger)
+        public PersonBusiness(PersonData personData, ILogger<PersonData> logger)
         {
             _personData = personData;
             _logger = logger;
@@ -72,7 +72,9 @@ namespace Business
             {
                 ValidatePerson(personDto);
 
+
                 var person = MapToEntity(personDto);
+                person.CreateDate = DateTime.Now;
 
                 var personCreada = await _personData.CreateAsync(person);
 
@@ -115,9 +117,8 @@ namespace Business
                 Email = person.Email,
                 TypeIdentification = person.TypeIdentification,
                 NumberIdentification = person.NumberIdentification,
-                Signig = person.Signig,
+                Signing = person.Signing,
                 Active = person.Active,
-                UserId = person.UserId,
             };
         }
 
@@ -130,15 +131,14 @@ namespace Business
                 Name = personDto.Name,
                 FirstName = personDto.FirstName,
                 SecondName = personDto.SecondName,
-                FirstLastName = personDto.FirstLastName,
+                FirstLastName = personDto.FirstLastName, 
                 SecondLastName = personDto.SecondLastName,
                 PhoneNumber = personDto.PhoneNumber,
                 Email = personDto.Email,
                 TypeIdentification = personDto.TypeIdentification,
                 NumberIdentification = personDto.NumberIdentification,
-                Signig = personDto.Signig,
+                Signing = personDto.Signing,
                 Active = personDto.Active,
-                UserId = personDto.UserId,
             };
         }
 

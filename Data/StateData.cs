@@ -14,14 +14,14 @@ namespace Data
     public class StateData
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger _logger;
+        private readonly ILogger<StateData> _logger;
 
         /// <summary>
         /// Constructor que recibe el contexto de la base de datos.
         /// </summary>
         /// <param name="context">Instancia de <see cref="ApplicationDbContext"/> para la conexión con la base de datos.</param>
         /// <param name="logger">Instancia de <see cref="ILogger"/> para el registro de logs.</param>
-        public StateData(ApplicationDbContext context, ILogger logger)
+        public StateData(ApplicationDbContext context, ILogger<StateData> logger)
         {
             _context = context;
             _logger = logger;

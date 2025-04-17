@@ -14,9 +14,9 @@ namespace Business
     public class UserSedeBusiness
     {
         private readonly UserSedeData _userSedeData;
-        private readonly ILogger _logger;
+        private readonly ILogger<UserSedeData> _logger;
 
-        public UserSedeBusiness(UserSedeData userSedeData, ILogger logger)
+        public UserSedeBusiness(UserSedeData userSedeData, ILogger<UserSedeData> logger)
         {
             _userSedeData = userSedeData;
             _logger = logger;

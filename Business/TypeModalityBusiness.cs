@@ -13,9 +13,9 @@ namespace Business
     public class TypeModalityBusiness
     {
         private readonly TypeModalityData _typeModalityData;
-        private readonly ILogger _logger;
+        private readonly ILogger<TypeModalityData> _logger;
 
-        public TypeModalityBusiness(TypeModalityData typeModalityData, ILogger logger)
+        public TypeModalityBusiness(TypeModalityData typeModalityData, ILogger<TypeModalityData> logger)
         {
             _typeModalityData = typeModalityData;
             _logger = logger;
@@ -109,7 +109,6 @@ namespace Business
                 Name = typeModality.Name,
                 Description = typeModality.Description,
                 Active = typeModality.Active, // si existe la entidad
-                AprendizProcessInstructorId = typeModality.AprendizProcessInstructorId
             };
         }
         //Metodo para mapear de TypeModalityDto a TypeModality
@@ -121,7 +120,6 @@ namespace Business
                 Name = typeModalityDto.Name,
                 Description = typeModalityDto.Description,
                 Active = typeModalityDto.Active, // si existe la entidad
-                AprendizProcessInstructorId = typeModalityDto.AprendizProcessInstructorId
             };
         }
         //Metodo para mapear una lista de TypeModality a una lista de TypeModalityDto

@@ -13,9 +13,9 @@ namespace Business
     public class StateBusiness
     {
         private readonly StateData _stateData;
-        private readonly ILogger _logger;
+        private readonly ILogger<StateData> _logger;
 
-        public StateBusiness(StateData stateData, ILogger logger)
+        public StateBusiness(StateData stateData, ILogger<StateData> logger)
         {
             _stateData = stateData;
             _logger = logger;
@@ -71,6 +71,7 @@ namespace Business
                 ValidateState(stateDto);
 
                 var state = MapToEntity(stateDto);
+                state.CreateDate = DateTime.Now;
 
                 var stateCreado = await _stateData.CreateAsync(state);
 
@@ -107,7 +108,6 @@ namespace Business
                 TypeState = state.TypeState,
                 Description = state.Description,
                 Active = state.Active,
-                AprendizProcessInstructorId = state.AprendizProcessInstructorId
             };
         }
 
@@ -120,7 +120,6 @@ namespace Business
                 TypeState = stateDto.TypeState,
                 Description = stateDto.Description,
                 Active = stateDto.Active,
-                AprendizProcessInstructorId = stateDto.AprendizProcessInstructorId,
             };
         }
 

@@ -11,9 +11,9 @@ namespace Data
     public class FormModuleData
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger _logger;
+        private readonly ILogger<FormModuleData> _logger;
 
-        public FormModuleData(ApplicationDbContext context, ILogger logger)
+        public FormModuleData(ApplicationDbContext context, ILogger<FormModuleData> logger)
         {
             _context = context;
             _logger = logger;

@@ -14,10 +14,9 @@ namespace Entity.DTOautogestion
         public string Username { get; set; }
         public string Email { get; set; }
         public int PersonId { get; set; }
-        public int UserRolId { get; set; }
-        public int UserSedeId { get; set; }
-        public int InstructorId { get; set; }
-        public int AprendizId { get; set; }
+        public string Password { get; set; }
+
+
     }
 }
 

@@ -104,6 +104,8 @@ namespace Web.Controllers
         [ProducesResponseType(typeof(RolDto), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
+
+
         public async Task<IActionResult> CreateRol([FromBody] RolDto RolDto)
         {
             try

@@ -12,9 +12,9 @@ namespace Business
     public class AprendizProcessInstructorBusiness
     {
         private readonly AprendizProcessInstructorData _aprendizProcessInstructorData;
-        private readonly ILogger _logger;
+        private readonly ILogger<AprendizProcessInstructorData> _logger;
 
-        public AprendizProcessInstructorBusiness(AprendizProcessInstructorData aprendizProcessInstructorData, ILogger logger)
+        public AprendizProcessInstructorBusiness(AprendizProcessInstructorData aprendizProcessInstructorData, ILogger<AprendizProcessInstructorData> logger)
         {
             _aprendizProcessInstructorData = aprendizProcessInstructorData;
             _logger = logger;

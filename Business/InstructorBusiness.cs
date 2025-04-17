@@ -13,9 +13,9 @@ namespace Business
     public class InstructorBusiness
     {
         private readonly InstructorData _instructorData;
-        private readonly ILogger _logger;
+        private readonly ILogger<InstructorData> _logger;
 
-        public InstructorBusiness(InstructorData instructorData, ILogger logger)
+        public InstructorBusiness(InstructorData instructorData, ILogger<InstructorData> logger)
         {
             _instructorData = instructorData;
             _logger = logger;
@@ -92,11 +92,7 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto Instructor no puede ser nulo");
             }
 
-            if (instructorDto.UserId <= 0)
-            {
-                _logger.LogWarning("Se intentó crear/actualizar un instructor con UserId inválido");
-                throw new Utilities.Exceptions.ValidationException("UserId", "El UserId del instructor es obligatorio y debe ser mayor que cero");
-            }
+           
         }
 
         //Metodo para mapear de Instructor a InstructorDto
@@ -106,8 +102,8 @@ namespace Business
             {
                 Id = instructor.Id,
                 Active = instructor.Active,
-                UserId = instructor.UserId, // Relación con la entidad User
-                InstructorProgramId = instructor.InstructorProgramid
+                UserId = instructor.UserId,
+                
             };
         }
         //Metodo para mapear de InstructorDto a Instructor
@@ -117,8 +113,8 @@ namespace Business
             {
                 Id = instructorDto.Id,
                 Active = instructorDto.Active,
-                UserId = instructorDto.UserId, // Relación con la entidad User
-                InstructorProgramid = instructorDto.AprendizProcessInstructorId,
+                UserId = instructorDto.UserId,
+               
             };
         }
         //Metodo para mapear una lista de Instructor a una lista de InstructorDto

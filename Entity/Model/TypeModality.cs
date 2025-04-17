@@ -13,7 +13,6 @@ namespace Entity.Model
         public string Description { get; set; }
         public bool Active { get; set; }
         public ICollection<AprendizProcessInstructor> AprendizProcessInstructor { get; set; }
-        public int AprendizProcessInstructorId { get; set; }
 
     }
 }

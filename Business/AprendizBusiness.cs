@@ -13,9 +13,9 @@ namespace Business
     public class AprendizBusiness
     {
         private readonly AprendizData _aprendizData;
-        private readonly ILogger _logger;
+        private readonly ILogger<AprendizData> _logger;
 
-        public AprendizBusiness(AprendizData aprendizData, ILogger logger)
+        public AprendizBusiness(AprendizData aprendizData, ILogger<AprendizData> logger)
         {
             _aprendizData = aprendizData;
             _logger = logger;
@@ -79,7 +79,7 @@ namespace Business
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo aprendiz: {Name}", aprendizDto?.PreviuosProgram ?? "null");
+                _logger.LogError(ex, "Error al crear nuevo aprendiz: {Name}", aprendizDto?.PreviousProgram ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el aprendiz", ex);
             }
         }
@@ -98,11 +98,10 @@ namespace Business
             return new AprendizDto
             {
                 Id = aprendiz.Id,
-                PreviuosProgram = aprendiz.PreviuosProgram,
-                UserId = aprendiz.UserId,
+                PreviousProgram = aprendiz.PreviousProgram,
                 Active = aprendiz.Active,
-                AprendizProgramId = aprendiz.AprendizProgramId,
-                AprendizProcessInstructorId = aprendiz.AprendizProcessInstructorId,
+                UserId = aprendiz.UserId,
+             
             };
         }
 
@@ -112,11 +111,10 @@ namespace Business
             return new Aprendiz
             {
                 Id = aprendizDto.Id,
-                PreviuosProgram = aprendizDto.PreviuosProgram,
-                UserId = aprendizDto.UserId,
+                PreviousProgram = aprendizDto.PreviousProgram,
                 Active = aprendizDto.Active,
-                AprendizProgramId = aprendizDto.AprendizProgramId,
-                AprendizProcessInstructorId = aprendizDto.AprendizProcessInstructorId,
+                UserId= aprendizDto.UserId,
+               
             
             };
         }

@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using System;
+using Data;
 using Entity.DTOautogestion;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
@@ -12,9 +13,9 @@ namespace Business
     public class CenterBusiness
     {
         private readonly CenterData _centerData;
-        private readonly ILogger _logger;
+        private readonly ILogger<CenterData> _logger;
 
-        public CenterBusiness(CenterData centerData, ILogger logger)
+        public CenterBusiness(CenterData centerData, ILogger<CenterData> logger)
         {
             _centerData = centerData;
             _logger = logger;
@@ -71,6 +72,8 @@ namespace Business
                 ValidateCenter(centerDto);
 
                 var center = MapToEntity(centerDto);
+                center.CreateDate = DateTime.Now;
+
 
                 var centerCreado = await _centerData.CreateAsync(center);
 
@@ -109,7 +112,6 @@ namespace Business
                 Active = center.Active,
                 RegionalId = center.RegionalId,
                 Address = center.Address,
-                SedeId = center.Sedeid,
                
 
             };
@@ -125,7 +127,6 @@ namespace Business
                 Active = centerDto.Active,
                 RegionalId = centerDto.RegionalId,
                 Address = centerDto.Address,
-                Sedeid = centerDto.SedeId,
 
 
             };

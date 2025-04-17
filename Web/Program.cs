@@ -120,8 +120,8 @@ builder.Services.AddScoped<VerificationBusiness>();
 builder.Services.AddOpenApi();
 
 //Agregar CORS 
-var OrigenesPermitidos = builder.Configuration.GetValue<String>
-    ("Origenes permitidos ")!.Split(',');
+var OrigenesPermitidos = builder.Configuration.GetValue<string>
+    ("OrigenesPermitidos")!.Split(',');
 builder.Services.AddCors(Opciones =>
 {
     Opciones.AddDefaultPolicy(politica =>

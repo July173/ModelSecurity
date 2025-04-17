@@ -14,14 +14,14 @@ namespace Data
     public class CenterData
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger _logger;
+        private readonly ILogger<CenterData> _logger;
 
         /// <summary>
         /// Constructor que recibe el contexto de la base de datos.
         /// </summary>
         /// <param name="context">Instancia de <see cref="ApplicationDbContext"/> para la conexión con la base de datos.</param>
         /// <param name="logger">Instancia de <see cref="ILogger"/> para el registro de logs.</param>
-        public CenterData(ApplicationDbContext context, ILogger logger)
+        public CenterData(ApplicationDbContext context, ILogger<CenterData> logger)
         {
             _context = context;
             _logger = logger;

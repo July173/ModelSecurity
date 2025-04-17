@@ -14,14 +14,14 @@ namespace Data
     public class SedeData
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger _logger;
+        private readonly ILogger<SedeData> _logger;
 
         /// <summary>
         /// Constructor que recibe el contexto de la base de datos.
         /// </summary>
         /// <param name="context">Instancia de <see cref="ApplicationDbContext"/> para la conexión con la base de datos.</param>
         /// <param name="logger">Instancia de <see cref="ILogger"/> para el registro de logs.</param>
-        public SedeData(ApplicationDbContext context, ILogger logger)
+        public SedeData(ApplicationDbContext context, ILogger<SedeData> logger)
         {
             _context = context;
             _logger = logger;

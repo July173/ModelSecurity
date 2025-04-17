@@ -13,9 +13,9 @@ namespace Business
     public class UserBusiness
     {
         private readonly UserData _userData;
-        private readonly ILogger _logger;
+        private readonly ILogger<UserData> _logger;
 
-        public UserBusiness(UserData userData, ILogger logger)
+        public UserBusiness(UserData userData, ILogger<UserData> logger)
         {
             _userData = userData;
             _logger = logger;
@@ -117,10 +117,8 @@ namespace Business
                 Email = user.Email,
                 Active = user.Active,//si existe la entidad
                 PersonId = user.PersonId,
-                UserRolId = user.UserRolId,
-                UserSedeId = user.UserSedeId,
-                InstructorId = user.InstructorId,
-                AprendizId = user.AprendizId,
+                Password = user.Password
+            
             };
         }
         //Metodo para mapear de UserDto a User 
@@ -132,12 +130,9 @@ namespace Business
                 Username = userDto.Username,
                 Email = userDto.Email,
                 Active = userDto.Active, //si existe la entidad
-                UserSedeId= userDto.UserSedeId,
-                InstructorId= userDto.InstructorId,
-                AprendizId= userDto.AprendizId,
-                PersonId= userDto.PersonId,
-                UserRolId= userDto.UserRolId,
-
+                PersonId = userDto.PersonId,
+                Password = userDto.Password
+              
             };
         }
         //Metodo para mapear una lista de User a una lista de UserDto
