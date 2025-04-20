@@ -1,6 +1,6 @@
 ﻿using Business;
 using Data;
-using Entity.DTOautogestion;
+using Entity.DTOs.Rol;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -32,7 +32,7 @@ namespace Web.Controllers
         }
 
         /// <summary>
-        /// Obtiene todos los permisos del sistema
+        /// Obtiene todos los permisos del sistema (get)
         /// </summary>
         /// <returns>Lista de permisos</returns>
         /// <response code="200">Retorna la lista de permisos</response>
@@ -55,7 +55,7 @@ namespace Web.Controllers
         }
 
         /// <summary>
-        /// Obtiene un permiso específico por su ID
+        /// Obtiene un permiso específico por su ID (GetById)
         /// </summary>
         /// <param name="id">ID del permiso</param>
         /// <returns>Permiso solicitado</returns>
@@ -93,7 +93,7 @@ namespace Web.Controllers
         }
 
         /// <summary>
-        /// Crea un nuevo permiso en el sistema
+        /// Crea un nuevo permiso en el sistema (post)
         /// </summary>
         /// <param name="RolDto">Datos del permiso a crear</param>
         /// <returns>Permiso creado</returns>
@@ -124,6 +124,81 @@ namespace Web.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+        ///<summary>
+        ///Modifica parcialmente los datos de un rol (patch)
+        /// </summary>
+        /// <param name="id">Id del rol</param>
+        /// <param name="dto">datos del rol para actualizar</param>
+        /// <returns>actualiza los datos</returns>
+        /// <response code="200">Retorna el permiso solicitado</response>
+        /// <response code="400">ID proporcionado no válido</response>
+        /// <response code="404">Permiso no encontrado</response>
+        /// <response code="500">Error interno del servidor</response>
+
+        [HttpPatch("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+
+        public async Task<IActionResult> PatchRol(int id, [FromBody] RolUpdateDto dto)
+        {
+            if (id != dto.Id)
+                return BadRequest(new { message = "El ID de la ruta no coincide con el del cuerpo "});
+
+            try
+            {
+                var result = await _RolBusiness.UpdateParcialRolAsync(dto);
+                return result ? Ok() : NotFound();
+            }
+            catch(ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Validacion fallida al modificar rol con ID {RolId}", id);
+                return BadRequest(new { message =ex.Message });
+            }
+            catch(EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex,"Rol no encontrado con ID {RolId}", id);
+                return NotFound (new { message = ex.Message });
+            }
+            catch(ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error interno al modificar el rol con ID {RolId}", id);
+                return StatusCode(500, new {message = ex.Message});
+            }
+
+        }
+
+        ///<summary>
+        ///Elimina permanenentemente los datos del rol (delete permanente)
+        /// </summary>
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+
+        ///<summary>
+        ///actualiza todos los datos del rol (put)
+        /// </summary>
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+
+        ///<summary>
+        ///elimina el rol logicamente todos los datos del rol (delete)
+        /// </summary>
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
 
     }
 }

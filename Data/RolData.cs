@@ -24,14 +24,20 @@ namespace Data
             _context = context;
             _logger = logger;
         }
+
+
         /// <summary>
         /// Obtiene todos los roles almacenados en la base de datos
         /// </summary>
         /// <returns> Lista de roles </returns>
         public async Task<IEnumerable<Rol>> GetAllAsync()
         {
-            return await _context.Set<Rol>().ToListAsync();
+            return await _context.Set<Rol>()
+                .Where(r => r.Active)//Trae solo los activos
+                .ToListAsync();
         }
+
+
 
         public async Task<Rol?> GetByidAsync(int id)
         {
@@ -46,6 +52,8 @@ namespace Data
             }
 
         }
+
+
 
         /// <summary>
         /// Crea un nuevo rol en la base de datos 
@@ -67,6 +75,8 @@ namespace Data
             }
         }
 
+
+
         /// <summary>
         /// Actualiza un rol existente en la base de datos 
         /// </summary>
@@ -87,8 +97,10 @@ namespace Data
             }
         }
 
+
+
         /// <summary>
-        /// Elimina un rol en la base de datos 
+        /// Elimina un rol permanente en la base de datos 
         /// </summary>
         /// <param name="id">Identificador unico del rol a eliminar</param>
         /// <returns>True si la eliminacion fue exitosa, False en caso contrario.</returns>
@@ -110,5 +122,70 @@ namespace Data
                 return false;
             }
         }
+
+
+
+        ///<summary>
+        /// Elimina logicamente un rol (desactiva o activia el rol)
+        /// </summary>
+        /// <param name="id">Id del rol</param>
+        /// <returns>True si la operacion fue exitosa</returns>
+        public async Task<bool>SetActiveAsync(int id, bool active)
+        {
+            try
+            {
+                var rol = await _context.Set<Rol>().FindAsync(id);
+                if (rol == null)
+                    return false;
+
+                rol.Active = active; //Desactiva el rol
+                _context.Entry(rol).Property(r => r.Active).IsModified = true;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch(Exception ex)
+            {
+                 _logger.LogError(ex, $"Error al realizar eliminacion logica del rol con ID {id}");
+                return false;
+            }
+        }
+
+
+
+
+        ///<summary>
+        ///Modifica datos especificos de rol 
+        ///</summary>
+        ///<param name="id">Id del rol</param>
+        ///<returns> True si la actualizacion es verdadera</returns>
+        public async Task<bool> PatchRolAsync(int id, string NewTypeRol, string newDescription)
+        {
+            try
+            {
+                var rol = await _context.Set<Rol>().FindAsync(id);
+                if (rol == null)
+                    return false;
+
+                rol.TypeRol = NewTypeRol;
+                rol.Description = newDescription;
+
+                _context.Entry(rol).Property(r => r.TypeRol).IsModified = true;
+                _context.Entry(rol).Property(r =>r.Description).IsModified = true;
+
+                
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al modificar datos del rol con su Id");
+                return false;
+            }
+
+        }
+
+
     } 
 }
