@@ -123,7 +123,7 @@ namespace Business
                 var exists = await _rolData.GetByidAsync(Updatedto.Id);
                 if(exists == null)
                 {
-                    _logger.LogInformation("No se encontro el rol con ID {RolId} para reemplzar", dto.Id);
+                    _logger.LogInformation("No se encontro el rol con ID {RolId} para reemplzar", Updatedto.Id);
                     throw new EntityNotFoundException("Rol", Updatedto.Id);
                 }
                 var updateRol = MapToEntity(Updatedto);

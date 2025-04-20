@@ -145,29 +145,66 @@ namespace Web.Controllers
         public async Task<IActionResult> PatchRol(int id, [FromBody] RolUpdateDto dto)
         {
             if (id != dto.Id)
-                return BadRequest(new { message = "El ID de la ruta no coincide con el del cuerpo "});
+                return BadRequest(new { message = "El ID de la ruta no coincide con el del cuerpo " });
 
             try
             {
                 var result = await _RolBusiness.UpdateParcialRolAsync(dto);
                 return result ? Ok() : NotFound();
             }
-            catch(ValidationException ex)
+            catch (ValidationException ex)
             {
                 _logger.LogWarning(ex, "Validacion fallida al modificar rol con ID {RolId}", id);
-                return BadRequest(new { message =ex.Message });
+                return BadRequest(new { message = ex.Message });
             }
-            catch(EntityNotFoundException ex)
+            catch (EntityNotFoundException ex)
             {
-                _logger.LogInformation(ex,"Rol no encontrado con ID {RolId}", id);
-                return NotFound (new { message = ex.Message });
+                _logger.LogInformation(ex, "Rol no encontrado con ID {RolId}", id);
+                return NotFound(new { message = ex.Message });
             }
-            catch(ExternalServiceException ex)
+            catch (ExternalServiceException ex)
             {
                 _logger.LogError(ex, "Error interno al modificar el rol con ID {RolId}", id);
-                return StatusCode(500, new {message = ex.Message});
+                return StatusCode(500, new { message = ex.Message });
             }
 
+        }
+
+        ///<summary>
+        ///actualiza todos los datos del rol (put)
+        /// </summary>
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> PutRol(int id, [FromBody] RolUpdateDto dto)
+        {
+            if (id != dto.Id)
+                return BadRequest(new { message = "El ide la ruta no coincide con el del cuerpo" });
+            try
+            {
+                var result = await _RolBusiness.UpdateRolAsync(dto);
+                return result ? Ok() : NotFound();
+
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Validacion fallida al actualizar rol con id {RolId}", id);
+                return BadRequest(new { message = ex.Message });
+
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Rol no encontrado con id {RolId}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error interno al actualizar el rol con id {Rolid}", id);
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
 
         ///<summary>
@@ -179,26 +216,68 @@ namespace Web.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
+        public async Task<IActionResult> DeleteRol(int id)
+        {
+            try
+            {
+                var result = await _RolBusiness.DeleteRolAsync(id);
+                return result ? Ok() : NotFound();
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Validación fallida al eliminar el rol con ID {RolId}", id);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Rol no encontrado con ID {RolId}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al eliminar el rol con ID {RolId}", id);
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
 
-        ///<summary>
-        ///actualiza todos los datos del rol (put)
-        /// </summary>
 
-        [HttpPut("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
 
         ///<summary>
         ///elimina el rol logicamente todos los datos del rol (delete)
         /// </summary>
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}/active")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
+
+        public async Task<IActionResult> SetActive(int id, [FromBody] RolStatusDto dto)
+        {
+            if (id != dto.Id)
+                return BadRequest("El ID de la ruta no coincide con el del cuerpo");
+
+            try
+            {
+                var result = await _RolBusiness.SetRolActiveAsync(dto);
+                return result ? Ok() : NotFound();
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Validación fallida al cambiar estado activo del rol");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Rol no encontrado con ID: {RolId}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al cambiar estado activo del rol");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
 
     }
 }
