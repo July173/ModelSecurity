@@ -4,15 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.DTOautogestion
+namespace Entity.DTOs.Form
 {
-    public class AprendizDto
+    public class FormStatusDto
+
     {
         public int Id { get; set; }
-        public string PreviousProgram { get; set; }
+    
         public bool Active { get; set; }
-        public int UserId { get; set; }
-
-   
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Business;
 using Data;
-using Entity.DTOautogestion;
+using Entity.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;

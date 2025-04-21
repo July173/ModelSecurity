@@ -1,5 +1,5 @@
 ﻿using Data;
-using Entity.DTOautogestion;
+using Entity.DTOs.Program;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System;
