@@ -1,11 +1,11 @@
-﻿    using Data;
-    using Entity.DTOautogestion;
-    using Entity.Model;
-    using Microsoft.Extensions.Logging;
-    using System.ComponentModel.DataAnnotations;
-    using Utilities.Exceptions;
+﻿using Data;
+using Entity.DTOs.Regional;
+using Entity.Model;
+using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
+using Utilities.Exceptions;
 
-    namespace Business
+namespace Business
     {
         /// <summary>
         /// Clase de negocio encargada de la lógica relacionada con las regionales en el sistema.

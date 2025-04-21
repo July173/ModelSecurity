@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.DTOautogestion
+namespace Entity.DTOs.TypeModality
 {
-    public class StateDto
+    public class TypeModalityStatusDto
     {
         public int Id { get; set; }
-        public string TypeState { get; set; }
-        public string Description { get; set; }
         public bool Active { get; set; }
-
     }
 }

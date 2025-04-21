@@ -74,25 +74,7 @@ namespace Data
             }
         }
 
-        /// <summary>
-        /// Actualiza un AprendizProcessInstructor existente en la base de datos.
-        /// </summary>
-        /// <param name="aprendizProcessInstructor">Objeto con la información actualizada.</param>
-        /// <returns>True si la operación fue exitosa, False en caso contrario.</returns>
-        public async Task<bool> UpdateAsync(AprendizProcessInstructor aprendizProcessInstructor)
-        {
-            try
-            {
-                _context.Set<AprendizProcessInstructor>().Update(aprendizProcessInstructor);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error al actualizar el AprendizProcessInstructor {ex.Message}");
-                return false;
-            }
-        }
+       
 
         /// <summary>
         /// Elimina un AprendizProcessInstructor en la base de datos.

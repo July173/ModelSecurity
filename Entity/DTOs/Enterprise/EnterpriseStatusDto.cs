@@ -4,15 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.DTOautogestion
+namespace Entity.DTOs.Enterprise
 {
-    public class RegisterySofiaDto
+    public class EnterpriseStatusDto
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Document { get; set; }
-        public bool Active { get; set; }
 
+        public int Id { get; set; }
+        public bool Active { get; set; }
     }
 }

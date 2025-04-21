@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.DTOautogestion
+namespace Entity.DTOs.Concept
 {
-    public class ConceptDto
+    public class ConceptStatusDto
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Observation { get; set; }
         public bool Active { get; set; }
-
     }
 }
