@@ -173,6 +173,13 @@ namespace Web.Controllers
         ///<summary>
         ///actualiza todos los datos del rol (put)
         /// </summary>
+        /// /// <param name="id">ID del rol a actualizar</param>
+        /// <param name="dto">DTO con todos los datos del rol</param>
+        /// <returns>Resultado de la operación</returns>
+        /// <response code="200">Rol actualizado correctamente</response>
+        /// <response code="400">ID no coincide o datos inválidos</response>
+        /// <response code="404">Rol no encontrado</response>
+        /// <response code="500">Error interno del servidor</response>
 
         [HttpPut("{id}")]
         [ProducesResponseType(200)]
@@ -210,6 +217,12 @@ namespace Web.Controllers
         ///<summary>
         ///Elimina permanenentemente los datos del rol (delete permanente)
         /// </summary>
+        /// <param name="id">ID del rol</param>
+        /// <returns>Resultado de la operación</returns>
+        /// <response code="200">Rol eliminado exitosamente</response>
+        /// <response code="400">ID inválido</response>
+        /// <response code="404">Rol no encontrado</response>
+        /// <response code="500">Error interno</response>   
 
         [HttpDelete("{id}")]
         [ProducesResponseType(200)]
@@ -245,6 +258,13 @@ namespace Web.Controllers
         ///<summary>
         ///elimina el rol logicamente todos los datos del rol (delete)
         /// </summary>
+        /// /// <param name="id">ID del rol</param>
+        /// <param name="active">Nuevo estado activo</param>
+        /// <returns>Resultado de la operación</returns>
+        /// <response code="200">Estado del rol actualizado</response>
+        /// <response code="400">ID inválido</response>
+        /// <response code="404">Rol no encontrado</response>
+        /// <response code="500">Error interno</response>
 
         [HttpDelete("{id}/active")]
         [ProducesResponseType(200)]

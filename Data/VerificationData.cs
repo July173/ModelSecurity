@@ -28,7 +28,7 @@ namespace Data
         }
 
         /// <summary>
-        /// Obtiene todas las verificaciones almacenadas en la base de datos.
+        /// Obtiene todas las verificaciones almacenadas en la base de datos.(get)
         /// </summary>
         /// <returns>Lista de verificaciones.</returns>
         public async Task<IEnumerable<Verification>> GetAllAsync()
@@ -37,7 +37,7 @@ namespace Data
         }
 
         /// <summary>
-        /// Obtiene una verificación por su ID.
+        /// Obtiene una verificación por su ID. (getById)
         /// </summary>
         /// <param name="id">Identificador único de la verificación.</param>
         /// <returns>La verificación con el ID especificado.</returns>
@@ -55,7 +55,7 @@ namespace Data
         }
 
         /// <summary>
-        /// Crea una nueva verificación en la base de datos.
+        /// Crea una nueva verificación en la base de datos.(post)
         /// </summary>
         /// <param name="verification">Instancia de la verificación a crear.</param>
         /// <returns>La verificación creada.</returns>
@@ -75,7 +75,7 @@ namespace Data
         }
 
         /// <summary>
-        /// Actualiza una verificación existente en la base de datos.
+        /// Actualiza una verificación existente en la base de datos.(put)
         /// </summary>
         /// <param name="verification">Objeto con la información actualizada.</param>
         /// <returns>True si la operación fue exitosa, False en caso contrario.</returns>
@@ -95,7 +95,7 @@ namespace Data
         }
 
         /// <summary>
-        /// Elimina una verificación en la base de datos.
+        /// Elimina una verificación en la base de datos.(delete permanente)
         /// </summary>
         /// <param name="id">Identificador único de la verificación a eliminar.</param>
         /// <returns>True si la eliminación fue exitosa, False en caso contrario.</returns>
@@ -117,6 +117,8 @@ namespace Data
                 return false;
             }
         }
+
+
     }
 }
 
