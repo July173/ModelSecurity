@@ -4,6 +4,7 @@ using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using Utilities.Exceptions;
+using ValidationException = Utilities.Exceptions.ValidationException;
 
 namespace Business
 {
@@ -21,28 +22,26 @@ namespace Business
             _logger = logger;
         }
 
-        // Método para obtener todos las verificaciones como DTOs
         public async Task<IEnumerable<VerificationDto>> GetAllVerificationsAsync()
         {
             try
             {
                 var verifications = await _verificationData.GetAllAsync();
-               return MapToDTOList(verifications);
+                return MapToDTOList(verifications);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener todos las verificaciones ");
+                _logger.LogError(ex, "Error al obtener todas las verificaciones");
                 throw new ExternalServiceException("Base de datos", "Error al recuperar la lista de verificaciones", ex);
             }
         }
 
-        // Método para obtener una verificacion por ID como DTO
         public async Task<VerificationDto> GetVerificationByIdAsync(int id)
         {
             if (id <= 0)
             {
-                _logger.LogWarning("Se intentó obtener una verificacion con ID inválido: {Id}", id);
-                throw new Utilities.Exceptions.ValidationException("id", "El ID de la verificacion debe ser mayor que cero");
+                _logger.LogWarning("ID inválido al obtener verificación: {Id}", id);
+                throw new ValidationException("id", "El ID de la verificación debe ser mayor que cero");
             }
 
             try
@@ -50,56 +49,179 @@ namespace Business
                 var verification = await _verificationData.GetByIdAsync(id);
                 if (verification == null)
                 {
-                    _logger.LogInformation("No se encontró ninguna verificacion con ID: {Id}", id);
-                    throw new EntityNotFoundException("verification", id);
+                    _logger.LogInformation("Verificación no encontrada con ID: {Id}", id);
+                    throw new EntityNotFoundException("Verification", id);
                 }
 
                 return MapToDTO(verification);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener la verificacion con ID: {Id}", id);
-                throw new ExternalServiceException("Base de datos", $"Error al recuperar la verificacion con ID {id}", ex);
+                _logger.LogError(ex, "Error al obtener la verificación con ID: {Id}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al recuperar la verificación con ID {id}", ex);
             }
         }
 
-        // Método para crear una verificacion desde un DTO
-        public async Task<VerificationDto> CreateVerificationAsync(VerificationDto verificationDto)
+        public async Task<VerificationDto> CreateVerificationAsync(VerificationDto dto)
         {
             try
             {
-                ValidateUser(verificationDto);
+                ValidateVerification(dto);
 
-                var verification = MapToEntity(verificationDto);
+                var verification = MapToEntity(dto);
                 verification.CreateDate = DateTime.Now;
 
-                var verificationCreado = await _verificationData.CreateAsync(verification);
+                var created = await _verificationData.CreateAsync(verification);
 
-                return MapToDTO(verificationCreado);
+                return MapToDTO(created);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nueva verificacion: {Name}", verificationDto?.Name ?? "null");
-                throw new ExternalServiceException("Base de datos", "Error al crear la verificacion", ex);
+                _logger.LogError(ex, "Error al crear nueva verificación: {Name}", dto?.Name ?? "null");
+                throw new ExternalServiceException("Base de datos", "Error al crear la verificación", ex);
             }
         }
 
-        // Método para validar el DTO
-        private void ValidateUser(VerificationDto verificationDto)
+        public async Task<bool> UpdateParcialVerificationAsync(VerificationUpadateDto dto)
         {
-            if (verificationDto == null)
+            if (dto == null || dto.Id <= 0)
             {
-                throw new Utilities.Exceptions.ValidationException("El objeto verificacion no puede ser nulo");
+                _logger.LogWarning("DTO de actualización parcial inválido");
+                throw new ValidationException("Id", "Datos inválidos para actualizar verificación");
             }
 
-            if (string.IsNullOrWhiteSpace(verificationDto.Name))
+            try
             {
-                _logger.LogWarning("Se intentó crear/actualizar una verificacion con Name vacío");
-                throw new Utilities.Exceptions.ValidationException("Name", "El Name de la verificacion es obligatorio");
-            }
+                var exists = await _verificationData.GetByIdAsync(dto.Id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("Verificación no encontrada con ID: {Id}", dto.Id);
+                    throw new EntityNotFoundException("Verification", dto.Id);
+                }
 
+                return await _verificationData.PatchVerificationAsync(dto.Id, dto.Name, dto.Observation);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente la verificación con ID {Id}", dto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar verificación con ID {dto.Id}", ex);
+            }
         }
-        //Metodo para mapear de verification a VerificationDto
+
+        public async Task<bool> UpdateVerificationAsync(VerificationUpadateDto dto)
+        {
+            if (dto == null || dto.Id <= 0)
+            {
+                _logger.LogWarning("DTO de actualización inválido");
+                throw new Utilities.Exceptions.ValidationException("id", "Datos inválidos para actualizar verificación");
+            }
+
+            try
+            {
+                var exists = await _verificationData.GetByIdAsync(dto.Id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("Verificación no encontrada con ID: {Id}", dto.Id);
+                    throw new EntityNotFoundException("Verification", dto.Id);
+                }
+
+                var entity = await _verificationData.GetByIdAsync(dto.Id);
+                if (entity == null)
+                    throw new EntityNotFoundException("Verification", dto.Id);
+
+                // Modifica sus campos directamente
+                entity.Name = dto.Name;
+                entity.Observation = dto.Observation;
+                entity.UpdateDate = DateTime.Now;
+
+                return await _verificationData.UpdateAsync(entity); //actualizas la misma instancia rastreada
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar la verificación con ID {Id}", dto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar verificación con ID {dto.Id}", ex);
+            }
+        }
+
+        public async Task<bool> SetVerificationActiveAsync(VerificationStatusDto dto)
+        {
+            if (dto == null)
+                throw new ValidationException("El DTO de estado de verificación no puede ser nulo");
+
+            if (dto.Id <= 0)
+            {
+                _logger.LogWarning("ID inválido para cambiar estado activo de verificación: {Id}", dto.Id);
+                throw new ValidationException("Id", "El ID de la verificación debe ser mayor a 0");
+            }
+
+            try
+            {
+                var entity = await _verificationData.GetByIdAsync(dto.Id);
+                if (entity == null)
+                {
+                    _logger.LogInformation("Verificación no encontrada con ID {Id} para cambiar estado", dto.Id);
+                    throw new EntityNotFoundException("Verification", dto.Id);
+                }
+
+                // Establecer DeleteDate si se va a desactivar (borrado lógico)
+                if (!dto.Active)
+                {
+                    entity.DeleteDate = DateTime.Now;
+                }
+                else
+                {
+                    entity.DeleteDate = null; // Reactivación: eliminamos la marca de eliminación
+                }
+
+                return await _verificationData.SetActiveAsync(dto.Id, dto.Active); // Usamos UpdateAsync porque modificamos el objeto
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al cambiar estado activo de verificación con ID {Id}", dto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar estado activo de verificación con ID {dto.Id}", ex);
+            }
+        }
+
+
+        public async Task<bool> DeleteVerificationAsync(int id)
+        {
+            if (id <= 0)
+            {
+                _logger.LogWarning("Se intentó eliminar una verificación con ID inválido: {Id}", id);
+                throw new ValidationException("Id", "El ID debe ser mayor a 0");
+            }
+
+            try
+            {
+                var exists = await _verificationData.GetByIdAsync(id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("Verificación no encontrada con ID {Id} para eliminar", id);
+                    throw new EntityNotFoundException("Verification", id);
+                }
+
+                return await _verificationData.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar verificación con ID {Id}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al eliminar verificación con ID {id}", ex);
+            }
+        }
+
+        private void ValidateVerification(VerificationDto dto)
+        {
+            if (dto == null)
+                throw new ValidationException("El objeto verificación no puede ser nulo");
+
+            if (string.IsNullOrWhiteSpace(dto.Name))
+            {
+                _logger.LogWarning("Se intentó crear/actualizar verificación con nombre vacío");
+                throw new ValidationException("Name", "El nombre es obligatorio");
+            }
+        }
+
         private VerificationDto MapToDTO(Verification verification)
         {
             return new VerificationDto
@@ -107,30 +229,24 @@ namespace Business
                 Id = verification.Id,
                 Name = verification.Name,
                 Observation = verification.Observation,
-                Active = verification.Active, //si existe la entidad
+                Active = verification.Active,
             };
         }
-        //Metodo para mapear de VerificationDto a Verification 
-        private Verification MapToEntity(VerificationDto verificationDto)
+
+        private Verification MapToEntity(VerificationDto dto)
         {
             return new Verification
             {
-                Id = verificationDto.Id,
-                Name = verificationDto.Name,
-                Observation = verificationDto.Observation,
-                Active = verificationDto.Active, //si existe la entidad
+                Id = dto.Id,
+                Name = dto.Name,
+                Observation = dto.Observation,
+                Active = dto.Active
             };
         }
-        //Metodo para mapear una lista de Verification a una lista de VerificationDto
+
         private IEnumerable<VerificationDto> MapToDTOList(IEnumerable<Verification> verifications)
         {
-            var verificationsDto = new List<VerificationDto>();
-            foreach (var verification in verifications)
-            {
-                verificationsDto.Add(MapToDTO(verification));
-            }
-            return verificationsDto;
+            return verifications.Select(MapToDTO).ToList();
         }
-
     }
 }

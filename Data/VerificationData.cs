@@ -19,8 +19,8 @@ namespace Data
         /// <summary>
         /// Constructor que recibe el contexto de la base de datos.
         /// </summary>
-        /// <param name="context">Instancia de <see cref="ApplicationDbContext"/> para la conexión con la base de datos.</param>
-        /// <param name="logger">Instancia de <see cref="ILogger"/> para el registro de logs.</param>
+        /// <param name="context">Instancia de ApplicationDbContext para la conexión con la base de datos.</param>
+        /// <param name="logger">Instancia de ILogger para el registro de logs.</param>
         public VerificationData(ApplicationDbContext context, ILogger<VerificationData> logger)
         {
             _context = context;
@@ -28,19 +28,21 @@ namespace Data
         }
 
         /// <summary>
-        /// Obtiene todas las verificaciones almacenadas en la base de datos.(get)
+        /// Obtiene todas las verificaciones activas almacenadas en la base de datos. (get)
         /// </summary>
-        /// <returns>Lista de verificaciones.</returns>
+        /// <returns>Lista de verificaciones activas.</returns>
         public async Task<IEnumerable<Verification>> GetAllAsync()
         {
-            return await _context.Set<Verification>().ToListAsync();
+            return await _context.Set<Verification>()
+                                 .Where(v => v.Active)
+                                 .ToListAsync();
         }
 
         /// <summary>
         /// Obtiene una verificación por su ID. (getById)
         /// </summary>
         /// <param name="id">Identificador único de la verificación.</param>
-        /// <returns>La verificación con el ID especificado.</returns>
+        /// <returns>La verificación con el ID especificado o null.</returns>
         public async Task<Verification?> GetByIdAsync(int id)
         {
             try
@@ -49,13 +51,13 @@ namespace Data
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error al obtener verificación con ID {id}: {ex.Message}");
-                throw; // Re-lanza la excepción para que sea manejada en capas superiores
+                _logger.LogError(ex, $"Error al obtener verificación con ID {id}");
+                throw;
             }
         }
 
         /// <summary>
-        /// Crea una nueva verificación en la base de datos.(post)
+        /// Crea una nueva verificación en la base de datos. (post)
         /// </summary>
         /// <param name="verification">Instancia de la verificación a crear.</param>
         /// <returns>La verificación creada.</returns>
@@ -69,13 +71,13 @@ namespace Data
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error al crear la verificación: {ex.Message}");
+                _logger.LogError(ex, $"Error al crear la verificación.");
                 throw;
             }
         }
 
         /// <summary>
-        /// Actualiza una verificación existente en la base de datos.(put)
+        /// Actualiza una verificación existente en la base de datos. (put)
         /// </summary>
         /// <param name="verification">Objeto con la información actualizada.</param>
         /// <returns>True si la operación fue exitosa, False en caso contrario.</returns>
@@ -89,13 +91,13 @@ namespace Data
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error al actualizar la verificación: {ex.Message}");
+                _logger.LogError(ex, "Error al actualizar la verificación.");
                 return false;
             }
         }
 
         /// <summary>
-        /// Elimina una verificación en la base de datos.(delete permanente)
+        /// Elimina una verificación de forma permanente en la base de datos. (delete)
         /// </summary>
         /// <param name="id">Identificador único de la verificación a eliminar.</param>
         /// <returns>True si la eliminación fue exitosa, False en caso contrario.</returns>
@@ -113,15 +115,61 @@ namespace Data
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error al eliminar la verificación: {ex.Message}");
+                _logger.LogError(ex, "Error al eliminar la verificación.");
                 return false;
             }
         }
 
+        /// <summary>
+        /// Actualiza solo el campo Active (eliminación lógica).
+        /// </summary>
+        public async Task<bool> SetActiveAsync(int id, bool active)
+        {
+            try
+            {
+                var verification = await _context.Set<Verification>().FindAsync(id);
+                if (verification == null)
+                    return false;
 
+                verification.Active = active;
+                _context.Entry(verification).Property(v => v.Active).IsModified = true;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al cambiar el estado activo de la verificación con ID {id}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Actualiza parcialmente la verificación (patch).
+        /// </summary>
+        public async Task<bool> PatchVerificationAsync(int id, string newName, string newObservation)
+        {
+            try
+            {
+                var verification = await _context.Set<Verification>().FindAsync(id);
+                if (verification == null)
+                    return false;
+
+                verification.Name = newName;
+                verification.Observation = newObservation;
+
+                _context.Entry(verification).Property(v => v.Name).IsModified = true;
+                _context.Entry(verification).Property(v => v.Observation).IsModified = true;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al aplicar Patch a la verificación con ID {id}");
+                return false;
+            }
+        }
     }
 }
-
-
 
 

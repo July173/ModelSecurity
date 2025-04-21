@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.DTOs.Verification
+namespace Entity.DTOs.Person
 {
-    public class VerificationUpadateDto
+    public class PersonStatusDto
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Observation { get; set; }
-       
+        public bool Active { get; set; }
+
 
     }
 }
+

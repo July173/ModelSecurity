@@ -126,8 +126,16 @@ namespace Business
                     _logger.LogInformation("No se encontro el rol con ID {RolId} para reemplzar", Updatedto.Id);
                     throw new EntityNotFoundException("Rol", Updatedto.Id);
                 }
-                var updateRol = MapToEntity(Updatedto);
-                return await _rolData.UpdateAsync(updateRol);
+                var entity = await _rolData.GetByidAsync(Updatedto.Id);
+                if (entity == null)
+                    throw new EntityNotFoundException("Verification", Updatedto.Id);
+
+                // Modifica sus campos directamente
+                entity.TypeRol = Updatedto.TypeRol;
+                entity.Description = Updatedto.Description;
+                
+
+                return await _rolData.UpdateAsync(entity);
 
             }
             catch(Exception ex)
@@ -247,15 +255,7 @@ namespace Business
             return rolesDto;
         }
 
-        //Metodo para mapear de RolUpdateDto a Rol
-        private Rol MapToEntity(RolUpdateDto dto)
-        {
-            return new Rol
-            {
-                TypeRol = dto.TypeRol,
-                Description = dto.Description,
-            };
-        }
+        
 
     }
 }
