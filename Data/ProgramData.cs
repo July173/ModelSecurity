@@ -33,7 +33,9 @@ namespace Data
         /// <returns>Lista de programas.</returns>
         public async Task<IEnumerable<Program>> GetAllAsync()
         {
-            return await _context.Set<Program>().ToListAsync();
+            return await _context.Set<Program>()
+                 .Where(p => p.Active)//Trae solo los activos
+                 .ToListAsync();
         }
 
         /// <summary>
@@ -117,6 +119,68 @@ namespace Data
                 return false;
             }
         }
+
+
+        ///<summary>
+        /// Elimina logicamente un program (desactiva o activia el rol)
+        /// </summary>
+        /// <param name="id">Id del program</param>
+        /// <returns>True si la operacion fue exitosa</returns>
+        public async Task<bool> SetActiveAsync(int id, bool active)
+        {
+            try
+            {
+                var program = await _context.Set<Program>().FindAsync(id);
+                if (program == null)
+                    return false;
+
+                program.Active = active; //Desactiva el PROGRAM
+                _context.Entry(program).Property(p => p.Active).IsModified = true;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al realizar eliminacion logica del program con ID {id}");
+                return false;
+            }
+        }
+
+        ///<summary>
+        ///Modifica datos especificos de program 
+        ///</summary>
+        ///<param name="id">Id del program</param>
+        ///<returns> True si la actualizacion es verdadera</returns>
+        public async Task<bool> PatchRolAsync(int id,string newName, string NewTypeProgram, string newDescription)
+        {
+            try
+            {
+                var program = await _context.Set<Program>().FindAsync(id);
+                if (program == null)
+                    return false;
+
+                program.TypeProgram = NewTypeProgram;
+                program.Name = newName;
+                program.Description = newDescription;
+
+
+                _context.Entry(program).Property(p => p.TypeProgram).IsModified = true;
+                _context.Entry(program).Property(p => p.Description).IsModified = true;
+                _context.Entry(program).Property(p => p.Name).IsModified = true;
+
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al modificar datos del program con su Id");
+                return false;
+            }
+
+        }
+
     }
 }
 

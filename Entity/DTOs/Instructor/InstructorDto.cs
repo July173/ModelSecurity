@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.Model
+namespace Entity.DTOs.Instructor
 {
-    public class UserSede
+    public class InstructorDto
     {
         public int Id { get; set; }
+        public bool Active { get; set; }
         public int UserId { get; set; }
-        public User User { get; set; }
-        public int SedeId { get; set; }
-        public Sede Sede { get; set; }
+      
     }
 }

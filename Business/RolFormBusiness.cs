@@ -1,6 +1,6 @@
 ﻿using Data;
 using Entity.DTOautogestion;
-using Entity.DTOautogestion.pivote;
+using Entity.DTOs.RolForm;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;

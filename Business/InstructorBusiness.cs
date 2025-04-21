@@ -1,6 +1,6 @@
 ﻿using Data;
-using Entity.DTOautogestion;
 using Entity.DTOs;
+using Entity.DTOs.Instructor;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using Utilities.Exceptions;

@@ -1,5 +1,5 @@
 ﻿using Data;
-using Entity.DTOautogestion;
+using Entity.DTOs.Sede;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;

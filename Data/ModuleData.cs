@@ -18,10 +18,15 @@ namespace Data
             _context = context;
             _logger = logger;
         }
-
+        /// <summary>
+        /// Obtiene todos los modules almacenados en la base de datos
+        /// </summary>
+        /// <returns> Lista de roles </returns>
         public async Task<IEnumerable<Module>> GetAllAsync()
         {
-            return await _context.Set<Module>().ToListAsync();
+            return await _context.Set<Module>()
+               .Where(m => m.Active)//Trae solo los activos
+               .ToListAsync();
         }
 
         public async Task<Module?> GetByidAsync(int id)
@@ -37,6 +42,12 @@ namespace Data
             }
         }
 
+
+        /// <summary>
+        /// Crea un nuevo module en la base de datos post
+        /// </summary>
+        /// <param name="module">instancia del module a crear.</param>
+        /// <returns>el module creado</returns>
         public async Task<Module> CreateAsync(Module module)
         {
             try
@@ -51,6 +62,13 @@ namespace Data
                 throw;
             }
         }
+
+
+        /// <summary>
+        /// Actualiza un module existente en la base de datos 
+        /// </summary>
+        /// <param name="module">Objeto con la infromacion actualizada</param>
+        /// <returns>True si la operacion fue exitosa, False en caso contrario.</returns>
 
         public async Task<bool> UpdateAsync(Module module)
         {
@@ -67,6 +85,12 @@ namespace Data
             }
         }
 
+
+        /// <summary>
+        /// Elimina un module permanente en la base de datos 
+        /// </summary>
+        /// <param name="id">Identificador unico del module a eliminar</param>
+        /// <returns>True si la eliminacion fue exitosa, False en caso contrario.</returns>
         public async Task<bool> DeleteAsync(int id)
         {
             try
@@ -85,5 +109,65 @@ namespace Data
                 return false;
             }
         }
+
+
+        ///<summary>
+        /// Elimina logicamente un modele (desactiva o activia)
+        /// </summary>
+        /// <param name="id">Id del module</param>
+        /// <returns>True si la operacion fue exitosa</returns>
+        public async Task<bool> SetActiveAsync(int id, bool active)
+        {
+            try
+            {
+                var module = await _context.Set<Module>().FindAsync(id);
+                if (module == null)
+                    return false;
+
+                module.Active = active; //Desactiva el module
+                _context.Entry(module).Property(m => m.Active).IsModified = true;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al realizar eliminacion logica del modele con ID {id}");
+                return false;
+            }
+        }
+
+        ///<summary>
+        ///Modifica datos especificos de module
+        ///</summary>
+        ///<param name="id">Id del module</param>
+        ///<returns> True si la actualizacion es verdadera</returns>
+        public async Task<bool> PatchRolAsync(int id, string NewName, string newDescription)
+        {
+            try
+            {
+                var module = await _context.Set<Module>().FindAsync(id);
+                if (module == null)
+                    return false;
+
+                module.Name = NewName;
+                module.Description = newDescription;
+
+                _context.Entry(module).Property(m => m.Name).IsModified = true;
+                _context.Entry(module).Property(m => m.Description).IsModified = true;
+
+
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al modificar datos del module con su Id");
+                return false;
+            }
+
+        }
+
     }
 }

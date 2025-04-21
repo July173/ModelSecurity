@@ -19,9 +19,16 @@ namespace Data
             _logger = logger;
         }
 
+
+        /// <summary>
+        /// Obtiene todos los forms almacenados en la base de datos
+        /// </summary>
+        /// <returns> Lista de forms </returns>
         public async Task<IEnumerable<Form>> GetAllAsync()
         {
-            return await _context.Set<Form>().ToListAsync();
+            return await _context.Set<Form>()
+                 .Where(f => f.Active)//Trae solo los activos
+                 .ToListAsync();
         }
 
         public async Task<Form> GetByidAsync(int id)
@@ -84,6 +91,73 @@ namespace Data
                 Console.WriteLine($"Error al eliminar el formulario {ex.Message}");
                 return false;
             }
+        }
+
+        ///<summary>
+        /// Elimina logicamente un form (desactiva o activia )
+        /// </summary>
+        /// <param name="id">Id del form</param>
+        /// <returns>True si la operacion fue exitosa</returns>
+        public async Task<bool> SetActiveAsync(int id, bool active)
+        {
+            try
+            {
+                var form = await _context.Set<Form>().FindAsync(id);
+                if (form == null)
+                    return false;
+
+                form.Active = active; //Desactiva el fomr
+                _context.Entry(form).Property(f => f.Active).IsModified = true;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al realizar eliminacion logica del form con ID {id}");
+                return false;
+            }
+        }
+
+        ///<summary>
+        ///Modifica datos especificos de form
+        ///</summary>
+        ///<param name="id">Id del form</param>
+        ///<returns> True si la actualizacion es verdadera</returns>
+        public async Task<bool> PatchRolAsync(int id, string NewTypeCuestion, string newDescription, string newName, string newCuestion, string newAnswer)
+        {
+            try
+            {
+                var form = await _context.Set<Form>().FindAsync(id);
+                if (form == null)
+                    return false;
+
+
+                form.TypeCuestion = NewTypeCuestion;
+                form.Name = newName;
+                form.Cuestion = newCuestion;
+                form.Description = newDescription;
+                form.Answer = newAnswer;
+
+
+                _context.Entry(form).Property(f => f.TypeCuestion).IsModified = true;
+                _context.Entry(form).Property(f => f.Description).IsModified = true;
+                _context.Entry(form).Property(f => f.Answer).IsModified = true;
+                _context.Entry(form).Property(f => f.Cuestion).IsModified = true;
+                _context.Entry(form).Property(f => f.TypeCuestion).IsModified = true;
+
+
+
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al modificar datos del form con su Id");
+                return false;
+            }
+
         }
     }
 }

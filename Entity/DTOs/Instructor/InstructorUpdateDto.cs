@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.DTOautogestion
+namespace Entity.DTOs.Instructor
 {
-    public class InstructorDto
+    public class InstructorUpdateDto
+
     {
         public int Id { get; set; }
-        public bool Active { get; set; }
-        public int UserId { get; set; }
-      
     }
 }

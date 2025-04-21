@@ -1,6 +1,6 @@
 ﻿using Data;
-using Entity.DTOautogestion;
 using Entity.DTOautogestion.pivote;
+using Entity.DTOs.FormModule;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
@@ -107,7 +107,6 @@ namespace Business
             return new FormModuleDto
             {
                 Id = formModule.Id,
-                StatusProcedure = formModule.StatusProcedure,
                 FormId = formModule.FormId,
                 ModuleId = formModule.ModuleId
             };
@@ -119,7 +118,6 @@ namespace Business
             return new FormModule
             {
                 Id = formModuleDto.Id,
-                StatusProcedure = formModuleDto.StatusProcedure,
                 FormId = formModuleDto.FormId,
                 ModuleId = formModuleDto.ModuleId
             };

@@ -74,25 +74,7 @@ namespace Data
             }
         }
 
-        /// <summary>
-        /// Actualiza un AprendizProgram existente en la base de datos.
-        /// </summary>
-        /// <param name="aprendizProgram">Objeto con la información actualizada.</param>
-        /// <returns>True si la operación fue exitosa, False en caso contrario.</returns>
-        public async Task<bool> UpdateAsync(AprendizProgram aprendizProgram)
-        {
-            try
-            {
-                _context.Set<AprendizProgram>().Update(aprendizProgram);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error al actualizar el AprendizProgram {ex.Message}");
-                return false;
-            }
-        }
+       
 
         /// <summary>
         /// Elimina un AprendizProgram en la base de datos.

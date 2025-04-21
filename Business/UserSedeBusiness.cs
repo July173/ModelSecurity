@@ -1,6 +1,6 @@
 ﻿using Data;
 using Entity.DTOautogestion;
-using Entity.DTOs;
+using Entity.DTOs.UserSede;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;

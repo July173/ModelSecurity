@@ -66,25 +66,7 @@ namespace Data
             }
         }
 
-        /// <summary>
-        /// Actualiza un rol existente en la base de datos 
-        /// </summary>
-        /// <param name="rolForm">Objeto con la infromacion actualizada</param>
-        /// <returns>True si la operacion fue exitosa, False en caso contrario.</returns>
-        public async Task<bool> UpdateAsync(RolForm rolForm)
-        {
-            try
-            {
-                _context.Set<RolForm>().Update(rolForm);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error al actualizar el rol {ex.Message}");
-                return false;
-            }
-        }
+      
 
         /// <summary>
         /// Elimina un rol en la base de datos 

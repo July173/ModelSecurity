@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.DTOautogestion
+namespace Entity.DTOs.AprendizProgram
 {
-    public class UserRolDto
+    public class AprendizProgramDto
     {
         public int Id { get; set; }
-        public int RolId { get; set; }
-        public int UserId { get; set; }
+        public int ProgramId { get; set; }
+        public int AprendizId { get; set; }
     }
 }

@@ -5,14 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.DTOs
+namespace Entity.DTOs.InstructorProgram
 {
-    public class UserSedeDto
+    public class InstructorProgramDto
     {
         public int Id { get; set; }
-        public string StatusProcedure { get; set; }
-        public int UserId { get; set; }
-        public int SedeId { get; set; }
-        
+        public int InstructorId { get; set; }
+        public int ProgramId { get; set; }
     }
 }

@@ -19,6 +19,10 @@ namespace Data
             _logger = logger;
         }
 
+        /// <summary>
+        /// Obtiene todos los formModule almacenados en la base de datos
+        /// </summary>
+        /// <returns> Lista de formModule </returns>
         public async Task<IEnumerable<FormModule>> GetAllAsync()
         {
             return await _context.Set<FormModule>().ToListAsync();
@@ -37,6 +41,12 @@ namespace Data
             }
         }
 
+
+        /// <summary>
+        /// Crea un nuevo formModule en la base de datos 
+        /// </summary>
+        /// <param name="formModule">instancia del formModule a crear.</param>
+        /// <returns>el formModule creado</returns>
         public async Task<FormModule> CreateAsync(FormModule formModule)
         {
             try
@@ -52,20 +62,12 @@ namespace Data
             }
         }
 
-        public async Task<bool> UpdateAsync(FormModule formModule)
-        {
-            try
-            {
-                _context.Set<FormModule>().Update(formModule);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error al actualizar la relación Formulario-Módulo {ex.Message}");
-                return false;
-            }
-        }
+
+        /// <summary>
+        /// Elimina un FormModule permanente en la base de datos 
+        /// </summary>
+        /// <param name="id">Identificador unico del FormModule a eliminar</param>
+        /// <returns>True si la eliminacion fue exitosa, False en caso contrario.</returns>/*
 
         public async Task<bool> DeleteAsync(int id)
         {
