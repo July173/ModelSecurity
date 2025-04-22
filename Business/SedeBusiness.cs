@@ -1,5 +1,6 @@
 ﻿using Data;
 using Entity.DTOs.Sede;
+using Entity.DTOs.Verification;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
@@ -22,7 +23,7 @@ namespace Business
             _logger = logger;
         }
 
-        // Método para obtener todas las sedes como DTOs
+        // Método para obtener todas las sedes como DTOs get
         public async Task<IEnumerable<SedeDto>> GetAllSedesAsync()
         {
             try
@@ -37,7 +38,7 @@ namespace Business
             }
         }
 
-        // Método para obtener una sede por ID como DTO
+        // Método para obtener una sede por ID como DTO getById
         public async Task<SedeDto> GetSedeByIdAsync(int id)
         {
             if (id <= 0)
@@ -64,7 +65,7 @@ namespace Business
             }
         }
 
-        // Método para crear una sede desde un DTO
+        // Método para crear una sede desde un DTO Post
         public async Task<SedeDto> CreateSedeAsync(SedeDto sedeDto)
         {
             try
@@ -85,7 +86,7 @@ namespace Business
             }
         }
 
-        // Método para actualizar una sede desde un DTO
+        // Método para actualizar una sede desde un DTO put
         public async Task<bool> UpdateSedeAsync(SedeUpdateDto sedeUpdateDto)
         {
             try
@@ -112,7 +113,7 @@ namespace Business
             }
         }
 
-        // Método para eliminar una sede de manera permanente
+        // Método para eliminar una sede de manera permanente delete
         public async Task DeleteSedeAsync(int id)
         {
             if (id <= 0)
@@ -144,6 +145,73 @@ namespace Business
         }
 
 
+        public async Task<bool> UpdateParcialSedeAsync(SedeUpdateDto dto)
+        {
+            if (dto == null || dto.Id <= 0)
+            {
+                _logger.LogWarning("DTO de actualización parcial inválido");
+                throw new ValidationException("Id", "Datos inválidos para actualizar sede");
+            }
+
+            try
+            {
+                var exists = await _sedeData.GetByIdAsync(dto.Id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("Sede no encontrada con ID: {Id}", dto.Id);
+                    throw new EntityNotFoundException("Sede", dto.Id);
+                }
+
+                return await _sedeData.PatchSedeAsync(dto.Id, dto.Name, dto.EmailContact, dto.Address, dto.PhoneSede);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente la sede con ID {Id}", dto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar sede con ID {dto.Id}", ex);
+            }
+        }
+
+        public async Task<bool> SetSedeActiveAsync(SedeStatusDto dto)
+        {
+            if (dto == null)
+                throw new ValidationException("El DTO de estado de sede no puede ser nulo");
+
+            if (dto.Id <= 0)
+            {
+                _logger.LogWarning("ID inválido para cambiar estado activo de sede: {Id}", dto.Id);
+                throw new ValidationException("Id", "El ID de la sede debe ser mayor a 0");
+            }
+
+            try
+            {
+                var entity = await _sedeData.GetByIdAsync(dto.Id);
+                if (entity == null)
+                {
+                    _logger.LogInformation("Sede no encontrada con ID {Id} para cambiar estado", dto.Id);
+                    throw new EntityNotFoundException("Sede", dto.Id);
+                }
+
+                // Establecer DeleteDate si se va a desactivar (borrado lógico)
+                if (!dto.Active)
+                {
+                    entity.DeleteDate = DateTime.Now;
+                }
+                else
+                {
+                    entity.DeleteDate = null; // Reactivación: eliminamos la marca de eliminación
+                }
+
+                return await _sedeData.SetActiveAsync(dto.Id, dto.Active); // Usamos UpdateAsync porque modificamos el objeto
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al cambiar estado activo de sede con ID {Id}", dto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar estado activo de sede con ID {dto.Id}", ex);
+            }
+        }
+
+
+
         // Método para validar el DTO
         private void ValidateSede(SedeDto sedeDto)
         {
@@ -159,36 +227,7 @@ namespace Business
             }
         }
 
-        // Método para realizar la eliminación lógica de una sede
-        public async Task DeleteSedeLogicalAsync(int id)
-        {
-            if (id <= 0)
-            {
-                _logger.LogWarning("Se intentó eliminar una sede con ID inválido: {Id}", id);
-                throw new ValidationException("id", "El ID de la sede debe ser mayor que cero");
-            }
-
-            try
-            {
-                var sede = await _sedeData.GetByIdAsync(id);
-                if (sede == null)
-                {
-                    _logger.LogInformation("No se encontró ninguna sede con ID: {Id}", id);
-                    throw new EntityNotFoundException("sede", id);
-                }
-
-                // Marcar la sede como inactiva (Eliminación lógica)
-                sede.Active = false;
-                var sedeEliminada = await _sedeData.UpdateAsync(sede);
-                _logger.LogInformation("La sede con ID {Id} ha sido eliminada lógicamente.", id);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al eliminar lógicamente la sede con ID: {Id}", id);
-                throw new ExternalServiceException("Base de datos", "Error al eliminar la sede lógicamente", ex);
-            }
-        }
-
+        
         // Método para mapear de Sede a SedeDto
         private SedeDto MapToDTO(Sede sede)
         {

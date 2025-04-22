@@ -106,5 +106,136 @@ namespace Web.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+        /// <summary>
+        /// Elimina un registro de Sofia por su ID.
+        /// </summary>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> DeleteRegisterySofia(int id)
+        {
+            try
+            {
+                var result = await _registerySofiaBusiness.DeleteAsync(id);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "ID inválido al intentar eliminar: {Id}", id);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Registro de Sofia no encontrado al eliminar: {Id}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al eliminar registro de Sofia");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Actualiza completamente un registro de Sofia existente.
+        /// </summary>
+        [HttpPut("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdateRegisterySofia(int id, [FromBody] RegisterySofiaUpdateDto dto)
+        {
+            if (id != dto.Id)
+                return BadRequest(new { message = "El id de la ruta no coincide con el del cuerpo" });
+            try
+            {
+                var result = await _registerySofiaBusiness.UpdateAsync(dto);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Error de validación al actualizar registro de Sofia");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Registro de Sofia no encontrado al actualizar: {Id}", dto.Id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al actualizar registro de Sofia");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Actualiza parcialmente un registro de Sofia (solo algunos campos).
+        /// </summary>
+        [HttpPatch]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdatePartialRegisterySofia([FromBody] RegisterySofiaUpdateDto dto)
+        {
+            try
+            {
+                var result = await _registerySofiaBusiness.UpdateParcialAsync(dto);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Error de validación en actualización parcial");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Registro de Sofia no encontrado en actualización parcial: {Id}", dto.Id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error en actualización parcial de registro de Sofia");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Cambia el estado activo/inactivo de un registro de Sofia.
+        /// </summary>
+        [HttpDelete("active")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> SetRegisterySofiaActive([FromBody] RegisterySofiaStatusDto dto)
+        {
+            try
+            {
+                var result = await _registerySofiaBusiness.SetActiveAsync(dto);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Error de validación al cambiar estado");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Registro de Sofia no encontrado al cambiar estado: {Id}", dto.Id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al cambiar estado activo");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
     }
 }

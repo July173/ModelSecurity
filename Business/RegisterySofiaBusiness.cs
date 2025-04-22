@@ -201,7 +201,7 @@ namespace Business
             }
         }
 
-        public async Task<bool> DeleteVerificationAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             if (id <= 0)
             {

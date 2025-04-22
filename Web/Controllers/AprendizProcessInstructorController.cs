@@ -106,5 +106,38 @@ namespace Web.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+        /// <summary>
+        /// Elimina un AprendizProcessInstructor por su ID.
+        /// </summary>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> DeleteAprendizProcessInstructor(int id)
+        {
+            try
+            {
+                var result = await _aprendizProcessInstructorBusiness.DeleteAprendizProcessInstructorAsync(id);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "ID inválido al intentar eliminar: {Id}", id);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "AprendizProcessInstructor no encontrado al eliminar: {Id}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al eliminar AprendizProcessInstructor");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
     }
 }

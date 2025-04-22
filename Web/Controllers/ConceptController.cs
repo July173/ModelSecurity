@@ -106,5 +106,133 @@ namespace Web.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+        /// <summary>
+        /// Elimina un concepto por su ID.
+        /// </summary>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> DeleteConcept(int id)
+        {
+            try
+            {
+                var result = await _conceptBusiness.DeleteConceptAsync(id);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "ID inválido al intentar eliminar: {Id}", id);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Concepto no encontrado al eliminar: {Id}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al eliminar concepto");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+        /// <summary>
+        /// Actualiza completamente un concepto existente.
+        /// </summary>
+        [HttpPut("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdateConcept(int id, [FromBody] ConceptUpdateDto dto)
+        {
+            if (id != dto.Id)
+                return BadRequest(new { message = "El id de la ruta no coincide con el del cuerpo" });
+            try
+            {
+                var result = await _conceptBusiness.UpdateConceptAsync(dto);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Error de validación al actualizar concepto");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Concepto no encontrado al actualizar: {Id}", dto.Id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al actualizar concepto");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+        /// <summary>
+        /// Actualiza parcialmente un concepto (solo nombre y descripción).
+        /// </summary>
+        [HttpPatch]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdatePartialConcept([FromBody] ConceptUpdateDto dto)
+        {
+            try
+            {
+                var result = await _conceptBusiness.UpdateParcialConceptAsync(dto);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Error de validación en actualización parcial");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Concepto no encontrado en actualización parcial: {Id}", dto.Id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error en actualización parcial de concepto");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+        /// <summary>
+        /// Cambia el estado activo/inactivo de un concepto.
+        /// </summary>
+        [HttpDelete("active")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> SetConceptActive([FromBody] ConceptStatusDto dto)
+        {
+            try
+            {
+                var result = await _conceptBusiness.SetConceptActiveAsync(dto);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Error de validación al cambiar estado");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Concepto no encontrado al cambiar estado: {Id}", dto.Id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al cambiar estado activo");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
     }
 }

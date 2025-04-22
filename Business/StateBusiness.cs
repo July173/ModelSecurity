@@ -1,5 +1,6 @@
 ﻿using Data;
 using Entity.DTOs.State;
+using Entity.DTOs.Verification;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
@@ -175,39 +176,45 @@ namespace Business
                 throw new ExternalServiceException("Base de datos", $"Error al eliminar el estado con ID {id}", ex);
             }
         }
-
-        // Método para eliminar un estado lógicamente
-        public async Task<bool> DeleteStateLogicalAsync(int id)
+        public async Task<bool> SetStateActiveAsync(StateStatusDto dto)
         {
-            if (id <= 0)
+            if (dto == null)
+                throw new ValidationException("El DTO de estado de State no puede ser nulo");
+
+            if (dto.Id <= 0)
             {
-                _logger.LogWarning("Se intentó eliminar un estado con ID inválido: {Id}", id);
-                throw new ValidationException("id", "El ID debe ser mayor a 0");
+                _logger.LogWarning("ID inválido para cambiar estado activo de State: {Id}", dto.Id);
+                throw new ValidationException("Id", "El ID de la State debe ser mayor a 0");
             }
 
             try
             {
-                // Verificar si el estado existe
-                var exists = await _stateData.GetByIdAsync(id);
-                if (exists == null)
+                var entity = await _stateData.GetByIdAsync(dto.Id);
+                if (entity == null)
                 {
-                    _logger.LogInformation("No se encontró estado con ID: {Id} para eliminar lógicamente", id);
-                    throw new EntityNotFoundException("state", id);
+                    _logger.LogInformation("state no encontrada con ID {Id} para cambiar estado", dto.Id);
+                    throw new EntityNotFoundException("state", dto.Id);
                 }
 
-                // Cambiar el estado a "inactivo" (Active = false)
-                exists.Active = false;
-                exists.UpdateDate = DateTime.Now;
+                // Establecer DeleteDate si se va a desactivar (borrado lógico)
+                if (!dto.Active)
+                {
+                    entity.DeleteDate = DateTime.Now;
+                }
+                else
+                {
+                    entity.DeleteDate = null; // Reactivación: eliminamos la marca de eliminación
+                }
 
-                // Actualizar el estado en la base de datos
-                return await _stateData.UpdateAsync(exists);
+                return await _stateData.SetActiveAsync(dto.Id, dto.Active); // Usamos UpdateAsync porque modificamos el objeto
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al eliminar lógicamente el estado con ID: {Id}", id);
-                throw new ExternalServiceException("Base de datos", $"Error al eliminar lógicamente el estado con ID {id}", ex);
+                _logger.LogError(ex, "Error al cambiar estado activo de state con ID {Id}", dto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar estado activo de state con ID {dto.Id}", ex);
             }
         }
+
 
 
         // Método para validar el DTO

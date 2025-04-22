@@ -124,5 +124,136 @@ namespace Web.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+        /// <summary>
+        /// Elimina un módulo por su ID.
+        /// </summary>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> DeleteModule(int id)
+        {
+            try
+            {
+                var result = await _ModuleBusiness.DeleteModuleAsync(id);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "ID inválido al intentar eliminar: {Id}", id);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Módulo no encontrado al eliminar: {Id}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al eliminar módulo");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Actualiza completamente un módulo existente.
+        /// </summary>
+        [HttpPut("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdateModule(int id, [FromBody] ModuleUpdateDto dto)
+        {
+            if (id != dto.Id)
+                return BadRequest(new { message = "El id de la ruta no coincide con el del cuerpo" });
+            try
+            {
+                var result = await _ModuleBusiness.UpdateModuleAsync(dto);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Error de validación al actualizar módulo");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Módulo no encontrado al actualizar: {Id}", dto.Id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al actualizar módulo");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Actualiza parcialmente un módulo (solo nombre y descripción).
+        /// </summary>
+        [HttpPatch]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdatePartialModule([FromBody] ModuleUpdateDto dto)
+        {
+            try
+            {
+                var result = await _ModuleBusiness.UpdateParcialModuleAsync(dto);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Error de validación en actualización parcial");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Módulo no encontrado en actualización parcial: {Id}", dto.Id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error en actualización parcial de módulo");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Cambia el estado activo/inactivo de un módulo.
+        /// </summary>
+        [HttpDelete("active")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> SetModuleActive([FromBody] ModuleStatusDto dto)
+        {
+            try
+            {
+                var result = await _ModuleBusiness.SetModuleActiveAsync(dto);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Error de validación al cambiar estado");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Módulo no encontrado al cambiar estado: {Id}", dto.Id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al cambiar estado activo");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
     }
 }
