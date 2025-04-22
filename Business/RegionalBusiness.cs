@@ -103,7 +103,7 @@ namespace Business
                     throw new EntityNotFoundException("Regional", dto.Id);
                 }
 
-                return await _regionalData.PatchRegionalAsync(dto.Id, dto.Name, dto.Description, dto.CodeRegional, dto.Address);
+                return await _regionalData.PatchRegionalAsync(dto.Id, dto.Name, dto.Description);
             }
             catch (Exception ex)
             {
