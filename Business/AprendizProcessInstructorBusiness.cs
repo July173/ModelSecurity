@@ -84,6 +84,34 @@ namespace Business
             }
         }
 
+
+        //Metodo para borrar aprendizProcessInstructor permanente (Delete permanente) 
+
+        public async Task<bool> DeleteAprendizProcessInstructorAsync(int id)
+        {
+            if (id <= 0)
+            {
+                _logger.LogWarning("Se intento eliminar un aprendizProcessInstructor con Id invalido : {aprendizProcessInstructorId}", id);
+                throw new ValidationException("Id", "El id del aprendizProcessInstructor debe ser mayor a 0");
+            }
+            try
+            {
+                var exists = await _aprendizProcessInstructorData.GetByIdAsync(id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontro el aprendizProcessInstructor con ID {aprendizProcessInstructorId} para eliminar", id);
+                    throw new EntityNotFoundException("aprendizProcessInstructor", id);
+                }
+                return await _aprendizProcessInstructorData.DeleteAsync(id);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar el aprendizProcessInstructor con ID {aprendizProcessInstructorid}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al elimiar el aprendizProcessInstructor con ID {id}", ex);
+
+            }
+        }
         // Método para validar el DTO
         private void ValidateAprendizProcessInstructor(AprendizProcessInstructorDto dto)
         {

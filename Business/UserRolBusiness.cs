@@ -6,6 +6,7 @@ using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using Utilities.Exceptions;
+using ValidationException = Utilities.Exceptions.ValidationException;
 
 namespace Business
 {
@@ -83,6 +84,34 @@ namespace Business
             {
                 _logger.LogError(ex, "Error al crear nuevo rol de usuario: {UserId}, {RolId}", rolUserDto?.UserId ?? 0, rolUserDto?.RolId ?? 0);
                 throw new ExternalServiceException("Base de datos", "Error al crear el rol de usuario", ex);
+            }
+        }
+
+        //Metodo para borrar userRol permanente (Delete permanente) 
+
+        public async Task<bool> DeleteRolUserAsync(int id)
+        {
+            if (id <= 0)
+            {
+                _logger.LogWarning("Se intento eliminar un userRol con Id invalido : {userRolId}", id);
+                throw new ValidationException("Id", "El id del userRol debe ser mayor a 0");
+            }
+            try
+            {
+                var exists = await _rolUserData.GetByIdAsync(id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontro el rol con ID {userRolId} para eliminar", id);
+                    throw new EntityNotFoundException("userRol", id);
+                }
+                return await _rolUserData.DeleteAsync(id);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar el rol con ID {userRolid}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al elimiar el userRol con ID {id}", ex);
+
             }
         }
 

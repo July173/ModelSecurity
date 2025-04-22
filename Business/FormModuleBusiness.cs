@@ -1,10 +1,10 @@
 ﻿using Data;
-using Entity.DTOautogestion.pivote;
 using Entity.DTOs.FormModule;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using Utilities.Exceptions;
+using ValidationException = Utilities.Exceptions.ValidationException;
 
 namespace Business
 {
@@ -85,6 +85,34 @@ namespace Business
             }
         }
 
+
+        //Metodo para borrar formModule permanente (Delete permanente) 
+
+        public async Task<bool> DeleteFormModuleAsync(int id)
+        {
+            if (id <= 0)
+            {
+                _logger.LogWarning("Se intento eliminar un formModule con Id invalido : {formModuleId}", id);
+                throw new ValidationException("Id", "El formModule del rol debe ser mayor a 0");
+            }
+            try
+            {
+                var exists = await _formModuleData.GetByIdAsync(id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontro el formModule con ID {formModuleId} para eliminar", id);
+                    throw new EntityNotFoundException("Rol", id);
+                }
+                return await _formModuleData.DeleteAsync(id);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar el formModule con ID {formModuleid}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al elimiar el formModule con ID {id}", ex);
+
+            }
+        }
         // Método para validar el DTO
         private void ValidateFormModule(FormModuleDto formModuleDto)
         {

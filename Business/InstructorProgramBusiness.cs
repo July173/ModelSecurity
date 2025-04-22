@@ -1,10 +1,10 @@
 ﻿using Data;
-using Entity.DTOautogestion;
 using Entity.DTOs.InstructorProgram;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using Utilities.Exceptions;
+using ValidationException = Utilities.Exceptions.ValidationException;
 
 namespace Business
 {
@@ -85,6 +85,34 @@ namespace Business
             }
         }
 
+
+        //Metodo para borrar instructorProgram permanente (Delete permanente) 
+
+        public async Task<bool> DeleteInstructorProgramAsync(int id)
+        {
+            if (id <= 0)
+            {
+                _logger.LogWarning("Se intento eliminar un instructorProgram con Id invalido : {instructorProgramId}", id);
+                throw new ValidationException("Id", "El id del instructorProgram debe ser mayor a 0");
+            }
+            try
+            {
+                var exists = await _instructorProgramData.GetByIdAsync(id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontro el instructorProgram con ID {instructorProgramId} para eliminar", id);
+                    throw new EntityNotFoundException("instructorProgram", id);
+                }
+                return await _instructorProgramData.DeleteAsync(id);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar el instructorProgram con ID {instructorProgramid}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al elimiar el instructorProgram con ID {id}", ex);
+
+            }
+        }
         // Método para validar el DTO
         private void ValidateInstructorProgram(InstructorProgramDto instructorProgramDto)
         {

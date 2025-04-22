@@ -83,6 +83,34 @@ namespace Business
             }
         }
 
+        //Metodo para borrar aprendizProgram permanente (Delete permanente) 
+
+        public async Task<bool> DeleteAprendizProgramAsync(int id)
+        {
+            if (id <= 0)
+            {
+                _logger.LogWarning("Se intento eliminar un aprendizProgram con Id invalido : {aprendizProgramId}", id);
+                throw new ValidationException("Id", "El id del aprendizProgram debe ser mayor a 0");
+            }
+            try
+            {
+                var exists = await _aprendizProgramData.GetByIdAsync(id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontro el aprendizProgram con ID {aprendizProgramId} para eliminar", id);
+                    throw new EntityNotFoundException("aprendizProgram", id);
+                }
+                return await _aprendizProgramData.DeleteAsync(id);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar el aprendizProgram con ID {aprendizProgramid}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al elimiar el aprendizProgram con ID {id}", ex);
+
+            }
+        }
+
         // Método para validar el DTO
         private void ValidateAprendizProgram(AprendizProgramDto aprendizProgramDto)
         {

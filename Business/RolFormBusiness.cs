@@ -1,10 +1,10 @@
 ﻿using Data;
-using Entity.DTOautogestion;
 using Entity.DTOs.RolForm;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using Utilities.Exceptions;
+using ValidationException = Utilities.Exceptions.ValidationException;
 
 namespace Business
 {
@@ -81,6 +81,35 @@ namespace Business
             {
                 _logger.LogError(ex, "Error al crear nuevo rol de formulario: {Name}", rolFormDto?.Permission ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el rol de formulario", ex);
+            }
+        }
+
+
+        //Metodo para borrar rolForm permanente (Delete permanente) 
+
+        public async Task<bool> DeleteRolFormAsync(int id)
+        {
+            if (id <= 0)
+            {
+                _logger.LogWarning("Se intento eliminar un rolForm con Id invalido : {rolFormId}", id);
+                throw new ValidationException("Id", "El id del rolForm debe ser mayor a 0");
+            }
+            try
+            {
+                var exists = await _rolFormData.GetByIdAsync(id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontro el rolForm con ID {rolFormId} para eliminar", id);
+                    throw new EntityNotFoundException("rolForm", id);
+                }
+                return await _rolFormData.DeleteAsync(id);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar el rolForm con ID {rolFormid}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al elimiar el rolForm con ID {id}", ex);
+
             }
         }
 
