@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Entity.Contexts;
 using Entity.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.Extensions.Logging;
 
 namespace Data
@@ -33,7 +34,9 @@ namespace Data
         /// <returns>Lista de Enterprise.</returns>
         public async Task<IEnumerable<Enterprise>> GetAllAsync()
         {
-            return await _context.Set<Enterprise>().ToListAsync();
+            return await _context.Set<Enterprise>()
+                         .Where(e => e.Active)//Trae solo los activos
+                         .ToListAsync();
         }
 
         /// <summary>
@@ -117,6 +120,74 @@ namespace Data
                 return false;
             }
         }
+
+        ///<summary>
+        /// Elimina logicamente un enterprise (desactiva o activia el enterprise)
+        /// </summary>
+        /// <param name="id">Id del enterprise</param>
+        /// <returns>True si la operacion fue exitosa</returns>
+        public async Task<bool> SetActiveAsync(int id, bool active)
+        {
+            try
+            {
+                var enterprise = await _context.Set<Enterprise>().FindAsync(id);
+                if (enterprise == null)
+                    return false;
+
+                enterprise.Active = active; //Desactiva enterprise 
+                _context.Entry(enterprise).Property(e => e.Active).IsModified = true;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al realizar eliminacion logica del enterprise con ID {id}");
+                return false;
+            }
+        }
+
+
+        ///<summary>
+        ///Modifica datos especificos de enterprise 
+        ///</summary>
+        ///<param name="id">Id del enterprise</param>
+        ///<returns> True si la actualizacion es verdadera</returns>
+        public async Task<bool> PatchRolAsync(int id, string NewName, string newObservation, string NewPhone, string NewLocate, string NewEmail)
+        {
+            try
+            {
+                var enterprise = await _context.Set<Enterprise>().FindAsync(id);
+                if (enterprise == null)
+                    return false;
+
+
+                enterprise.NameEnterprise = NewName;
+                enterprise.Observation = newObservation;
+                enterprise.PhoneEnterprise = NewPhone;
+                enterprise.EmailEnterprise = NewEmail;
+                enterprise.Locate = NewLocate;
+
+            
+                _context.Entry(enterprise).Property(e => e.NameEnterprise).IsModified = true;
+                _context.Entry(enterprise).Property(e => e.Observation).IsModified = true;
+                _context.Entry(enterprise).Property(e => e.EmailEnterprise).IsModified = true;
+                _context.Entry(enterprise).Property(e => e.PhoneEnterprise).IsModified = true;
+                _context.Entry(enterprise).Property(e => e.Locate).IsModified = true;
+
+
+
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al modificar datos del enterprise con su Id");
+                return false;
+            }
+
+        } q
     }
 }
 

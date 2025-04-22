@@ -33,7 +33,9 @@ namespace Data
         /// <returns>Lista de Concept.</returns>
         public async Task<IEnumerable<Concept>> GetAllAsync()
         {
-            return await _context.Set<Concept>().ToListAsync();
+            return await _context.Set<Concept>()
+                           .Where(c => c.Active)//Trae solo los activos
+                           .ToListAsync();
         }
 
         /// <summary>
@@ -116,6 +118,66 @@ namespace Data
                 _logger.LogError($"Error al eliminar el Concept {ex.Message}");
                 return false;
             }
+        }
+
+
+
+        ///<summary>
+        /// Elimina logicamente un concept (desactiva o activia el concept)
+        /// </summary>
+        /// <param name="id">Id del concept</param>
+        /// <returns>True si la operacion fue exitosa</returns>
+        public async Task<bool> SetActiveAsync(int id, bool active)
+        {
+            try
+            {
+                var concept = await _context.Set<Concept>().FindAsync(id);
+                if (concept == null)
+                    return false;
+
+                concept.Active = active; //Desactiva el concept
+                _context.Entry(concept).Property(c => c.Active).IsModified = true;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al realizar eliminacion logica del concept con ID {id}");
+                return false;
+            }
+        }
+
+        ///<summary>
+        ///Modifica datos especificos de concept 
+        ///</summary>
+        ///<param name="id">Id del concept</param>
+        ///<returns> True si la actualizacion es verdadera</returns>
+        public async Task<bool> PatchRolAsync(int id, string NewName, string newObservation)
+        {
+            try
+            {
+                var concept = await _context.Set<Concept>().FindAsync(id);
+                if (concept == null)
+                    return false;
+
+                concept.Name = NewName;
+                concept.Observation = newObservation;
+
+                _context.Entry(concept).Property(c => c.Name).IsModified = true;
+                _context.Entry(concept).Property(c => c.Observation).IsModified = true;
+
+
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al modificar datos del concept con su Id");
+                return false;
+            }
+
         }
     }
 }

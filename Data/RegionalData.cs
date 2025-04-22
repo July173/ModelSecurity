@@ -33,7 +33,9 @@ namespace Data
         /// <returns>Lista de registros regionales.</returns>
         public async Task<IEnumerable<Regional>> GetAllAsync()
         {
-            return await _context.Set<Regional>().ToListAsync();
+            return await _context.Set<Regional>()
+                .Where(r => r.Active)//Trae solo los activos
+                .ToListAsync();
         }
 
         /// <summary>
@@ -116,6 +118,64 @@ namespace Data
                 _logger.LogError($"Error al eliminar el registro regional: {ex.Message}");
                 return false;
             }
+        }
+
+        ///<summary>
+        /// Elimina logicamente una regional (desactiva o activia el regional)
+        /// </summary>
+        /// <param name="id">Id del regional</param>
+        /// <returns>True si la operacion fue exitosa</returns>
+        public async Task<bool> SetActiveAsync(int id, bool active)
+        {
+            try
+            {
+                var regional = await _context.Set<Regional>().FindAsync(id);
+                if (regional == null)
+                    return false;
+
+                regional.Active = active; //Desactiva el regional
+                _context.Entry(regional).Property(r => r.Active).IsModified = true;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al realizar eliminacion logica del regional con ID {id}");
+                return false;
+            }
+        }
+
+        ///<summary>
+        ///Modifica datos especificos de regional
+        ///</summary>
+        ///<param name="id">Id del regional</param>
+        ///<returns> True si la actualizacion es verdadera</returns>
+        public async Task<bool> PatchRolAsync(int id, string NewName, string newDescription)
+        {
+            try
+            {
+                var regional = await _context.Set<Regional>().FindAsync(id);
+                if (regional == null)
+                    return false;
+
+                regional.Name= NewName;
+                regional.Description = newDescription;
+
+                _context.Entry(regional).Property(r => r.Name).IsModified = true;
+                _context.Entry(regional).Property(r => r.Description).IsModified = true;
+
+
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al modificar datos del regional con su Id");
+                return false;
+            }
+
         }
     }
 }

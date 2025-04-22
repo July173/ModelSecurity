@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOs.RegisterySofia
 {
-    public class ReggisterySofiaUpdateDto
+    public class RegisterySofiaUpdateDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
