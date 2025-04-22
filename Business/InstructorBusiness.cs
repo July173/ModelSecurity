@@ -84,6 +84,121 @@ namespace Business
             }
         }
 
+
+        // Método para actualizar completamente un instructor (put)
+        public async Task<bool> UpdateInstructorAsync(InstructorUpdateDto dto)
+        {
+            if (dto == null || dto.Id <= 0)
+            {
+                _logger.LogWarning("DTO inválido para actualización de instructor");
+                throw new ValidationException("id", "Datos inválidos para actualizar instructor");
+            }
+
+            try
+            {
+                var exists = await _instructorData.GetByIdAsync(dto.Id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontró el instructor con ID {InstructorId} para actualizar", dto.Id);
+                    throw new EntityNotFoundException("Instructor", dto.Id);
+                }
+
+
+                return await _instructorData.UpdateAsync(exists);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar completamente el instructor con ID {InstructorId}", dto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar el instructor con ID {dto.Id}", ex);
+            }
+        }
+
+        // Método para activar o desactivar un instructor (delete lógico)
+        public async Task<bool> SetInstructorActiveAsync(InstructorStatusDto dto)
+        {
+            if (dto == null)
+            {
+                throw new ValidationException("El dto de estado de instructor no puede ser nulo");
+            }
+
+            if (dto.Id <= 0)
+            {
+                _logger.LogWarning("Se intentó activar/desactivar un instructor con ID inválido: {InstructorId}", dto.Id);
+                throw new ValidationException("Id", "El ID del instructor debe ser mayor que cero");
+            }
+
+            try
+            {
+                var exists = await _instructorData.GetByIdAsync(dto.Id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontró el instructor con ID {InstructorId} para cambiar estado", dto.Id);
+                    throw new EntityNotFoundException("Instructor", dto.Id);
+                }
+
+                return await _instructorData.SetActiveAsync(dto.Id, dto.Active);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al cambiar el estado activo del instructor con ID {InstructorId}", dto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar el estado activo del instructor con ID {dto.Id}", ex);
+            }
+        }
+        // Método para eliminar permanentemente un instructor (delete físico)
+        public async Task<bool> DeleteInstructorAsync(int id)
+        {
+            if (id <= 0)
+            {
+                _logger.LogWarning("Se intentó eliminar un instructor con ID inválido: {InstructorId}", id);
+                throw new ValidationException("Id", "El ID del instructor debe ser mayor que cero");
+            }
+
+            try
+            {
+                var exists = await _instructorData.GetByIdAsync(id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontró el instructor con ID {InstructorId} para eliminar", id);
+                    throw new EntityNotFoundException("Instructor", id);
+                }
+
+                return await _instructorData.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar el instructor con ID {InstructorId}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al eliminar el instructor con ID {id}", ex);
+            }
+        }
+        // Método para actualizar parcialmente un instructor (patch)
+        public async Task<bool> UpdateParcialInstructorAsync(InstructorUpdateDto dto)
+        {
+            if (dto == null || dto.Id <= 0)
+            {
+                _logger.LogWarning("DTO inválido para actualización parcial de instructor");
+                throw new ValidationException("Id", "Datos inválidos para actualización parcial");
+            }
+
+            try
+            {
+                var instructor = await _instructorData.GetByIdAsync(dto.Id);
+                if (instructor == null)
+                {
+                    _logger.LogInformation("No se encontró el instructor con ID {InstructorId} para actualizar parcialmente", dto.Id);
+                    throw new EntityNotFoundException("Instructor", dto.Id);
+                }
+
+              
+                return await _instructorData.PatchInstructorAsync(dto.Id );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente el instructor con ID {InstructorId}", dto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar parcialmente el instructor con ID {dto.Id}", ex);
+            }
+        }
+
+
         // Método para validar el DTO
         private void ValidateInstructor(InstructorDto instructorDto)
         {

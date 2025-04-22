@@ -1,5 +1,4 @@
 ﻿using Business;
-using Entity.DTOautogestion.pivote;
 using Entity.DTOs.AprendizProgram;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

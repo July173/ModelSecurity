@@ -1,5 +1,4 @@
 ﻿using Data;
-using Entity.DTOautogestion.pivote;
 using Entity.DTOs;
 using Entity.DTOs.UserRol;
 using Entity.Model;

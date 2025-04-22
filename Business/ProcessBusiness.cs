@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using Utilities.Exceptions;
 using Process = Entity.Model.Process;
+using ValidationException = Utilities.Exceptions.ValidationException;
 
 namespace Business
 {
@@ -86,6 +87,129 @@ namespace Business
                 throw new ExternalServiceException("Base de datos", "Error al crear el proceso", ex);
             }
         }
+
+        public async Task<bool> SetProcessActiveAsync(ProcessStatusDto dto)
+        {
+            if (dto == null)
+                throw new ValidationException("El DTO de estado de proceso no puede ser nulo");
+
+            if (dto.Id <= 0)
+            {
+                _logger.LogWarning("ID inválido para cambiar estado activo de proceso: {Id}", dto.Id);
+                throw new ValidationException("Id", "El ID del proceso debe ser mayor a 0");
+            }
+
+            try
+            {
+                var entity = await _processData.GetByIdAsync(dto.Id);
+                if (entity == null)
+                {
+                    _logger.LogInformation("Proceso no encontrado con ID {Id} para cambiar estado", dto.Id);
+                    throw new EntityNotFoundException("Process", dto.Id);
+                }
+
+                // Establecer DeleteDate si se va a desactivar (borrado lógico)
+                if (!dto.Active)
+                {
+                    entity.DeleteDate = DateTime.Now;
+                }
+                else
+                {
+                    entity.DeleteDate = null; // Reactivación: eliminamos la marca de eliminación
+                }
+
+                return await _processData.SetActiveAsync(dto.Id, dto.Active);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al cambiar estado activo de proceso con ID {Id}", dto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar estado activo de proceso con ID {dto.Id}", ex);
+            }
+        }
+
+
+        public async Task<bool> DeleteProcessAsync(int id)
+        {
+            if (id <= 0)
+            {
+                _logger.LogWarning("Se intentó eliminar un proceso con ID inválido: {Id}", id);
+                throw new ValidationException("Id", "El ID debe ser mayor a 0");
+            }
+
+            try
+            {
+                var exists = await _processData.GetByIdAsync(id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("Proceso no encontrado con ID {Id} para eliminar", id);
+                    throw new EntityNotFoundException("Process", id);
+                }
+
+                return await _processData.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar proceso con ID {Id}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al eliminar proceso con ID {id}", ex);
+            }
+        }
+
+
+
+        public async Task<bool> UpdateParcialProcessAsync(ProcessUpdateDto dto)
+        {
+            if (dto == null || dto.Id <= 0)
+            {
+                _logger.LogWarning("DTO de actualización parcial inválido");
+                throw new ValidationException("Id", "Datos inválidos para actualizar proceso");
+            }
+
+            try
+            {
+                var exists = await _processData.GetByIdAsync(dto.Id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("Proceso no encontrado con ID: {Id}", dto.Id);
+                    throw new EntityNotFoundException("Process", dto.Id);
+                }
+
+                return await _processData.PatchAsync(dto.Id, dto.TypeProcess, dto.Observation);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente el proceso con ID {Id}", dto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar proceso con ID {dto.Id}", ex);
+            }
+        }
+
+        public async Task<bool> UpdateProcessAsync(ProcessUpdateDto dto)
+        {
+            if (dto == null || dto.Id <= 0)
+            {
+                _logger.LogWarning("DTO de actualización inválido");
+                throw new Utilities.Exceptions.ValidationException("id", "Datos inválidos para actualizar proceso");
+            }
+
+            try
+            {
+                var entity = await _processData.GetByIdAsync(dto.Id);
+                if (entity == null)
+                    throw new EntityNotFoundException("Process", dto.Id);
+
+                // Modifica sus campos directamente
+                entity.TypeProcess = dto.TypeProcess;
+                entity.Observation = dto.Observation;
+                entity.UpdateDate = DateTime.Now;
+
+                return await _processData.UpdateAsync(entity); //actualizas la misma instancia rastreada
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar el proceso con ID {Id}", dto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar proceso con ID {dto.Id}", ex);
+            }
+        }
+
 
         // Método para validar el DTO
         private void ValidateProcess(ProcessDto processDto)

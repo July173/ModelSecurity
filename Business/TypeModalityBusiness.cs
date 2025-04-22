@@ -2,8 +2,8 @@
 using Entity.DTOs.TypeModality;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
-using System.ComponentModel.DataAnnotations;
 using Utilities.Exceptions;
+using static Dapper.SqlMapper;
 
 namespace Business
 {
@@ -21,14 +21,14 @@ namespace Business
             _logger = logger;
         }
 
-        // Método para obtener todas las modalidades como DTOs
+        /// <summary>
+        /// Obtiene todas las modalidades como una lista de DTOs.
+        /// </summary>
         public async Task<IEnumerable<TypeModalityDto>> GetAllTypeModalitiesAsync()
         {
             try
             {
                 var typeModalities = await _typeModalityData.GetAllAsync();
-                
-
                 return MapToDTOList(typeModalities);
             }
             catch (Exception ex)
@@ -38,13 +38,15 @@ namespace Business
             }
         }
 
-        // Método para obtener una modalidad por ID como DTO
+        /// <summary>
+        /// Obtiene una modalidad por su ID.
+        /// </summary>
         public async Task<TypeModalityDto> GetTypeModalityByIdAsync(int id)
         {
             if (id <= 0)
             {
                 _logger.LogWarning("Se intentó obtener una modalidad con ID inválido: {Id}", id);
-                throw new Utilities.Exceptions.ValidationException("id", "El ID de la modalidad debe ser mayor que cero");
+                throw new ValidationException("id", "El ID de la modalidad debe ser mayor que cero");
             }
 
             try
@@ -53,7 +55,7 @@ namespace Business
                 if (typeModality == null)
                 {
                     _logger.LogInformation("No se encontró ninguna modalidad con ID: {Id}", id);
-                    throw new EntityNotFoundException("typeModality", id);
+                    throw new EntityNotFoundException("TypeModality", id);
                 }
 
                 return MapToDTO(typeModality);
@@ -65,18 +67,17 @@ namespace Business
             }
         }
 
-        // Método para crear una modalidad desde un DTO
+        /// <summary>
+        /// Crea una nueva modalidad a partir de un DTO.
+        /// </summary>
         public async Task<TypeModalityDto> CreateTypeModalityAsync(TypeModalityDto typeModalityDto)
         {
             try
             {
                 ValidateTypeModality(typeModalityDto);
-
                 var typeModality = MapToEntity(typeModalityDto);
-
-                var typeModalityCreado = await _typeModalityData.CreateAsync(typeModality);
-
-                return MapToDTO(typeModalityCreado);
+                var creado = await _typeModalityData.CreateAsync(typeModality);
+                return MapToDTO(creado);
             }
             catch (Exception ex)
             {
@@ -85,52 +86,150 @@ namespace Business
             }
         }
 
-        // Método para validar el DTO
-        private void ValidateTypeModality(TypeModalityDto typeModalityDto)
+        /// <summary>
+        /// Actualiza parcialmente una modalidad existente.
+        /// </summary>
+        public async Task<bool> UpdateParcialTypeModalityAsync(TypeModalityUpdateDto dto)
         {
-            if (typeModalityDto == null)
+            if (dto == null || dto.Id <= 0)
             {
-                throw new Utilities.Exceptions.ValidationException("El objeto TypeModality no puede ser nulo");
+                _logger.LogWarning("DTO inválido para actualización parcial de modalidad.");
+                throw new ValidationException("Id", "Datos inválidos para actualizar modalidad.");
             }
 
-            if (string.IsNullOrWhiteSpace(typeModalityDto.Name))
+            try
             {
-                _logger.LogWarning("Se intentó crear/actualizar una modalidad con Name vacío");
-                throw new Utilities.Exceptions.ValidationException("Name", "El Name de la modalidad es obligatorio");
+                var exists = await _typeModalityData.GetByIdAsync(dto.Id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontró la modalidad con Id {Id} para actualizar", dto.Id);
+                    throw new EntityNotFoundException("TypeModality", dto.Id);
+                }
+
+                return await _typeModalityData.PatchRolAsync(dto.Id, dto.Name, dto.Description);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente la modalidad con ID {Id}", dto.Id);
+                throw new ExternalServiceException("Base de datos", "Error al actualizar la modalidad", ex);
             }
         }
 
-        //Metodo para mapear de TypeModality a TypeModalityDTO
-        private TypeModalityDto MapToDTO(TypeModality typeModality)
+        /// <summary>
+        /// Actualiza completamente una modalidad.
+        /// </summary>
+        public async Task<bool> UpdateCompletoTypeModalityAsync(TypeModalityUpdateDto dto)
         {
-            return new TypeModalityDto
+            if (dto == null || dto.Id <= 0)
             {
-                Id = typeModality.Id,
-                Name = typeModality.Name,
-                Description = typeModality.Description,
-                Active = typeModality.Active, // si existe la entidad
-            };
-        }
-        //Metodo para mapear de TypeModalityDto a TypeModality
-        private TypeModality MapToEntity(TypeModalityDto typeModalityDto)
-        {
-            return new TypeModality
-            {
-                Id = typeModalityDto.Id,
-                Name = typeModalityDto.Name,
-                Description = typeModalityDto.Description,
-                Active = typeModalityDto.Active, // si existe la entidad
-            };
-        }
-        //Metodo para mapear una lista de TypeModality a una lista de TypeModalityDto
-        private IEnumerable<TypeModalityDto> MapToDTOList(IEnumerable<TypeModality> typeModalities)
-        {
-            var typeModalitiesDto = new List<TypeModalityDto>();
-            foreach (var typeModality in typeModalities)
-            {
-                typeModalitiesDto.Add(MapToDTO(typeModality));
+                _logger.LogWarning("DTO inválido para actualización completa de modalidad.");
+                throw new ValidationException("Id", "Datos inválidos para actualización completa.");
             }
-            return typeModalitiesDto;
+
+            try
+            {
+
+                var exists = await _typeModalityData.GetByIdAsync(dto.Id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontró la modalidad con Id {Id} para actualizar", dto.Id);
+                    throw new EntityNotFoundException("TypeModality", dto.Id);
+                }
+
+                // Modifica sus campos directamente
+                exists.Name = dto.Name;
+                exists.Description = dto.Description;
+
+                return await _typeModalityData.UpdateAsync(exists);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar completamente la modalidad con ID {Id}", dto.Id);
+                throw new ExternalServiceException("Base de datos", "Error al actualizar modalidad", ex);
+            }
         }
+
+        /// <summary>
+        /// Elimina lógicamente una modalidad por su ID.
+        /// </summary>
+        public async Task<bool> SetTypeModalityActiveAsync(TypeModalityStatusDto dto )
+        {
+            if (dto.Id <= 0)
+            {
+                _logger.LogWarning("ID inválido para eliminación lógica.");
+                throw new ValidationException("Id", "El ID debe ser mayor que cero.");
+            }
+
+            try
+            {
+                var exists = await _typeModalityData.GetByIdAsync(dto.Id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontro el typeModality con ID {typeModalityId} para cambiar su estado activo", dto.Id);
+                    throw new EntityNotFoundException("typeModality", dto.Id);
+                }
+                return await _typeModalityData.SetActiveAsync(dto.Id, dto.Active);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al realizar eliminación lógica de modalidad con ID {Id}", dto.Id);
+                throw new ExternalServiceException("Base de datos", "Error al eliminar modalidad", ex);
+            }
+        }
+
+        /// <summary>
+        /// Elimina permanentemente una modalidad por su ID.
+        /// </summary>
+        public async Task<bool> DeleteTypeModalityAsync(int id)
+        {
+            if (id <= 0)
+            {
+                _logger.LogWarning("ID inválido para eliminación permanente.");
+                throw new ValidationException("Id", "El ID debe ser mayor que cero.");
+            }
+
+            try
+            {
+                return await _typeModalityData.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al realizar eliminación permanente de modalidad con ID {Id}", id);
+                throw new ExternalServiceException("Base de datos", "Error al eliminar modalidad permanentemente", ex);
+            }
+        }
+
+        // VALIDACIÓN
+
+        private void ValidateTypeModality(TypeModalityDto dto)
+        {
+            if (dto == null)
+                throw new ValidationException("TypeModality", "El objeto TypeModality no puede ser nulo");
+
+            if (string.IsNullOrWhiteSpace(dto.Name))
+            {
+                _logger.LogWarning("Campo 'Name' vacío al crear/actualizar modalidad.");
+                throw new ValidationException("Name", "El nombre de la modalidad es obligatorio.");
+            }
+        }
+
+        // MAPEOS
+
+        private TypeModalityDto MapToDTO(TypeModality entity) => new TypeModalityDto
+        {
+            Id = entity.Id,
+            Name = entity.Name,
+            Description = entity.Description,
+        };
+
+        private IEnumerable<TypeModalityDto> MapToDTOList(IEnumerable<TypeModality> entities) =>
+            entities.Select(MapToDTO).ToList();
+
+        private TypeModality MapToEntity(TypeModalityDto dto) => new TypeModality
+        {
+            Id = dto.Id,
+            Name = dto.Name,
+            Description = dto.Description,
+        };
     }
 }

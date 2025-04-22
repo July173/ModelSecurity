@@ -142,7 +142,7 @@ namespace Data
         ///</summary>
         ///<param name="id">Id del module</param>
         ///<returns> True si la actualizacion es verdadera</returns>
-        public async Task<bool> PatchRolAsync(int id, string NewName, string newDescription)
+        public async Task<bool> PatchAsync(int id, string NewName, string newDescription)
         {
             try
             {

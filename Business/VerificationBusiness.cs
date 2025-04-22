@@ -118,13 +118,7 @@ namespace Business
 
             try
             {
-                var exists = await _verificationData.GetByIdAsync(dto.Id);
-                if (exists == null)
-                {
-                    _logger.LogInformation("Verificación no encontrada con ID: {Id}", dto.Id);
-                    throw new EntityNotFoundException("Verification", dto.Id);
-                }
-
+              
                 var entity = await _verificationData.GetByIdAsync(dto.Id);
                 if (entity == null)
                     throw new EntityNotFoundException("Verification", dto.Id);

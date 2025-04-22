@@ -148,7 +148,7 @@ namespace Business
         //Metodo para delete logico para activar y desactivar el rol (delete logico con patch)
         public async Task<bool> SetRolActiveAsync(RolStatusDto dto)
         {
-            if (dto == null)
+            if (dto == null)    
             {
                 throw new ValidationException("El dto de estado de rol no puede ser nulo ");
             }

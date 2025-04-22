@@ -151,7 +151,7 @@ namespace Data
         ///</summary>
         ///<param name="id">Id del regional</param>
         ///<returns> True si la actualizacion es verdadera</returns>
-        public async Task<bool> PatchRolAsync(int id, string NewName, string newDescription)
+        public async Task<bool> PatchRegionalAsync(int id, string NewName, string newDescription)
         {
             try
             {

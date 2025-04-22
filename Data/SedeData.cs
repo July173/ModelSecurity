@@ -151,7 +151,7 @@ namespace Data
         ///</summary>
         ///<param name="id">Id de la sede</param>
         ///<returns> True si la actualizacion es verdadera</returns>
-        public async Task<bool> PatchRolAsync(int id, string NewName, string NewAddress, string newPhone, string newEmail)
+        public async Task<bool> PatchSedeAsync(int id, string NewName, string NewAddress, string newPhone, string newEmail)
         {
             try
             {

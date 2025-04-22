@@ -151,7 +151,7 @@ namespace Data
         ///</summary>
         ///<param name="id">Id del aprendiz</param>
         ///<returns> True si la actualizacion es verdadera</returns>
-        public async Task<bool> PatchRolAsync(int id, string NewPreviousProgram)
+        public async Task<bool> PatchAprendizAsync(int id, string NewPreviousProgram)
         {
             try
             {

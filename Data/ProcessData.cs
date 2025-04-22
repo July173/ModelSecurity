@@ -153,7 +153,7 @@ namespace Data
         ///</summary>
         ///<param name="id">Id del process</param>
         ///<returns> True si la actualizacion es verdadera</returns>
-        public async Task<bool> PatchRolAsync(int id, string NewTypeProcess, string newObservation)
+        public async Task<bool> PatchAsync(int id, string NewTypeProcess, string newObservation)
         {
             try
             {

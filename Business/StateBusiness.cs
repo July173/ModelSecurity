@@ -4,6 +4,7 @@ using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using Utilities.Exceptions;
+using ValidationException = Utilities.Exceptions.ValidationException;
 
 namespace Business
 {
@@ -83,6 +84,131 @@ namespace Business
                 throw new ExternalServiceException("Base de datos", "Error al crear el estado", ex);
             }
         }
+
+        // Método para actualizar un estado completamente
+        public async Task<bool> UpdateStateAsync(StateUpdateDto stateUpdateDto)
+        {
+            if (stateUpdateDto == null || stateUpdateDto.Id <= 0)
+            {
+                _logger.LogWarning("DTO de actualización inválido");
+                throw new ValidationException("id", "Datos inválidos para actualizar estado");
+            }
+
+            try
+            {
+                var exists = await _stateData.GetByIdAsync(stateUpdateDto.Id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontró estado con ID: {Id} para actualizar", stateUpdateDto.Id);
+                    throw new EntityNotFoundException("state", stateUpdateDto.Id);
+                }
+
+                // Mapear el DTO a la entidad
+                var entity = await _stateData.GetByIdAsync(stateUpdateDto.Id);
+                if (entity == null)
+                    throw new EntityNotFoundException("state", stateUpdateDto.Id);
+
+                entity.TypeState = stateUpdateDto.TypeState;
+                entity.Description = stateUpdateDto.Description;
+                entity.UpdateDate = DateTime.Now;
+
+                return await _stateData.UpdateAsync(entity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar el estado con ID: {Id}", stateUpdateDto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar el estado con ID {stateUpdateDto.Id}", ex);
+            }
+        }
+
+        // Método para actualizar parcialmente un estado
+        public async Task<bool> UpdatePartialStateAsync(StateUpdateDto stateUpdateDto)
+        {
+            if (stateUpdateDto == null || stateUpdateDto.Id <= 0)
+            {
+                _logger.LogWarning("DTO de actualización parcial inválido");
+                throw new ValidationException("id", "Datos inválidos para actualizar estado");
+            }
+
+            try
+            {
+                var exists = await _stateData.GetByIdAsync(stateUpdateDto.Id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontró estado con ID: {Id} para actualizar parcialmente", stateUpdateDto.Id);
+                    throw new EntityNotFoundException("state", stateUpdateDto.Id);
+                }
+
+                // Actualización parcial (puede que solo se actualicen algunos campos)
+                return await _stateData.PatchAsync(stateUpdateDto.Id, stateUpdateDto.TypeState, stateUpdateDto.Description);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente el estado con ID: {Id}", stateUpdateDto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar parcialmente el estado con ID {stateUpdateDto.Id}", ex);
+            }
+        }
+
+        // Método para eliminar un estado
+        public async Task<bool> DeleteStateAsync(int id)
+        {
+            if (id <= 0)
+            {
+                _logger.LogWarning("Se intentó eliminar un estado con ID inválido: {Id}", id);
+                throw new ValidationException("Id", "El ID debe ser mayor a 0");
+            }
+
+            try
+            {
+                var exists = await _stateData.GetByIdAsync(id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontró estado con ID: {Id} para eliminar", id);
+                    throw new EntityNotFoundException("state", id);
+                }
+
+                return await _stateData.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar el estado con ID: {Id}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al eliminar el estado con ID {id}", ex);
+            }
+        }
+
+        // Método para eliminar un estado lógicamente
+        public async Task<bool> DeleteStateLogicalAsync(int id)
+        {
+            if (id <= 0)
+            {
+                _logger.LogWarning("Se intentó eliminar un estado con ID inválido: {Id}", id);
+                throw new ValidationException("id", "El ID debe ser mayor a 0");
+            }
+
+            try
+            {
+                // Verificar si el estado existe
+                var exists = await _stateData.GetByIdAsync(id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontró estado con ID: {Id} para eliminar lógicamente", id);
+                    throw new EntityNotFoundException("state", id);
+                }
+
+                // Cambiar el estado a "inactivo" (Active = false)
+                exists.Active = false;
+                exists.UpdateDate = DateTime.Now;
+
+                // Actualizar el estado en la base de datos
+                return await _stateData.UpdateAsync(exists);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar lógicamente el estado con ID: {Id}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al eliminar lógicamente el estado con ID {id}", ex);
+            }
+        }
+
 
         // Método para validar el DTO
         private void ValidateState(StateDto stateDto)

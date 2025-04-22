@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOs.State
 {
-    internal class StateUpdateDto
+    public class StateUpdateDto
     {
         public int Id { get; set; }
         public string TypeState { get; set; }
