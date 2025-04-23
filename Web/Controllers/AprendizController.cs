@@ -139,6 +139,103 @@ namespace Web.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+        /// <summary>
+        /// Actualiza completamente un aprendiz existente.
+        /// </summary>
+        [HttpPut("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdateAprendiz(int id, [FromBody] AprendizUpdateDto dto)
+        {
+            if (id != dto.Id)
+                return BadRequest(new { message = "El id de la ruta no coincide con el del cuerpo" });
+            try
+            {
+                var result = await _AprendizBusiness.UpdateAprendizAsync(dto);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Error de validación al actualizar aprendiz");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Aprendiz no encontrado al actualizar: {Id}", dto.Id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al actualizar aprendiz");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Actualiza parcialmente un aprendiz (solo nombre y observación).
+        /// </summary>
+        [HttpPatch]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdatePartialAprendiz([FromBody] AprendizUpdateDto dto)
+        {
+            try
+            {
+                var result = await _AprendizBusiness.UpdateParcialAprendizAsync(dto);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Error de validación en actualización parcial");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Aprendiz no encontrado en actualización parcial: {Id}", dto.Id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error en actualización parcial de aprendiz");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Cambia el estado activo/inactivo de un aprendiz.
+        /// </summary>
+        [HttpDelete("active")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> SetAprendizActive([FromBody] AprendizStatusDto dto)
+        {
+            try
+            {
+                var result = await _AprendizBusiness.SetAprendizActiveAsync(dto);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Error de validación al cambiar estado");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Aprendiz no encontrado al cambiar estado: {Id}", dto.Id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al cambiar estado activo");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
 
     }
 }
