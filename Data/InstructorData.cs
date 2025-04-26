@@ -33,7 +33,9 @@ namespace Data
         /// <returns>Lista de instructores.</returns>
         public async Task<IEnumerable<Instructor>> GetAllAsync()
         {
-            return await _context.Set<Instructor>().ToListAsync();
+            return await _context.Set<Instructor>()
+                 .Where(i => i.Active)//Trae solo los activos
+                 .ToListAsync();
         }
 
         /// <summary>
@@ -116,6 +118,60 @@ namespace Data
                 _logger.LogError($"Error al eliminar el instructor: {ex.Message}");
                 return false;
             }
+        }
+
+
+
+        ///<summary>
+        /// Elimina logicamente un instructor  (desactiva o activia el instructor)
+        /// </summary>
+        /// <param name="id">Id del instructor</param>
+        /// <returns>True si la operacion fue exitosa</returns>
+        public async Task<bool> SetActiveAsync(int id, bool active)
+        {
+            try
+            {
+                var instructor = await _context.Set<Instructor>().FindAsync(id);
+                if (instructor == null)
+                    return false;
+
+                instructor.Active = active; //Desactiva el instructor
+                _context.Entry(instructor).Property(i => i.Active).IsModified = true;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al realizar eliminacion logica del instructor con ID {id}");
+                return false;
+            }
+        }
+
+
+        ///<summary>
+        ///Modifica datos especificos de instructor 
+        ///</summary>
+        ///<param name="id">Id del instructor</param>
+        ///<returns> True si la actualizacion es verdadera</returns>
+        public async Task<bool> PatchInstructorAsync(int id)
+        {
+            try
+            {
+                var instructor = await _context.Set<Instructor>().FindAsync(id);
+                if (instructor == null)
+                    return false;
+
+             
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al modificar datos del instructor con su Id");
+                return false;
+            }
+
         }
     }
 }

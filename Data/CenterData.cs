@@ -33,10 +33,12 @@ namespace Data
         /// <returns>Lista de Center.</returns>
         public async Task<IEnumerable<Center>> GetAllAsync()
         {
-            return await _context.Set<Center>().ToListAsync();
+            return await _context.Set<Center>()
+                           .Where(c => c.Active)//Trae solo los activos
+                           .ToListAsync();
         }
 
-        /// <summary>
+        /// <summary>-
         /// Obtiene un Center por su ID.
         /// </summary>
         /// <param name="id">Identificador único del Center.</param>
@@ -116,6 +118,66 @@ namespace Data
                 _logger.LogError($"Error al eliminar el Center {ex.Message}");
                 return false;
             }
+        }
+
+        ///<summary>
+        /// Elimina logicamente un center (desactiva o activia el center)
+        /// </summary>
+        /// <param name="id">Id del center</param>
+        /// <returns>True si la operacion fue exitosa</returns>
+        public async Task<bool> SetActiveAsync(int id, bool active)
+        {
+            try
+            {
+                var center = await _context.Set<Center>().FindAsync(id);
+                if (center == null)
+                    return false;
+
+                center.Active = active; //Desactiva el center
+                _context.Entry(center).Property(c => c.Active).IsModified = true;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al realizar eliminacion logica del center con ID {id}");
+                return false;
+            }
+        }
+
+
+        ///<summary>
+        ///Modifica datos especificos de center
+        ///</summary>
+        ///<param name="id">Id del center</param>
+        ///<returns> True si la actualizacion es verdadera</returns>
+        public async Task<bool> PatchAsync(int id, string NewName, string newAddress)
+        {
+            try
+            {
+                var center = await _context.Set<Center>().FindAsync(id);
+                if (center == null)
+                    return false;
+
+                center.Address = newAddress;
+                center.Name = NewName;
+             
+
+                _context.Entry(center).Property(c => c.Name).IsModified = true;
+                _context.Entry(center).Property(c => c.Address).IsModified = true;
+
+
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al modificar datos del center con su Id");
+                return false;
+            }
+
         }
     }
 }

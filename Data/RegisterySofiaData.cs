@@ -33,7 +33,9 @@ namespace Data
         /// <returns>Lista de registros de Sofia.</returns>
         public async Task<IEnumerable<RegisterySofia>> GetAllAsync()
         {
-            return await _context.Set<RegisterySofia>().ToListAsync();
+            return await _context.Set<RegisterySofia>()
+                            .Where(r => r.Active)//Trae solo los activos
+                            .ToListAsync();
         }
 
         /// <summary>
@@ -116,6 +118,67 @@ namespace Data
                 _logger.LogError($"Error al eliminar el registro de Sofia: {ex.Message}");
                 return false;
             }
+        }
+
+        ///<summary>
+        /// Elimina logicamente un registerySofia (desactiva o activia el registerySofia)
+        /// </summary>
+        /// <param name="id">Id del registerySofia</param>
+        /// <returns>True si la operacion fue exitosa</returns>
+        public async Task<bool> SetActiveAsync(int id, bool active)
+        {
+            try
+            {
+                var registerySofia = await _context.Set<RegisterySofia>().FindAsync(id);
+                if (registerySofia == null)
+                    return false;
+
+                registerySofia.Active = active; //Desactiva el registerySofia
+                _context.Entry(registerySofia).Property(r => r.Active).IsModified = true;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al realizar eliminacion logica del registerySofia con ID {id}");
+                return false;
+            }
+        }
+
+
+        ///<summary>
+        ///Modifica datos especificos de registerySofia 
+        ///</summary>
+        ///<param name="id">Id del registerySofia</param>
+        ///<returns> True si la actualizacion es verdadera</returns>
+        public async Task<bool> PatchAsync(int id, string NewName, string newDescription, string newDocument)
+        {
+            try
+            {
+                var registerySofia = await _context.Set<RegisterySofia>().FindAsync(id);
+                if (registerySofia == null)
+                    return false;
+
+                registerySofia.Name = NewName;
+                registerySofia.Description = newDescription;
+                registerySofia.Document = newDocument;
+
+                _context.Entry(registerySofia).Property(r => r.Name).IsModified = true;
+                _context.Entry(registerySofia).Property(r => r.Description).IsModified = true;
+                _context.Entry(registerySofia).Property(r => r.Document).IsModified = true;
+
+
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al modificar datos del registerySofia con su Id");
+                return false;
+            }
+
         }
     }
 }

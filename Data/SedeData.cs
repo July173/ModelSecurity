@@ -33,7 +33,9 @@ namespace Data
         /// <returns>Lista de sedes.</returns>
         public async Task<IEnumerable<Sede>> GetAllAsync()
         {
-            return await _context.Set<Sede>().ToListAsync();
+            return await _context.Set<Sede>()
+                           .Where(s => s.Active)//Trae solo los activos
+                           .ToListAsync();
         }
 
         /// <summary>
@@ -116,6 +118,67 @@ namespace Data
                 _logger.LogError($"Error al eliminar la sede: {ex.Message}");
                 return false;
             }
+        }
+
+        ///<summary>
+        /// Elimina logicamente una sede (desactiva o activia la sede)
+        /// </summary>
+        /// <param name="id">Id del a sede</param>
+        /// <returns>True si la operacion fue exitosa</returns>
+        public async Task<bool> SetActiveAsync(int id, bool active)
+        {
+            try
+            {
+                var sede = await _context.Set<Sede>().FindAsync(id);
+                if (sede == null)
+                    return false;
+
+                sede.Active = active; //Desactiva la sede
+                _context.Entry(sede).Property(s => s.Active).IsModified = true;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al realizar eliminacion logica de la sede con ID {id}");
+                return false;
+            }
+        }
+
+        ///<summary>
+        ///Modifica datos especificos de sede 
+        ///</summary>
+        ///<param name="id">Id de la sede</param>
+        ///<returns> True si la actualizacion es verdadera</returns>
+        public async Task<bool> PatchSedeAsync(int id, string NewName, string NewAddress, string newPhone, string newEmail)
+        {
+            try
+            {
+                var sede = await _context.Set<Sede>().FindAsync(id);
+                if (sede == null)
+                    return false;
+
+                sede.Name = NewName;
+                sede.Address = NewAddress;
+                sede.PhoneSede = newPhone;
+                sede.EmailContact = newEmail;
+
+                _context.Entry(sede).Property(s => s.Name).IsModified = true;
+                _context.Entry(sede).Property(s => s.EmailContact).IsModified = true;
+                _context.Entry(sede).Property(s => s.Address).IsModified = true;
+                _context.Entry(sede).Property(s => s.PhoneSede).IsModified = true;
+
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al modificar datos de la  sede con su Id");
+                return false;
+            }
+
         }
     }
 }

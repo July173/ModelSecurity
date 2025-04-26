@@ -33,7 +33,9 @@ namespace Data
         /// <returns>Lista de aprendices.</returns>
         public async Task<IEnumerable<Aprendiz>> GetAllAsync()
         {
-            return await _context.Set<Aprendiz>().ToListAsync();
+            return await _context.Set<Aprendiz>()
+              .Where(a => a.Active)//Trae solo los activos
+              .ToListAsync();
         }
 
         /// <summary>
@@ -116,6 +118,62 @@ namespace Data
                 _logger.LogError($"Error al eliminar el Aprendiz {ex.Message}");
                 return false;
             }
+        }
+
+        ///<summary>
+        /// Elimina logicamente un aprendiz (desactiva o activia el rol)
+        /// </summary>
+        /// <param name="id">Id del aprendiz</param>
+        /// <returns>True si la operacion fue exitosa</returns>
+        public async Task<bool> SetActiveAsync(int id, bool active)
+        {
+            try
+            {
+                var aprendiz = await _context.Set<Aprendiz>().FindAsync(id);
+                if (aprendiz == null)
+                    return false;
+
+                aprendiz.Active = active; //Desactiva el rol
+                _context.Entry(aprendiz).Property(a => a.Active).IsModified = true;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al realizar eliminacion logica del aprendiz con ID {id}");
+                return false;
+            }
+        }
+
+        ///<summary>
+        ///Modifica datos especificos de aprendiz 
+        ///</summary>
+        ///<param name="id">Id del aprendiz</param>
+        ///<returns> True si la actualizacion es verdadera</returns>
+        public async Task<bool> PatchAprendizAsync(int id, string NewPreviousProgram)
+        {
+            try
+            {
+                var aprendiz = await _context.Set<Aprendiz>().FindAsync(id);
+                if (aprendiz == null)
+                    return false;
+
+                aprendiz.PreviousProgram = NewPreviousProgram;
+
+                _context.Entry(aprendiz).Property(a => a.PreviousProgram).IsModified = true;
+
+
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al modificar datos del aprendiz con su Id");
+                return false;
+            }
+
         }
     }
 }

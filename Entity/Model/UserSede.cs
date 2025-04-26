@@ -9,7 +9,6 @@ namespace Entity.Model
     public class UserSede
     {
         public int Id { get; set; }
-        public string StatusProcedure { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
         public int SedeId { get; set; }

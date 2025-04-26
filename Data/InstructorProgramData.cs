@@ -74,25 +74,7 @@ namespace Data
             }
         }
 
-        /// <summary>
-        /// Actualiza un programa de instructor existente en la base de datos.
-        /// </summary>
-        /// <param name="instructorProgram">Objeto con la información actualizada.</param>
-        /// <returns>True si la operación fue exitosa, False en caso contrario.</returns>
-        public async Task<bool> UpdateAsync(InstructorProgram instructorProgram)
-        {
-            try
-            {
-                _context.Set<InstructorProgram>().Update(instructorProgram);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error al actualizar el programa de instructor: {ex.Message}");
-                return false;
-            }
-        }
+      
 
         /// <summary>
         /// Elimina un programa de instructor en la base de datos.

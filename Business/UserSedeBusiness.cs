@@ -1,10 +1,10 @@
 ﻿using Data;
-using Entity.DTOautogestion;
-using Entity.DTOs;
+using Entity.DTOs.UserSede;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using Utilities.Exceptions;
+using ValidationException = Utilities.Exceptions.ValidationException;
 
 namespace Business
 {
@@ -85,6 +85,37 @@ namespace Business
             }
         }
 
+
+
+        //Metodo para borrar roles permanente (Delete permanente) 
+
+        public async Task<bool> DeleteUserSedeAsync(int id)
+        {
+            if (id <= 0)
+            {
+                _logger.LogWarning("Se intento eliminar un userSede con Id invalido : {userSedeId}", id);
+                throw new ValidationException("Id", "El id del userSede debe ser mayor a 0");
+            }
+            try
+            {
+                var exists = await _userSedeData.GetByIdAsync(id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontro el userSede con ID {userSedeId} para eliminar", id);
+                    throw new EntityNotFoundException("userSede", id);
+                }
+                return await _userSedeData.DeleteAsync(id);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar el userSede con ID {userSedeid}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al elimiar el userSede con ID {id}", ex);
+
+            }
+        }
+
+
         // Método para validar el DTO
         private void ValidateUserSede(UserSedeDto userSedeDto)
         {
@@ -114,7 +145,6 @@ namespace Business
                 Id = userSede.Id,
                 UserId = userSede.UserId,
                 SedeId = userSede.SedeId,
-                StatusProcedure = userSede.StatusProcedure,
                 
             };
         }
@@ -126,7 +156,6 @@ namespace Business
                 Id = userSedeDto.Id,
                 UserId = userSedeDto.UserId,
                 SedeId = userSedeDto.SedeId,
-                StatusProcedure = userSedeDto.StatusProcedure,
             
             };
         }

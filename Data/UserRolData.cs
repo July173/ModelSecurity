@@ -37,6 +37,11 @@ namespace Data
             }
         }
 
+        /// <summary>
+        /// Crea un nuevo userRol  en la base de datos 
+        /// </summary>
+        /// <param name="userRol">instancia del userRol a crear.</param>
+        /// <returns>el userRol creado</returns>
         public async Task<UserRol> CreateAsync(UserRol rolUser)
         {
             try
@@ -52,21 +57,15 @@ namespace Data
             }
         }
 
-        public async Task<bool> UpdateAsync(UserRol rolUser)
-        {
-            try
-            {
-                _context.Set<UserRol>().Update(rolUser);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error al actualizar la relación Rol-Usuario {ex.Message}");
-                return false;
-            }
-        }
 
+
+
+
+        /// <summary>
+        /// Elimina un userRol permanente en la base de datos 
+        /// </summary>
+        /// <param name="id">Identificador unico del userRol a eliminar</param>
+        /// <returns>True si la eliminacion fue exitosa, False en caso contrario.</returns>
         public async Task<bool> DeleteAsync(int id)
         {
             try

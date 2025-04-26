@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Entity.Contexts;
 using Entity.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Process = Entity.Model.Process;
 
 namespace Data
 {
@@ -33,7 +35,9 @@ namespace Data
         /// <returns>Lista de procesos.</returns>
         public async Task<IEnumerable<Process>> GetAllAsync()
         {
-            return await _context.Set<Process>().ToListAsync();
+            return await _context.Set<Process>()
+                            .Where(p => p.Active)//Trae solo los activos
+                            .ToListAsync();
         }
 
         /// <summary>
@@ -116,6 +120,64 @@ namespace Data
                 _logger.LogError($"Error al eliminar el proceso: {ex.Message}");
                 return false;
             }
+        }
+
+        ///<summary>
+        /// Elimina logicamente un process (desactiva o activia el rol)
+        /// </summary>
+        /// <param name="id">Id del process</param>
+        /// <returns>True si la operacion fue exitosa</returns>
+        public async Task<bool> SetActiveAsync(int id, bool active)
+        {
+            try
+            {
+                var process = await _context.Set<Process>().FindAsync(id);
+                if (process == null)
+                    return false;
+
+                process.Active = active; //Desactiva el process
+                _context.Entry(process).Property(p => p.Active).IsModified = true;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al realizar eliminacion logica del process con ID {id}");
+                return false;
+            }
+        }
+
+        ///<summary>
+        ///Modifica datos especificos de process
+        ///</summary>
+        ///<param name="id">Id del process</param>
+        ///<returns> True si la actualizacion es verdadera</returns>
+        public async Task<bool> PatchAsync(int id, string NewTypeProcess, string newObservation)
+        {
+            try
+            {
+                var process = await _context.Set<Process>().FindAsync(id);
+                if (process == null)
+                    return false;
+
+                process.TypeProcess = NewTypeProcess;
+                process.Observation = newObservation;
+    
+                _context.Entry(process).Property(p => p.TypeProcess).IsModified = true;
+                _context.Entry(process).Property(p => p.Observation).IsModified = true;
+
+
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al modificar datos del process con su Id");
+                return false;
+            }
+
         }
     }
 }

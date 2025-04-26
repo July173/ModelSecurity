@@ -33,7 +33,9 @@ namespace Data
         /// <returns>Lista de registros de Stade.</returns>
         public async Task<IEnumerable<State>> GetAllAsync()
         {
-            return await _context.Set<State>().ToListAsync();
+            return await _context.Set<State>()
+                            .Where(s => s.Active)//Trae solo los activos
+                            .ToListAsync();
         }
 
         /// <summary>
@@ -116,6 +118,65 @@ namespace Data
                 _logger.LogError($"Error al eliminar el registro de Stade: {ex.Message}");
                 return false;
             }
+        }
+
+        ///<summary>
+        /// Elimina logicamente un state (desactiva o activia el State)
+        /// </summary>
+        /// <param name="id">Id del State</param>
+        /// <returns>True si la operacion fue exitosa</returns>
+        public async Task<bool> SetActiveAsync(int id, bool active)
+        {
+            try
+            {
+                var state = await _context.Set<State>().FindAsync(id);
+                if (state == null)
+                    return false;
+
+                state.Active = active; //Desactiva el state
+                _context.Entry(state).Property(s => s.Active).IsModified = true;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al realizar eliminacion logica del state con ID {id}");
+                return false;
+            }
+        }
+
+
+        ///<summary>
+        ///Modifica datos especificos de state
+        ///</summary>
+        ///<param name="id">Id del state</param>
+        ///<returns> True si la actualizacion es verdadera</returns>
+        public async Task<bool> PatchAsync(int id, string NewTypeState, string newDescription)
+        {
+            try
+            {
+                var state = await _context.Set<State>().FindAsync(id);
+                if (state == null)
+                    return false;
+
+                state.TypeState = NewTypeState;
+                state.Description = newDescription;
+
+                _context.Entry(state).Property(r => r.TypeState).IsModified = true;
+                _context.Entry(state).Property(r => r.Description).IsModified = true;
+
+
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al modificar datos del state con su Id");
+                return false;
+            }
+
         }
     }
 }

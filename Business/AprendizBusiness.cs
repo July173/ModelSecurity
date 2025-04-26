@@ -1,9 +1,10 @@
 ﻿using Data;
-using Entity.DTOautogestion;
+using Entity.DTOs.Aprendiz;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using Utilities.Exceptions;
+using ValidationException = Utilities.Exceptions.ValidationException;
 
 namespace Business
 {
@@ -81,6 +82,130 @@ namespace Business
             {
                 _logger.LogError(ex, "Error al crear nuevo aprendiz: {Name}", aprendizDto?.PreviousProgram ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el aprendiz", ex);
+            }
+        }
+
+
+        /// <summary>
+        /// Método para actualizar datos parcialmente (patch).
+        /// </summary>
+        public async Task<bool> UpdateParcialAprendizAsync(AprendizUpdateDto dto)
+        {
+            if (dto == null || dto.Id <= 0)
+            {
+                _logger.LogWarning("DTO de actualización de aprendiz inválido");
+                throw new ValidationException("id", "Datos inválidos para actualizar aprendiz");
+            }
+
+            try
+            {
+                var exists = await _aprendizData.GetByIdAsync(dto.Id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontró el aprendiz con ID {AprendizId} para actualizar", dto.Id);
+                    throw new EntityNotFoundException("Aprendiz", dto.Id);
+                }
+
+                return await _aprendizData.PatchAprendizAsync(dto.Id, dto.PreviousProgram);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al actualizar parcialmente el aprendiz con ID {dto.Id}");
+                throw new ExternalServiceException("Base de datos", "Error al actualizar el aprendiz", ex);
+            }
+        }
+
+        /// <summary>
+        /// Método para actualizar los datos en su totalidad con (put).
+        /// </summary>
+        public async Task<bool> UpdateAprendizAsync(AprendizUpdateDto dto)
+        {
+            if (dto == null || dto.Id <= 0)
+            {
+                _logger.LogWarning("DTO de reemplazo de aprendiz inválido");
+                throw new ValidationException("id", "Datos inválidos para reemplazar aprendiz");
+            }
+
+            try
+            {
+                var entity = await _aprendizData.GetByIdAsync(dto.Id);
+                if (entity == null)
+                {
+                    _logger.LogInformation("No se encontró el aprendiz con ID {AprendizId} para reemplazar", dto.Id);
+                    throw new EntityNotFoundException("Aprendiz", dto.Id);
+                }
+
+                // Modifica sus campos directamente
+                entity.PreviousProgram = dto.PreviousProgram;
+
+                return await _aprendizData.UpdateAsync(entity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al reemplazar el aprendiz con ID {dto.Id}");
+                throw new ExternalServiceException("Base de datos", "Error al reemplazar el aprendiz", ex);
+            }
+        }
+
+        /// <summary>
+        /// Método para delete lógico para activar y desactivar el aprendiz (patch).
+        /// </summary>
+        public async Task<bool> SetAprendizActiveAsync(AprendizStatusDto dto)
+        {
+            if (dto == null)
+            {
+                throw new ValidationException("El dto de estado de aprendiz no puede ser nulo");
+            }
+            if (dto.Id <= 0)
+            {
+                _logger.LogWarning("Se intentó activar/desactivar un aprendiz con ID inválido: {AprendizId}", dto.Id);
+                throw new ValidationException("id", "El ID del aprendiz debe ser mayor a cero");
+            }
+
+            try
+            {
+                var exists = await _aprendizData.GetByIdAsync(dto.Id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontró el aprendiz con ID {AprendizId} para cambiar su estado activo", dto.Id);
+                    throw new EntityNotFoundException("Aprendiz", dto.Id);
+                }
+
+                return await _aprendizData.SetActiveAsync(dto.Id, dto.Active);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al cambiar el estado activo del aprendiz con ID {AprendizId}", dto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar el estado activo del aprendiz con ID {dto.Id}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Método para eliminar permanentemente un aprendiz (delete físico).
+        /// </summary>
+        public async Task<bool> DeleteAprendizAsync(int id)
+        {
+            if (id <= 0)
+            {
+                _logger.LogWarning("Se intentó eliminar un aprendiz con ID inválido: {AprendizId}", id);
+                throw new ValidationException("id", "El ID del aprendiz debe ser mayor a cero");
+            }
+
+            try
+            {
+                var exists = await _aprendizData.GetByIdAsync(id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("No se encontró el aprendiz con ID {AprendizId} para eliminar", id);
+                    throw new EntityNotFoundException("Aprendiz", id);
+                }
+
+                return await _aprendizData.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar el aprendiz con ID {AprendizId}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al eliminar el aprendiz con ID {id}", ex);
             }
         }
 

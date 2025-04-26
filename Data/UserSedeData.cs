@@ -74,25 +74,7 @@ namespace Data
             }
         }
 
-        /// <summary>
-        /// Actualiza un registro de UserSede existente en la base de datos.
-        /// </summary>
-        /// <param name="userSede">Objeto con la información actualizada.</param>
-        /// <returns>True si la operación fue exitosa, False en caso contrario.</returns>
-        public async Task<bool> UpdateAsync(UserSede userSede)
-        {
-            try
-            {
-                _context.Set<UserSede>().Update(userSede);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error al actualizar el registro de UserSede: {ex.Message}");
-                return false;
-            }
-        }
+    
 
         /// <summary>
         /// Elimina un registro de UserSede en la base de datos.

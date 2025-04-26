@@ -3,8 +3,8 @@ using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using Utilities.Exceptions;
-using Entity.DTOs;
 using ValidationException = Utilities.Exceptions.ValidationException;
+using Entity.DTOs.ChangeLog;
 
 namespace Business
 {

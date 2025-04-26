@@ -1,5 +1,5 @@
 ﻿using Business;
-using Entity.DTOautogestion;
+using Entity.DTOs.Instructor;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -106,5 +106,134 @@ namespace Web.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+        /// <summary>
+        /// Elimina un instructor por su ID.
+        /// </summary>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> DeleteInstructor(int id)
+        {
+            try
+            {
+                var result = await _instructorBusiness.DeleteInstructorAsync(id);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "ID inválido al intentar eliminar: {Id}", id);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Instructor no encontrado al eliminar: {Id}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al eliminar instructor");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+        /// <summary>
+        /// Actualiza completamente un instructor existente.
+        /// </summary>
+        [HttpPut("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdateInstructor(int id, [FromBody] InstructorUpdateDto dto)
+        {
+            if (id != dto.Id)
+                return BadRequest(new { message = "El id de la ruta no coincide con el del cuerpo" });
+            try
+            {
+                var result = await _instructorBusiness.UpdateInstructorAsync(dto);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Error de validación al actualizar instructor");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Instructor no encontrado al actualizar: {Id}", dto.Id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al actualizar instructor");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Cambia el estado activo/inactivo de un instructor.
+        /// </summary>
+        [HttpDelete("active")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> SetInstructorActive([FromBody] InstructorStatusDto dto)
+        {
+            try
+            {
+                var result = await _instructorBusiness.SetInstructorActiveAsync(dto);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Error de validación al cambiar estado");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Instructor no encontrado al cambiar estado: {Id}", dto.Id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al cambiar estado activo");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+        /// <summary>
+        /// Actualiza parcialmente un instructor (solo nombre y descripción).
+        /// </summary>
+        [HttpPatch]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdatePartialInstructor([FromBody] InstructorUpdateDto dto)
+        {
+            try
+            {
+                var result = await _instructorBusiness.UpdateParcialInstructorAsync(dto);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Error de validación en actualización parcial");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Instructor no encontrado en actualización parcial: {Id}", dto.Id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error en actualización parcial de instructor");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
     }
 }

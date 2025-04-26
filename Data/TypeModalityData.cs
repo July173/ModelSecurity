@@ -33,7 +33,9 @@ namespace Data
         /// <returns>Lista de modalidades.</returns>
         public async Task<IEnumerable<TypeModality>> GetAllAsync()
         {
-            return await _context.Set<TypeModality>().ToListAsync();
+            return await _context.Set<TypeModality>()
+                           .Where(t => t.Active)//Trae solo los activos
+                           .ToListAsync();
         }
 
         /// <summary>
@@ -116,6 +118,65 @@ namespace Data
                 _logger.LogError($"Error al eliminar la modalidad: {ex.Message}");
                 return false;
             }
+        }
+
+
+        ///<summary>
+        /// Elimina logicamente un typeModality (desactiva o activia el typeModality)
+        /// </summary>
+        /// <param name="id">Id del typeModality</param>
+        /// <returns>True si la operacion fue exitosa</returns>
+        public async Task<bool> SetActiveAsync(int id, bool active)
+        {
+            try
+            {
+                var typeModality = await _context.Set<TypeModality>().FindAsync(id);
+                if (typeModality == null)
+                    return false;
+
+                typeModality.Active = active; //Desactiva el typeModality
+                _context.Entry(typeModality).Property(t => t.Active).IsModified = true;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al realizar eliminacion logica del typeModality con ID {id}");
+                return false;
+            }
+        }
+
+        ///<summary>
+        ///Modifica datos especificos de typeModality
+        ///</summary>
+        ///<param name="id">Id del typeModality</param>
+        ///<returns> True si la actualizacion es verdadera</returns>
+        public async Task<bool> PatchRolAsync(int id, string NewName, string newDescription)
+        {
+            try
+            {
+                var typeModality = await _context.Set<TypeModality>().FindAsync(id);
+                if (typeModality == null)
+                    return false;
+
+                typeModality.Name = NewName;
+                typeModality.Description = newDescription;
+
+                _context.Entry(typeModality).Property(r => r.Name).IsModified = true;
+                _context.Entry(typeModality).Property(r => r.Description).IsModified = true;
+
+
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al modificar datos del typeModality con su Id");
+                return false;
+            }
+
         }
     }
 }

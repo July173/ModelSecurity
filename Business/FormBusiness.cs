@@ -1,9 +1,10 @@
 ﻿using Data;
-using Entity.DTOautogestion;
+using Entity.DTOs.Form;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using Utilities.Exceptions;
+using ValidationException = Utilities.Exceptions.ValidationException;
 
 namespace Business
 {
@@ -84,6 +85,130 @@ namespace Business
                 throw new ExternalServiceException("Base de datos", "Error al crear el formulario", ex);
             }
         }
+
+        public async Task<bool> SetFormActiveAsync(FormStatusDto dto)
+        {
+            if (dto == null)
+                throw new ValidationException("El DTO de estado de formulario no puede ser nulo");
+
+            if (dto.Id <= 0)
+            {
+                _logger.LogWarning("ID inválido para cambiar estado activo de formulario: {Id}", dto.Id);
+                throw new ValidationException("Id", "El ID del formulario debe ser mayor a 0");
+            }
+
+            try
+            {
+                var entity = await _formData.GetByidAsync(dto.Id);
+                if (entity == null)
+                {
+                    _logger.LogInformation("Formulario no encontrado con ID {Id} para cambiar estado", dto.Id);
+                    throw new EntityNotFoundException("Form", dto.Id);
+                }
+
+                // Establecer DeleteDate si se va a desactivar (borrado lógico)
+                if (!dto.Active)
+                {
+                    entity.DeleteDate = DateTime.Now;
+                }
+                else
+                {
+                    entity.DeleteDate = null; // Reactivación: eliminamos la marca de eliminación
+                }
+
+                return await _formData.SetActiveAsync(dto.Id, dto.Active);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al cambiar estado activo de formulario con ID {Id}", dto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar estado activo de formulario con ID {dto.Id}", ex);
+            }
+        }
+
+        public async Task<bool> DeleteFormAsync(int id)
+        {
+            if (id <= 0)
+            {
+                _logger.LogWarning("Se intentó eliminar un formulario con ID inválido: {Id}", id);
+                throw new ValidationException("Id", "El ID debe ser mayor a 0");
+            }
+
+            try
+            {
+                var exists = await _formData.GetByidAsync(id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("Formulario no encontrado con ID {Id} para eliminar", id);
+                    throw new EntityNotFoundException("Form", id);
+                }
+
+                return await _formData.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar formulario con ID {Id}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al eliminar formulario con ID {id}", ex);
+            }
+        }
+
+        public async Task<bool> UpdateParcialFormAsync(FormUpdateDto dto)
+        {
+            if (dto == null || dto.Id <= 0)
+            {
+                _logger.LogWarning("DTO de actualización parcial inválido");
+                throw new ValidationException("Id", "Datos inválidos para actualizar formulario");
+            }
+
+            try
+            {
+                var exists = await _formData.GetByidAsync(dto.Id);
+                if (exists == null)
+                {
+                    _logger.LogInformation("Formulario no encontrado con ID: {Id}", dto.Id);
+                    throw new EntityNotFoundException("Form", dto.Id);
+                }
+
+                return await _formData.PatchAsync(dto.Id, dto.Name, dto.Description, dto.Cuestion, dto.TypeCuestion, dto.Answer);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente el formulario con ID {Id}", dto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar formulario con ID {dto.Id}", ex);
+            }
+        }
+
+        public async Task<bool> UpdateFormAsync(FormUpdateDto dto)
+        {
+            if (dto == null || dto.Id <= 0)
+            {
+                _logger.LogWarning("DTO de actualización inválido");
+                throw new Utilities.Exceptions.ValidationException("id", "Datos inválidos para actualizar formulario");
+            }
+
+            try
+            {
+                var entity = await _formData.GetByidAsync(dto.Id);
+                if (entity == null)
+                    throw new EntityNotFoundException("Form", dto.Id);
+
+                // Modifica sus campos directamente
+                entity.Name = dto.Name;
+                entity.Description = dto.Description;
+                entity.Cuestion = dto.Cuestion;
+                entity.TypeCuestion = dto.TypeCuestion;
+                entity.Answer = dto.Answer;
+                entity.UpdateDate = DateTime.Now;
+
+                return await _formData.UpdateAsync(entity); //actualizas la misma instancia rastreada
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar el formulario con ID {Id}", dto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar formulario con ID {dto.Id}", ex);
+            }
+        }
+
+
 
         // Método para validar el DTO
         private void ValidateForm(FormDto formDto)
