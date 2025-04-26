@@ -217,7 +217,7 @@ namespace Business
                 Email = personDto.Email,
                 TypeIdentification = personDto.TypeIdentification,
                 NumberIdentification = personDto.NumberIdentification,
-                Signing = personDto.Signing,
+                Signing = personDto.Signing,    
                 Active = personDto.Active,
             };
         }

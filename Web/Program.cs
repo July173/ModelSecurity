@@ -122,11 +122,15 @@ builder.Services.AddOpenApi();
 //Agregar CORS 
 var OrigenesPermitidos = builder.Configuration.GetValue<string>
     ("OrigenesPermitidos")!.Split(',');
+
 builder.Services.AddCors(Opciones =>
 {
-    Opciones.AddDefaultPolicy(politica =>
+    Opciones.AddPolicy("AllowSpecificOrigins", politica =>
     {
-        politica.WithOrigins(OrigenesPermitidos).AllowAnyHeader().AllowAnyMethod();
+        politica.WithOrigins(OrigenesPermitidos)
+        .WithOrigins("http://127.0.0.1:5500")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
     });
 });
 
@@ -139,13 +143,14 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 
+app.UseCors("AllowSpecificOrigins");
 app.UseAuthorization();
 
 app.MapControllers();
