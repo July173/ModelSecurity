@@ -14,7 +14,6 @@ namespace Entity.DTOs.Person
         public string FirstLastName { get; set; }
         public string SecondLastName { get; set; }
         public long PhoneNumber { get; set; }
-        public string Email { get; set; }
      
         public long NumberIdentification { get; set; }
      

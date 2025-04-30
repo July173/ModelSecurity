@@ -13,7 +13,7 @@ namespace Entity.Model
         public string? Description { get; set; }
         public bool Active { get; set; }
 
-        public ICollection<RolForm> RolForm { get; set; }
+        public ICollection<RolFormPermission> RolFormPermissions { get; set; }
 
         public ICollection<UserRol> UserRol  { get; set; }
 

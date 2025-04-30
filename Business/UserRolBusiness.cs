@@ -1,5 +1,4 @@
 ﻿using Data;
-using Entity.DTOs;
 using Entity.DTOs.UserRol;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
@@ -15,9 +14,9 @@ namespace Business
     public class UserRolBusiness
     {
         private readonly UserRolData _rolUserData;
-        private readonly ILogger<UserRolData> _logger;
+        private readonly ILogger<UserRolBusiness> _logger;
 
-        public UserRolBusiness(UserRolData rolUserData, ILogger<UserRolData> logger)
+        public UserRolBusiness(UserRolData rolUserData, ILogger<UserRolBusiness> logger)
         {
             _rolUserData = rolUserData;
             _logger = logger;
@@ -29,9 +28,7 @@ namespace Business
             try
             {
                 var rolUsers = await _rolUserData.GetAllAsync();
-
                 return MapToDTOList(rolUsers);
-
             }
             catch (Exception ex)
             {
@@ -75,6 +72,7 @@ namespace Business
                 ValidateRolUser(rolUserDto);
 
                 var rolUser = MapToEntity(rolUserDto);
+
                 var rolUserCreado = await _rolUserData.CreateAsync(rolUser);
 
                 return MapToDTO(rolUserCreado);
@@ -86,31 +84,85 @@ namespace Business
             }
         }
 
-        //Metodo para borrar userRol permanente (Delete permanente) 
+        // Método para actualizar una relación entre rol y usuario existente.
+        public async Task<bool> UpdateRolUserAsync(UserRolDto rolUserDto)
+        {
+            ValidateRolUser(rolUserDto);
 
+            try
+            {
+                var rolUser = MapToEntity(rolUserDto);
+                var result = await _rolUserData.UpdateAsync(rolUser);
+
+                if (!result)
+                {
+                    _logger.LogWarning("No se pudo actualizar la relación rol-usuario con ID {RolUserId}", rolUserDto.Id);
+                    throw new EntityNotFoundException("RolUser", rolUserDto.Id);
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar la relación rol-usuario con ID {RolUserId}", rolUserDto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar la relación rol-usuario con ID {rolUserDto.Id}", ex);
+            }
+        }
+
+        // Método para actualizar parcialmente una relación entre rol y usuario.
+        public async Task<bool> UpdatePartialRolUserAsync(int id, Dictionary<string, object> updatedFields)
+        {
+            if (id <= 0)
+            {
+                throw new ValidationException("id", "El ID de la relación rol-usuario debe ser mayor que cero");
+            }
+
+            if (updatedFields == null || updatedFields.Count == 0)
+            {
+                throw new ValidationException("updatedFields", "Debe proporcionar al menos un campo para actualizar.");
+            }
+
+            try
+            {
+                var result = await _rolUserData.UpdatePartialAsync(id, updatedFields);
+
+                if (!result)
+                {
+                    throw new EntityNotFoundException("RolUser", id);
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente la relación rol-usuario con ID {RolUserId}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar parcialmente la relación rol-usuario con ID {id}", ex);
+            }
+        }
+
+        // Método para eliminar una relación entre rol y usuario.
         public async Task<bool> DeleteRolUserAsync(int id)
         {
             if (id <= 0)
             {
-                _logger.LogWarning("Se intento eliminar un userRol con Id invalido : {userRolId}", id);
-                throw new ValidationException("Id", "El id del userRol debe ser mayor a 0");
+                throw new ValidationException("id", "El ID de la relación rol-usuario debe ser mayor que cero");
             }
+
             try
             {
-                var exists = await _rolUserData.GetByIdAsync(id);
-                if (exists == null)
-                {
-                    _logger.LogInformation("No se encontro el rol con ID {userRolId} para eliminar", id);
-                    throw new EntityNotFoundException("userRol", id);
-                }
-                return await _rolUserData.DeleteAsync(id);
+                var result = await _rolUserData.DeleteAsync(id);
 
+                if (!result)
+                {
+                    throw new EntityNotFoundException("RolUser", id);
+                }
+
+                return result;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al eliminar el rol con ID {userRolid}", id);
-                throw new ExternalServiceException("Base de datos", $"Error al elimiar el userRol con ID {id}", ex);
-
+                _logger.LogError(ex, "Error al eliminar la relación rol-usuario con ID {RolUserId}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al eliminar la relación rol-usuario con ID {id}", ex);
             }
         }
 
@@ -135,36 +187,37 @@ namespace Business
             }
         }
 
-        //Metodo para mapear de UserRol a UserRolDto
-        private UserRolDto MapToDTO(UserRol userRol)
+        // Método para mapear de UserRol a UserRolDto
+        private UserRolDto MapToDTO(UserRol rolUser)
         {
             return new UserRolDto
             {
-                Id = userRol.Id,
-                UserId = userRol.UserId,
-                RolId = userRol.RolId
+                Id = rolUser.Id,
+                UserId = rolUser.UserId,
+                RolId = rolUser.RolId
             };
         }
-        //Metodo para mapear de UserRolDto a UserRol
-        private UserRol MapToEntity(UserRolDto userRolDto)
+
+        // Método para mapear de UserRolDto a UserRol
+        private UserRol MapToEntity(UserRolDto rolUserDto)
         {
             return new UserRol
             {
-                Id = userRolDto.Id,
-                UserId = userRolDto.UserId,
-                RolId = userRolDto.RolId
+                Id = rolUserDto.Id,
+                UserId = rolUserDto.UserId,
+                RolId = rolUserDto.RolId
             };
         }
-        //Metodo para mapear una lista de UserRol a una lista de UserRolDto
-        private IEnumerable<UserRolDto> MapToDTOList(IEnumerable<UserRol> userRoles)
+
+        // Método para mapear una lista de UserRol a una lista de UserRolDto
+        private IEnumerable<UserRolDto> MapToDTOList(IEnumerable<UserRol> rolUsers)
         {
-            var userRolesDto = new List<UserRolDto>();
-            foreach (var userRol in userRoles)
+            var rolUsersDTO = new List<UserRolDto>();
+            foreach (var rolUser in rolUsers)
             {
-                userRolesDto.Add(MapToDTO(userRol));
+                rolUsersDTO.Add(MapToDTO(rolUser));
             }
-            return userRolesDto;
+            return rolUsersDTO;
         }
     }
 }
-

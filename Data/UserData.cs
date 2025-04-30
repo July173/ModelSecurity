@@ -171,6 +171,19 @@ namespace Data
 
         }
 
+
+        public async Task<User> GetByEmailOrUsernameAsync(string email, string username)
+        {
+            return await _context.User.FirstOrDefaultAsync(u =>
+                (u.Email.ToLower() == email.ToLower() || u.Username.ToLower() == username.ToLower()) );
+        }
+
+
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await _context.User.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
     }
 }
 

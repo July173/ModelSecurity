@@ -1,9 +1,7 @@
 ﻿using Data;
-using Entity.DTOs.Rol;
 using Entity.DTOs.User;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
-using System.ComponentModel.DataAnnotations;
 using Utilities.Exceptions;
 using ValidationException = Utilities.Exceptions.ValidationException;
 
@@ -23,15 +21,12 @@ namespace Business
             _logger = logger;
         }
 
-        // Método para obtener todos los usuarios como DTOs
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
             try
             {
                 var users = await _userData.GetAllAsync();
                 return MapToDTOList(users);
-
-                
             }
             catch (Exception ex)
             {
@@ -40,13 +35,12 @@ namespace Business
             }
         }
 
-        // Método para obtener un usuario por ID como DTO
         public async Task<UserDto> GetUserByIdAsync(int id)
         {
             if (id <= 0)
             {
                 _logger.LogWarning("Se intentó obtener un usuario con ID inválido: {UserId}", id);
-                throw new Utilities.Exceptions.ValidationException("id", "El ID del usuario debe ser mayor que cero");
+                throw new ValidationException("id", "El ID del usuario debe ser mayor que cero");
             }
 
             try
@@ -59,7 +53,6 @@ namespace Business
                 }
 
                 return MapToDTO(user);
-               
             }
             catch (Exception ex)
             {
@@ -68,18 +61,23 @@ namespace Business
             }
         }
 
-        // Método para crear un usuario desde un DTO
         public async Task<UserDto> CreateUserAsync(UserDto userDto)
         {
             try
             {
                 ValidateUser(userDto);
 
-                var user = MapToEntity(userDto);
+                var existingUser = await _userData.GetByEmailOrUsernameAsync(userDto.Email, userDto.Username);
+                if (existingUser != null)
+                {
+                    throw new ValidationException("Usuario", "El correo electrónico o nombre de usuario ya está registrado.");
+                }
 
+                var user = MapToEntity(userDto);
+                user.Password = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
+                user.Active = true;
 
                 var userCreado = await _userData.CreateAsync(user);
-
                 return MapToDTO(userCreado);
             }
             catch (Exception ex)
@@ -89,21 +87,20 @@ namespace Business
             }
         }
 
-
-        //Metodo para actualizar datos parcialmente (patch)
         public async Task<bool> UpdateParcialUserAsync(UserUpdateDto dto)
         {
             if (dto == null || dto.Id <= 0)
             {
-                _logger.LogWarning("DTO de actualiazacion de user invalido");
-                throw new Utilities.Exceptions.ValidationException("Id", "Datos invalidos para actualizar user");
+                _logger.LogWarning("DTO de actualización parcial de usuario inválido");
+                throw new ValidationException("Id", "Datos inválidos para actualizar el usuario");
             }
+
             try
             {
                 var exists = await _userData.GetByIdAsync(dto.Id);
                 if (exists == null)
                 {
-                    _logger.LogInformation("No se encontro el user con Id {userId} para actualizar", dto.Id);
+                    _logger.LogInformation("No se encontró el usuario con Id {UserId} para actualizar", dto.Id);
                     throw new EntityNotFoundException("user", dto.Id);
                 }
 
@@ -111,125 +108,126 @@ namespace Business
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error al actualizar el user con ID {dto.Id}");
-                throw new ExternalServiceException("Base de datos", $"Error al actualizar el user", ex);
+                _logger.LogError(ex, "Error al actualizar parcialmente el usuario con ID {UserId}", dto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar el usuario", ex);
             }
         }
 
-        //Metodo para actualizar los datos en su totalidad con (put)
-        public async Task<bool> UpdateUserAsync(UserUpdateDto Updatedto)
+        public async Task<bool> UpdateUserAsync(UserUpdateDto dto)
         {
-            if (Updatedto == null || Updatedto.Id <= 0)
+            if (dto == null || dto.Id <= 0)
             {
-                _logger.LogWarning("DTO de reemplazo de user invalido");
-                throw new Utilities.Exceptions.ValidationException("id", "Datos invalidos para reemplazar user");
+                _logger.LogWarning("DTO de reemplazo de usuario inválido");
+                throw new ValidationException("id", "Datos inválidos para reemplazar el usuario");
             }
+
             try
             {
-                var exists = await _userData.GetByIdAsync(Updatedto.Id);
-                if (exists == null)
-                {
-                    _logger.LogInformation("No se encontro el user con ID {RolId} para reemplzar", Updatedto.Id);
-                    throw new EntityNotFoundException("user", Updatedto.Id);
-                }
-                var entity = await _userData.GetByIdAsync(Updatedto.Id);
+                var entity = await _userData.GetByIdAsync(dto.Id);
                 if (entity == null)
-                    throw new EntityNotFoundException("user", Updatedto.Id);
+                {
+                    _logger.LogInformation("No se encontró el usuario con ID {UserId} para reemplazar", dto.Id);
+                    throw new EntityNotFoundException("user", dto.Id);
+                }
 
-                // Modifica sus campos directamente
-                entity.Username = Updatedto.Username;
-                entity.Email = Updatedto.Email;
-
+                entity.Username = dto.Username;
+                entity.Email = dto.Email;
 
                 return await _userData.UpdateAsync(entity);
-
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error al reemplzar el user con ID {Updatedto.Id}");
-                throw new ExternalServiceException("Base de datos", $"Error al reemplzar el user ", ex);
+                _logger.LogError(ex, "Error al reemplazar el usuario con ID {UserId}", dto.Id);
+                throw new ExternalServiceException("Base de datos", "Error al reemplazar el usuario", ex);
             }
         }
 
-        //Metodo para delete logico para activar y desactivar el user (delete logico con patch)
         public async Task<bool> SetUserActiveAsync(UserStatusDto dto)
         {
             if (dto == null)
             {
-                throw new ValidationException("El dto de estado de user no puede ser nulo ");
+                throw new ValidationException("El DTO de estado de usuario no puede ser nulo");
             }
+
             if (dto.Id <= 0)
             {
-                _logger.LogWarning("Se intento activar/desactivar un user con ID invalido:{userId}", dto.Id);
-                throw new ValidationException("Id", "El ID del user debe ser mayor a 0");
+                _logger.LogWarning("Se intentó activar/desactivar un usuario con ID inválido: {UserId}", dto.Id);
+                throw new ValidationException("Id", "El ID del usuario debe ser mayor a 0");
             }
+
             try
             {
                 var exists = await _userData.GetByIdAsync(dto.Id);
                 if (exists == null)
                 {
-                    _logger.LogInformation("No se encontro el user con ID {userId} para cambiar su estado activo", dto.Id);
+                    _logger.LogInformation("No se encontró el usuario con ID {UserId} para cambiar su estado activo", dto.Id);
                     throw new EntityNotFoundException("user", dto.Id);
                 }
-                return await _userData.SetActiveAsync(dto.Id, dto.Active);
 
+                return await _userData.SetActiveAsync(dto.Id, dto.Active);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al cambiar el esatdo activo del user con ID {userId}", dto.Id);
-                throw new ExternalServiceException("Base de datos", $"Error al actualizar el estado activo del user con ID {dto.Id}", ex);
+                _logger.LogError(ex, "Error al cambiar el estado activo del usuario con ID {UserId}", dto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar el estado activo del usuario con ID {dto.Id}", ex);
             }
         }
-
-        //Metodo para borrar user permanente (Delete permanente) 
 
         public async Task<bool> DeleteUserAsync(int id)
         {
             if (id <= 0)
             {
-                _logger.LogWarning("Se intento eliminar un user con Id invalido : {userId}", id);
-                throw new ValidationException("Id", "El id del user debe ser mayor a 0");
+                _logger.LogWarning("Se intentó eliminar un usuario con ID inválido: {UserId}", id);
+                throw new ValidationException("Id", "El ID del usuario debe ser mayor a 0");
             }
+
             try
             {
                 var exists = await _userData.GetByIdAsync(id);
                 if (exists == null)
                 {
-                    _logger.LogInformation("No se encontro el user con ID {userId} para eliminar", id);
+                    _logger.LogInformation("No se encontró el usuario con ID {UserId} para eliminar", id);
                     throw new EntityNotFoundException("user", id);
                 }
-                return await _userData.DeleteAsync(id);
 
+                return await _userData.DeleteAsync(id);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al eliminar el user con ID {userid}", id);
-                throw new ExternalServiceException("Base de datos", $"Error al elimiar el user con ID {id}", ex);
-
+                _logger.LogError(ex, "Error al eliminar el usuario con ID {UserId}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al eliminar el usuario con ID {id}", ex);
             }
         }
 
-        // Método para validar el DTO
         private void ValidateUser(UserDto userDto)
         {
             if (userDto == null)
             {
-                throw new Utilities.Exceptions.ValidationException("El objeto usuario no puede ser nulo");
+                throw new ValidationException("El objeto usuario no puede ser nulo");
             }
 
             if (string.IsNullOrWhiteSpace(userDto.Username))
             {
-                _logger.LogWarning("Se intentó crear/actualizar un usuario con Name vacío");
-                throw new Utilities.Exceptions.ValidationException("Name", "El Name del usuario es obligatorio");
+                _logger.LogWarning("Se intentó crear/actualizar un usuario con nombre de usuario vacío");
+                throw new ValidationException("Username", "El nombre de usuario es obligatorio");
             }
 
             if (string.IsNullOrWhiteSpace(userDto.Email))
             {
-                _logger.LogWarning("Se intentó crear/actualizar un usuario con Email vacío");
-                throw new Utilities.Exceptions.ValidationException("Email", "El Email del usuario es obligatorio");
+                _logger.LogWarning("Se intentó crear/actualizar un usuario con correo electrónico vacío");
+                throw new ValidationException("Email", "El correo electrónico es obligatorio");
             }
         }
-        //Metodo para mapear de User a UserDTO
+
+        public async Task<UserDto> ValidateCredentialsAsync(string email, string password)
+        {
+            var user = await _userData.GetByEmailAsync(email);
+            if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
+                return null;
+
+            return MapToDTO(user);
+        }
+
         private UserDto MapToDTO(User user)
         {
             return new UserDto
@@ -237,13 +235,12 @@ namespace Business
                 Id = user.Id,
                 Username = user.Username,
                 Email = user.Email,
-                Active = user.Active,//si existe la entidad
+                Active = user.Active,
                 PersonId = user.PersonId,
                 Password = user.Password
-            
             };
         }
-        //Metodo para mapear de UserDto a User 
+
         private User MapToEntity(UserDto userDto)
         {
             return new User
@@ -251,13 +248,12 @@ namespace Business
                 Id = userDto.Id,
                 Username = userDto.Username,
                 Email = userDto.Email,
-                Active = userDto.Active, //si existe la entidad
+                Active = userDto.Active,
                 PersonId = userDto.PersonId,
                 Password = userDto.Password
-              
             };
         }
-        //Metodo para mapear una lista de User a una lista de UserDto
+
         private IEnumerable<UserDto> MapToDTOList(IEnumerable<User> users)
         {
             var usersDto = new List<UserDto>();
@@ -267,6 +263,5 @@ namespace Business
             }
             return usersDto;
         }
-
     }
 }

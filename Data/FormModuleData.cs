@@ -8,6 +8,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Data
 {
+    /// <summary>
+    /// Repository encargado de la gestión de la entidad FormModule en la base de datos.
+    /// </summary>
     public class FormModuleData
     {
         private readonly ApplicationDbContext _context;
@@ -20,14 +23,16 @@ namespace Data
         }
 
         /// <summary>
-        /// Obtiene todos los formModule almacenados en la base de datos
+        /// Obtiene todos los registros de FormModule.
         /// </summary>
-        /// <returns> Lista de formModule </returns>
         public async Task<IEnumerable<FormModule>> GetAllAsync()
         {
             return await _context.Set<FormModule>().ToListAsync();
         }
 
+        /// <summary>
+        /// Obtiene un registro de FormModule por su ID.
+        /// </summary>
         public async Task<FormModule?> GetByIdAsync(int id)
         {
             try
@@ -36,17 +41,14 @@ namespace Data
             }
             catch (Exception ex)
             {
-                _logger.LogError( $"Error al obtener Formulario-Módulo con ID {id}");
+                _logger.LogError($"Error al obtener FormModule con ID {id}: {ex.Message}");
                 throw;
             }
         }
 
-
         /// <summary>
-        /// Crea un nuevo formModule en la base de datos 
+        /// Crea un nuevo registro de FormModule.
         /// </summary>
-        /// <param name="formModule">instancia del formModule a crear.</param>
-        /// <returns>el formModule creado</returns>
         public async Task<FormModule> CreateAsync(FormModule formModule)
         {
             try
@@ -57,18 +59,75 @@ namespace Data
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error al crear la relación Formulario-Módulo {ex.Message}");
+                _logger.LogError($"Error al crear FormModule: {ex.Message}");
                 throw;
             }
         }
 
+        /// <summary>
+        /// Actualiza un registro existente de FormModule.
+        /// </summary>
+        public async Task<bool> UpdateAsync(FormModule formModule)
+        {
+            try
+            {
+                _context.Set<FormModule>().Update(formModule);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al actualizar FormModule: {ex.Message}");
+                return false;
+            }
+        }
 
         /// <summary>
-        /// Elimina un FormModule permanente en la base de datos 
+        /// Actualiza parcialmente un registro de FormModule.
         /// </summary>
-        /// <param name="id">Identificador unico del FormModule a eliminar</param>
-        /// <returns>True si la eliminacion fue exitosa, False en caso contrario.</returns>/*
+        public async Task<bool> UpdatePartialAsync(int id, Dictionary<string, object> updatedFields)
+        {
+            try
+            {
+                var formModule = await _context.Set<FormModule>().FindAsync(id);
+                if (formModule == null)
+                {
+                    _logger.LogWarning($"No se encontró FormModule con ID {id} para actualización parcial.");
+                    return false;
+                }
 
+                var entry = _context.Entry(formModule);
+                foreach (var field in updatedFields)
+                {
+                    if (entry.Property(field.Key) == null)
+                    {
+                        _logger.LogWarning($"La propiedad '{field.Key}' no existe en la entidad FormModule.");
+                        continue;
+                    }
+
+                    if (field.Value == null || (field.Value is string strValue && string.IsNullOrWhiteSpace(strValue)))
+                    {
+                        _logger.LogInformation($"El valor para la propiedad '{field.Key}' es nulo o vacío. Se conservará el valor actual.");
+                        continue;
+                    }
+
+                    entry.Property(field.Key).CurrentValue = field.Value;
+                    entry.Property(field.Key).IsModified = true;
+                }
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al actualizar parcialmente FormModule con ID {id}: {ex.Message}");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Elimina un registro de FormModule de la base de datos.
+        /// </summary>
         public async Task<bool> DeleteAsync(int id)
         {
             try
@@ -83,9 +142,36 @@ namespace Data
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error al eliminar la relación Formulario-Módulo {ex.Message}");
+                _logger.LogError($"Error al eliminar FormModule con ID {id}: {ex.Message}");
                 return false;
             }
         }
+
+        /// <summary>
+        /// Realiza un borrado lógico de un registro de FormModule.
+        /// </summary>
+        public async Task<bool> SoftDeleteAsync(int id)
+        {
+            try
+            {
+                var formModule = await _context.Set<FormModule>().FindAsync(id);
+                if (formModule == null)
+                {
+                    _logger.LogWarning($"No se encontró FormModule con ID {id} para borrado lógico.");
+                    return false;
+                }
+
+               
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al realizar el borrado lógico de FormModule con ID {id}: {ex.Message}");
+                return false;
+            }
+        }
+
     }
 }
+
