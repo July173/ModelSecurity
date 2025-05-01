@@ -104,7 +104,6 @@ namespace Data
                 person.FirstLastName = dto.FirstLastName;
                 person.SecondLastName = dto.SecondLastName;
                 person.PhoneNumber = dto.PhoneNumber;
-                person.Email = dto.Email;
                 person.NumberIdentification = dto.NumberIdentification;
 
                 _context.Set<Person>().Update(person);
@@ -171,6 +170,15 @@ namespace Data
                 return false;
             }
         }
+
+        public async Task<Person> GetByDocumentAsync(long numberIdentification)
+        {
+            return await _context.Person
+                .FirstOrDefaultAsync(p => p.NumberIdentification == numberIdentification && p.DeleteDate == null);
+        }
+
+
+
 
     }
 }

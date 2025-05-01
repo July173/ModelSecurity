@@ -4,13 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.DTOs.RolForm
+namespace Entity.Model
 {
-    public class RolFormDto
+    public class RolFormPermission
     {
         public int Id { get; set; }
-        public string Permission { get; set; }
+        public int PermissionId { get; set; }
+        public Permission Permission { get; set; }
         public int RolId { get; set; }
+        public Rol Rol { get; set; }
         public int FormId { get; set; }
+        public Form Form { get; set; }
     }
 }

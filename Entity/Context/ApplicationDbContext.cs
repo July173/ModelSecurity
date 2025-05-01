@@ -34,6 +34,10 @@ namespace Entity.Contexts
             _configuration = configuration;
         }
 
+        public ApplicationDbContext()
+        {
+        }
+
         ///DB SETS
         public DbSet<Rol> Rol { get; set; }
         public DbSet<Verification> Verification { get; set; }
@@ -52,7 +56,8 @@ namespace Entity.Contexts
         public DbSet<Form> Form { get; set; }
         public DbSet<Module> Module { get; set; }
         public DbSet<FormModule> FormModule { get; set; }
-        public DbSet<RolForm> RolForm { get; set; }
+        public DbSet<RolFormPermission> RolFormPermission { get; set; }
+        public DbSet<Permission> Permission { get; set; }
         public DbSet<TypeModality> TypeModality { get; set; }
         public DbSet<State> State { get; set; }
         public DbSet<RegisterySofia> RegisterySofia { get; set; }
@@ -191,16 +196,22 @@ namespace Entity.Contexts
             .WithMany(m => m.FormModule)
             .HasForeignKey(fm => fm.ModuleId);
 
-            //Relacion de muchos a muchos tabla pivote RolForm
-            modelBuilder.Entity<RolForm>()
-           .HasOne(rf => rf.Rol)
-           .WithMany(r => r.RolForm)
-           .HasForeignKey(rf => rf.RolId);
+            //Relacion entre rol, form y permission
+            modelBuilder.Entity<RolFormPermission>()
+                .HasOne(rfp => rfp.Rol)
+                .WithMany(r => r.RolFormPermissions)
+                .HasForeignKey(rfp => rfp.RolId);
 
-            modelBuilder.Entity<RolForm>()
-            .HasOne(rf => rf.Form)
-            .WithMany(f => f.RolForm)
-            .HasForeignKey(rf => rf.FormId);
+            modelBuilder.Entity<RolFormPermission>()
+                .HasOne(rfp => rfp.Form)
+                .WithMany(f => f.RolFormPermissions)
+                .HasForeignKey(rfp => rfp.FormId);
+
+            modelBuilder.Entity<RolFormPermission>()
+                .HasOne(rfp => rfp.Permission)
+                .WithMany(p => p.RolFormPermissions)
+                .HasForeignKey(rfp => rfp.PermissionId);
+
 
             //Relacion de 1 a muchos entre Center y Regional
             modelBuilder.Entity<Center>()

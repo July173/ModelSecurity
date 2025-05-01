@@ -124,9 +124,88 @@ namespace Web.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+        /// <summary>
+        /// Actualiza una relación entre rol y usuario existente en el sistema.
+        /// </summary>
+        [HttpPut("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdateRolUser(int id, [FromBody] UserRolDto rolUserDto)
+        {
+            if (id != rolUserDto.Id)
+            {
+                return BadRequest(new { message = "El ID de la relación no coincide con el ID proporcionado en el cuerpo de la solicitud." });
+            }
+
+            try
+            {
+                var result = await _RolUserBusiness.UpdateRolUserAsync(rolUserDto);
+                return Ok(new { message = "Relación rol-usuario actualizada correctamente", success = result });
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Validación fallida al actualizar la relación rol-usuario con ID: {RolUserId}", id);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Relación rol-usuario no encontrada con ID: {RolUserId}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al actualizar la relación rol-usuario con ID: {RolUserId}", id);
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
 
         /// <summary>
-        /// Elimina un rol de usuario por su ID.
+        /// Actualiza campos específicos de una relación entre rol y usuario.
+        /// </summary>
+        [HttpPatch("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdatePartialRolUser(int id, [FromBody] Dictionary<string, object> updatedFields)
+        {
+            if (updatedFields == null || updatedFields.Count == 0)
+            {
+                return BadRequest(new { message = "Debe proporcionar al menos un campo para actualizar." });
+            }
+
+            try
+            {
+                var result = await _RolUserBusiness.UpdatePartialRolUserAsync(id, updatedFields);
+
+                if (!result)
+                {
+                    return NotFound(new { message = "No se encontró la relación rol-usuario o no se pudo actualizar." });
+                }
+
+                return Ok(new { message = "Relación rol-usuario actualizada parcialmente correctamente", success = result });
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Validación fallida al actualizar parcialmente la relación rol-usuario con ID: {RolUserId}", id);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Relación rol-usuario no encontrada con ID: {RolUserId}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente la relación rol-usuario con ID: {RolUserId}", id);
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Elimina una relación entre rol y usuario del sistema.
         /// </summary>
         [HttpDelete("{id}")]
         [ProducesResponseType(200)]
@@ -135,27 +214,36 @@ namespace Web.Controllers
         [ProducesResponseType(500)]
         public async Task<IActionResult> DeleteRolUser(int id)
         {
+            if (id <= 0)
+            {
+                return BadRequest(new { message = "El ID de la relación debe ser mayor a 0." });
+            }
+
             try
             {
                 var result = await _RolUserBusiness.DeleteRolUserAsync(id);
-                return Ok(result);
-            }
-            catch (ValidationException ex)
-            {
-                _logger.LogWarning(ex, "ID inválido al intentar eliminar: {Id}", id);
-                return BadRequest(new { message = ex.Message });
+                return Ok(new { message = "Relación rol-usuario eliminada correctamente", success = result });
             }
             catch (EntityNotFoundException ex)
             {
-                _logger.LogInformation(ex, "Rol de usuario no encontrado al eliminar: {Id}", id);
+                _logger.LogInformation(ex, "Relación rol-usuario no encontrada con ID: {RolUserId}", id);
                 return NotFound(new { message = ex.Message });
             }
             catch (ExternalServiceException ex)
             {
-                _logger.LogError(ex, "Error al eliminar rol de usuario");
+                _logger.LogError(ex, "Error al eliminar la relación rol-usuario con ID: {RolUserId}", id);
                 return StatusCode(500, new { message = ex.Message });
             }
         }
 
+
+            [HttpPost("asignar")]
+            public async Task<IActionResult> AsignarRoles([FromBody] UserRolAssignDto dto)
+            {
+                var result = await _RolUserBusiness.AssignRolesAsync(dto);
+                return Ok(new { success = result });
+            }
+        }
+
     }
-}
+

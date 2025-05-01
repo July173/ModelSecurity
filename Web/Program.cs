@@ -85,8 +85,12 @@ builder.Services.AddScoped<RegisterySofiaBusiness>();
 
 
 // Registrar clases de RolForm
-builder.Services.AddScoped<RolFormData>();
-builder.Services.AddScoped<RolFormBusiness>();
+builder.Services.AddScoped<RolFormPermissionData>();
+builder.Services.AddScoped<RolFormPermissionBusiness>();
+
+// Registrar clases de Permission
+builder.Services.AddScoped<PermissionData>();
+builder.Services.AddScoped<PermissionBusiness>();
 
 // Registrar clases de Sede
 builder.Services.AddScoped<SedeData>();
@@ -122,11 +126,17 @@ builder.Services.AddOpenApi();
 //Agregar CORS 
 var OrigenesPermitidos = builder.Configuration.GetValue<string>
     ("OrigenesPermitidos")!.Split(',');
+
 builder.Services.AddCors(Opciones =>
 {
-    Opciones.AddDefaultPolicy(politica =>
+    Opciones.AddPolicy("AllowSpecificOrigins", politica =>
     {
-        politica.WithOrigins(OrigenesPermitidos).AllowAnyHeader().AllowAnyMethod();
+        politica.WithOrigins(OrigenesPermitidos)
+        .WithOrigins("http://127.0.0.1:5500")
+        .WithOrigins("http://127.0.0.1:61371")
+
+        .AllowAnyHeader()
+        .AllowAnyMethod();
     });
 });
 
@@ -139,13 +149,14 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 
+app.UseCors("AllowSpecificOrigins");
 app.UseAuthorization();
 
 app.MapControllers();

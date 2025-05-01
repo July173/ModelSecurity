@@ -66,14 +66,26 @@ namespace Business
             {
                 ValidatePerson(personDto);
 
+                // Validar si el email ya existe
+                var existingPerson = await _personData.GetByDocumentAsync(personDto.NumberIdentification);
+                if (existingPerson != null)
+                {
+                    throw new ValidationException("El numero de documento ya está registrado.");
+                }
+
                 var person = MapToEntity(personDto);
                 var created = await _personData.CreateAsync(person);
 
                 return MapToDTO(created);
             }
+            catch (ValidationException)
+            {
+                // Dejar pasar validaciones para que el controlador las maneje con BadRequest
+                throw;
+            }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nueva persona: {Name}", personDto?.Name ?? "null");
+                _logger.LogError(ex, "Error al crear nueva persona: {Name}", personDto?.FirstName ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear la persona", ex);
             }
         }
@@ -103,7 +115,6 @@ namespace Business
                 entity.FirstLastName = dto.FirstLastName;
                 entity.SecondLastName = dto.SecondLastName;
                 entity.PhoneNumber = dto.PhoneNumber;
-                entity.Email = dto.Email;
                 entity.NumberIdentification = dto.NumberIdentification;
 
                 return await _personData.UpdateAsync(entity);
@@ -177,7 +188,7 @@ namespace Business
             if (personDto == null)
                 throw new ValidationException("El objeto persona no puede ser nulo");
 
-            if (string.IsNullOrWhiteSpace(personDto.Name))
+            if (string.IsNullOrWhiteSpace(personDto.FirstName))
             {
                 _logger.LogWarning("Se intentó crear/actualizar una persona con Name vacío");
                 throw new ValidationException("Name", "El Name de la persona es obligatorio");
@@ -189,16 +200,13 @@ namespace Business
             return new PersonDto
             {
                 Id = person.Id,
-                Name = person.Name,
                 FirstName = person.FirstName,
                 SecondName = person.SecondName,
                 FirstLastName = person.FirstLastName,
                 SecondLastName = person.SecondLastName,
                 PhoneNumber = person.PhoneNumber,
-                Email = person.Email,
                 TypeIdentification = person.TypeIdentification,
                 NumberIdentification = person.NumberIdentification,
-                Signing = person.Signing,
                 Active = person.Active,
             };
         }
@@ -208,16 +216,13 @@ namespace Business
             return new Person
             {
                 Id = personDto.Id,
-                Name = personDto.Name,
                 FirstName = personDto.FirstName,
                 SecondName = personDto.SecondName,
                 FirstLastName = personDto.FirstLastName,
                 SecondLastName = personDto.SecondLastName,
                 PhoneNumber = personDto.PhoneNumber,
-                Email = personDto.Email,
                 TypeIdentification = personDto.TypeIdentification,
                 NumberIdentification = personDto.NumberIdentification,
-                Signing = personDto.Signing,
                 Active = personDto.Active,
             };
         }

@@ -124,7 +124,7 @@ namespace Data
         ///</summary>
         ///<param name="id">Id del form</param>
         ///<returns> True si la actualizacion es verdadera</returns>
-        public async Task<bool> PatchAsync(int id, string NewTypeCuestion, string newDescription, string newName, string newCuestion, string newAnswer)
+        public async Task<bool> PatchAsync(int id,  string newDescription, string newName)
         {
             try
             {
@@ -133,18 +133,11 @@ namespace Data
                     return false;
 
 
-                form.TypeCuestion = NewTypeCuestion;
                 form.Name = newName;
-                form.Cuestion = newCuestion;
                 form.Description = newDescription;
-                form.Answer = newAnswer;
 
 
-                _context.Entry(form).Property(f => f.TypeCuestion).IsModified = true;
                 _context.Entry(form).Property(f => f.Description).IsModified = true;
-                _context.Entry(form).Property(f => f.Answer).IsModified = true;
-                _context.Entry(form).Property(f => f.Cuestion).IsModified = true;
-                _context.Entry(form).Property(f => f.TypeCuestion).IsModified = true;
 
 
 

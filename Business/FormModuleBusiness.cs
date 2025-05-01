@@ -2,9 +2,9 @@
 using Entity.DTOs.FormModule;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Utilities.Exceptions;
-using ValidationException = Utilities.Exceptions.ValidationException;
 
 namespace Business
 {
@@ -14,21 +14,22 @@ namespace Business
     public class FormModuleBusiness
     {
         private readonly FormModuleData _formModuleData;
-        private readonly ILogger<FormModuleData> _logger;
+        private readonly ILogger<FormModuleBusiness> _logger;
 
-        public FormModuleBusiness(FormModuleData formModuleData, ILogger<FormModuleData> logger)
+        public FormModuleBusiness(FormModuleData formModuleData, ILogger<FormModuleBusiness> logger)
         {
             _formModuleData = formModuleData;
             _logger = logger;
         }
 
-        // Método para obtener todos los módulos de formulario como DTOs
+        /// <summary>
+        /// Obtiene todos los módulos de formulario como DTOs.
+        /// </summary>
         public async Task<IEnumerable<FormModuleDto>> GetAllFormModulesAsync()
         {
             try
             {
                 var formModules = await _formModuleData.GetAllAsync();
-             
                 return MapToDTOList(formModules);
             }
             catch (Exception ex)
@@ -38,13 +39,15 @@ namespace Business
             }
         }
 
-        // Método para obtener un módulo de formulario por ID como DTO
+        /// <summary>
+        /// Obtiene un módulo de formulario por ID como DTO.
+        /// </summary>
         public async Task<FormModuleDto> GetFormModuleByIdAsync(int id)
         {
             if (id <= 0)
             {
                 _logger.LogWarning("Se intentó obtener un módulo de formulario con ID inválido: {FormModuleId}", id);
-                throw new Utilities.Exceptions.ValidationException("id", "El ID del módulo de formulario debe ser mayor que cero");
+                throw new ValidationException("id", "El ID del módulo de formulario debe ser mayor que cero");
             }
 
             try
@@ -56,7 +59,7 @@ namespace Business
                     throw new EntityNotFoundException("FormModule", id);
                 }
 
-                return  MapToDTO(formModule);
+                return MapToDTO(formModule);
             }
             catch (Exception ex)
             {
@@ -65,14 +68,16 @@ namespace Business
             }
         }
 
-        // Método para crear un módulo de formulario desde un DTO
+        /// <summary>
+        /// Crea un nuevo módulo de formulario desde un DTO.
+        /// </summary>
         public async Task<FormModuleDto> CreateFormModuleAsync(FormModuleDto formModuleDto)
         {
             try
             {
                 ValidateFormModule(formModuleDto);
 
-                var formModule =    MapToEntity(formModuleDto);
+                var formModule = MapToEntity(formModuleDto);
 
                 var formModuleCreado = await _formModuleData.CreateAsync(formModule);
 
@@ -85,51 +90,145 @@ namespace Business
             }
         }
 
+        /// <summary>
+        /// Actualiza un módulo de formulario existente.
+        /// </summary>
+        public async Task<bool> UpdateFormModuleAsync(FormModuleDto formModuleDto)
+        {
+            try
+            {
+                ValidateFormModule(formModuleDto);
 
-        //Metodo para borrar formModule permanente (Delete permanente) 
+                var formModule = MapToEntity(formModuleDto);
 
+                var result = await _formModuleData.UpdateAsync(formModule);
+
+                if (!result)
+                {
+                    _logger.LogWarning("No se pudo actualizar el módulo de formulario con ID {FormModuleId}", formModuleDto.Id);
+                    throw new EntityNotFoundException("FormModule", formModuleDto.Id);
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar el módulo de formulario con ID {FormModuleId}", formModuleDto.Id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar el módulo de formulario con ID {formModuleDto.Id}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Actualiza parcialmente un módulo de formulario.
+        /// </summary>
+        public async Task<bool> UpdatePartialFormModuleAsync(int id, Dictionary<string, object> updatedFields)
+        {
+            if (id <= 0)
+            {
+                _logger.LogWarning("Se intentó actualizar parcialmente un módulo de formulario con ID inválido: {FormModuleId}", id);
+                throw new ValidationException("id", "El ID del módulo de formulario debe ser mayor que cero");
+            }
+
+            try
+            {
+                var result = await _formModuleData.UpdatePartialAsync(id, updatedFields);
+
+                if (!result)
+                {
+                    _logger.LogWarning("No se pudo actualizar parcialmente el módulo de formulario con ID {FormModuleId}", id);
+                    throw new EntityNotFoundException("FormModule", id);
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente el módulo de formulario con ID {FormModuleId}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al actualizar parcialmente el módulo de formulario con ID {id}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Elimina un módulo de formulario por su ID.
+        /// </summary>
         public async Task<bool> DeleteFormModuleAsync(int id)
         {
             if (id <= 0)
             {
-                _logger.LogWarning("Se intento eliminar un formModule con Id invalido : {formModuleId}", id);
-                throw new ValidationException("Id", "El formModule del rol debe ser mayor a 0");
+                _logger.LogWarning("Se intentó eliminar un módulo de formulario con ID inválido: {FormModuleId}", id);
+                throw new ValidationException("id", "El ID del módulo de formulario debe ser mayor que cero");
             }
+
             try
             {
-                var exists = await _formModuleData.GetByIdAsync(id);
-                if (exists == null)
-                {
-                    _logger.LogInformation("No se encontro el formModule con ID {formModuleId} para eliminar", id);
-                    throw new EntityNotFoundException("Rol", id);
-                }
-                return await _formModuleData.DeleteAsync(id);
+                var result = await _formModuleData.DeleteAsync(id);
 
+                if (!result)
+                {
+                    _logger.LogInformation("No se encontró el módulo de formulario con ID {FormModuleId} para eliminar", id);
+                    throw new EntityNotFoundException("FormModule", id);
+                }
+
+                return result;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al eliminar el formModule con ID {formModuleid}", id);
-                throw new ExternalServiceException("Base de datos", $"Error al elimiar el formModule con ID {id}", ex);
-
+                _logger.LogError(ex, "Error al eliminar el módulo de formulario con ID {FormModuleId}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al eliminar el módulo de formulario con ID {id}", ex);
             }
         }
-        // Método para validar el DTO
+
+        /// <summary>
+        /// Realiza un borrado lógico de un módulo de formulario por su ID.
+        /// </summary>
+        public async Task<bool> SoftDeleteFormModuleAsync(int id)
+        {
+            if (id <= 0)
+            {
+                _logger.LogWarning("Se intentó realizar un borrado lógico de un módulo de formulario con ID inválido: {FormModuleId}", id);
+                throw new ValidationException("id", "El ID del módulo de formulario debe ser mayor que cero");
+            }
+
+            try
+            {
+                var result = await _formModuleData.SoftDeleteAsync(id);
+
+                if (!result)
+                {
+                    _logger.LogInformation("No se encontró el módulo de formulario con ID {FormModuleId} para borrado lógico", id);
+                    throw new EntityNotFoundException("FormModule", id);
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al realizar el borrado lógico del módulo de formulario con ID {FormModuleId}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al realizar el borrado lógico del módulo de formulario con ID {id}", ex);
+            }
+        }
+
+
+        /// <summary>
+        /// Valida el DTO del módulo de formulario.
+        /// </summary>
         private void ValidateFormModule(FormModuleDto formModuleDto)
         {
             if (formModuleDto == null)
             {
-                throw new Utilities.Exceptions.ValidationException("El objeto módulo de formulario no puede ser nulo");
+                throw new ValidationException("El objeto módulo de formulario no puede ser nulo");
             }
 
             if (formModuleDto.FormId <= 0 || formModuleDto.ModuleId <= 0)
             {
                 _logger.LogWarning("Se intentó crear/actualizar un módulo de formulario con FormId o ModuleId inválidos");
-                throw new Utilities.Exceptions.ValidationException("FormId/ModuleId", "El FormId y el ModuleId del módulo de formulario son obligatorios y deben ser mayores que cero");
+                throw new ValidationException("FormId/ModuleId", "El FormId y el ModuleId del módulo de formulario son obligatorios y deben ser mayores que cero");
             }
         }
 
-
-        //Metodo para mapear de FormModule a  FormModuleDto
+        /// <summary>
+        /// Mapea un objeto FormModule a FormModuleDto.
+        /// </summary>
         private FormModuleDto MapToDTO(FormModule formModule)
         {
             return new FormModuleDto
@@ -140,7 +239,9 @@ namespace Business
             };
         }
 
-        //Metodo para mapear de FormModuleDto a FormModule 
+        /// <summary>
+        /// Mapea un objeto FormModuleDto a FormModule.
+        /// </summary>
         private FormModule MapToEntity(FormModuleDto formModuleDto)
         {
             return new FormModule
@@ -150,15 +251,19 @@ namespace Business
                 ModuleId = formModuleDto.ModuleId
             };
         }
-        //Metodo para mapear una lista de FormModuleDto a una lista de FormModule
+
+        /// <summary>
+        /// Mapea una lista de objetos FormModule a una lista de FormModuleDto.
+        /// </summary>
         private IEnumerable<FormModuleDto> MapToDTOList(IEnumerable<FormModule> formModules)
         {
-            var formModulesDto = new List<FormModuleDto>();
+            var formModulesDTO = new List<FormModuleDto>();
             foreach (var formModule in formModules)
             {
-                formModulesDto.Add(MapToDTO(formModule));
+                formModulesDTO.Add(MapToDTO(formModule));
             }
-            return formModulesDto;
+            return formModulesDTO;
         }
     }
 }
+
