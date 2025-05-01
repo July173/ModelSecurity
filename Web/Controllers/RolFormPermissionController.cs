@@ -186,7 +186,7 @@ namespace Web.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("permission")]
         public async Task<IActionResult> AssignPermissions([FromBody] AssignPermissionsDto dto)
         {
             try
@@ -200,6 +200,7 @@ namespace Web.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error interno al asignar permisos.");
                 return StatusCode(500, new { message = "Error interno del servidor", detail = ex.Message });
             }
         }

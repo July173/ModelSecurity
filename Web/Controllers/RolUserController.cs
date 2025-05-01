@@ -236,5 +236,14 @@ namespace Web.Controllers
             }
         }
 
+
+            [HttpPost("asignar")]
+            public async Task<IActionResult> AsignarRoles([FromBody] UserRolAssignDto dto)
+            {
+                var result = await _RolUserBusiness.AssignRolesAsync(dto);
+                return Ok(new { success = result });
+            }
+        }
+
     }
-}
+

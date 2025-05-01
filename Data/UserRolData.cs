@@ -120,5 +120,25 @@ namespace Data
             }
         }
 
+        public async Task<bool> AssignRolesAsync(int userId, List<int> rolIds)
+        {
+            var existing = await _context.UserRol
+                .Where(ur => ur.UserId == userId)
+                .ToListAsync();
+
+            _context.UserRol.RemoveRange(existing);
+
+            var newRoles = rolIds.Select(rolId => new UserRol
+            {
+                UserId = userId,
+                RolId = rolId
+            });
+
+            await _context.UserRol.AddRangeAsync(newRoles);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+
     }
 }

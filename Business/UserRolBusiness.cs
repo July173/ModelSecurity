@@ -187,6 +187,15 @@ namespace Business
             }
         }
 
+        public async Task<bool> AssignRolesAsync(UserRolAssignDto dto)
+        {
+            if (dto.RolIds == null || dto.RolIds.Count == 0)
+                throw new ArgumentException("Debe asignar al menos un rol.");
+
+            return await _rolUserData.AssignRolesAsync(dto.UserId, dto.RolIds);
+        }
+
+
         // Método para mapear de UserRol a UserRolDto
         private UserRolDto MapToDTO(UserRol rolUser)
         {
