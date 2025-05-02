@@ -224,6 +224,14 @@ namespace Web.Controllers
                 return StatusCode(500, "Error interno del servidor.");
             }
         }
+
+        [HttpGet("permissionUserAgrupado/{userId}")]
+        public async Task<IActionResult> GetPermisosAgrupadosPorUsuario(int userId)
+        {
+            var permisos = await _rolFormPermissionBusiness.GetPermisosAgrupados(userId);
+            return Ok(permisos);
+        }
+
     }
 }
 

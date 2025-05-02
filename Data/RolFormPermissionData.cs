@@ -165,7 +165,7 @@ namespace Data
                     .Select(g => new FormPermissionDto
                     {
                         FormId = g.Key,
-                        PermissionIds = g.Select(rfp => rfp.PermissionId).ToList()
+                        PermissionIds= g.Select(rfp => rfp.PermissionId).ToList()
                     })
                     .ToListAsync();
 
@@ -176,6 +176,41 @@ namespace Data
                 _logger.LogError(ex, $"Error al obtener permisos por formulario para el rol con ID {idRol}");
                 throw;
             }
+        }
+
+
+        public async Task<List<RolFormDto>> ObtenerPermisosAgrupadosPorUsuario(int userId)
+        {
+            var datos = await (
+                from ru in _context.UserRol
+                where ru.UserId == userId
+                join r in _context.Rol on ru.RolId equals r.Id
+                join rfp in _context.RolFormPermission on ru.RolId equals rfp.RolId
+                join f in _context.Form on rfp.FormId equals f.Id
+                join p in _context.Permission on rfp.PermissionId equals p.Id
+                select new
+                {
+                    Rol = r.TypeRol,
+                    Formulario = f.Name,
+                    Permiso = p.Name
+                }
+            ).ToListAsync();
+
+            var resultado = datos
+                .GroupBy(d => d.Rol)
+                .Select(grupoRol => new RolFormDto
+                {
+                    Rol = grupoRol.Key,
+                    Form = grupoRol
+                        .GroupBy(g => g.Formulario)
+                        .Select(gf => new FormWithPermissionDto
+                        {
+                            Name = gf.Key,
+                            Permission = gf.Select(p => p.Permiso).Distinct().ToList()
+                        }).ToList()
+                }).ToList();
+
+            return resultado;
         }
 
     }

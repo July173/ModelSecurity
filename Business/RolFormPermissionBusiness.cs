@@ -157,6 +157,11 @@ namespace Business
             }
         }
 
+        public async Task<List<RolFormDto>> GetPermisosAgrupados(int userId)
+        {
+            return await _rolFormPermissionData.ObtenerPermisosAgrupadosPorUsuario(userId);
+        }
+
 
         /// <summary>
         /// Mapea una entidad RolFormPermission a un DTO.
@@ -196,5 +201,7 @@ namespace Business
                 FormId = rolFormPermissionDto.FormId
             };
         }
+       
+
     }
 }
