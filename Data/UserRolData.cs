@@ -139,6 +139,13 @@ namespace Data
             return true;
         }
 
+        public async Task<List<UserRol>> GetByUserIdAsync(int userId)
+        {
+            return await _context.UserRol
+                .Where(r => r.UserId == userId )
+                .Include(r => r.Rol) // Opcional si quieres incluir el nombre del rol
+                .ToListAsync();
+        }
 
 
 

@@ -204,6 +204,26 @@ namespace Web.Controllers
                 return StatusCode(500, new { message = "Error interno del servidor", detail = ex.Message });
             }
         }
+
+        [HttpGet("getByIdRol/{idRol}")]
+        public async Task<ActionResult<IEnumerable<AssignPermissionsDto>>> GetByIdRol(int idRol)
+        {
+            try
+            {
+                var PermissionsByIdRol =  await _rolFormPermissionBusiness.GetFormPermissionsByRolIdAsync(idRol);
+                return Ok(PermissionsByIdRol);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogError($"Error al obtener todos los registros de RolFormPermission: {ex.Message}");
+                return StatusCode(500, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al obtener todos los registros de RolFormPermission: {ex.Message}");
+                return StatusCode(500, "Error interno del servidor.");
+            }
+        }
     }
 }
 

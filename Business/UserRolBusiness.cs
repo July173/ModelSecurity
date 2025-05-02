@@ -197,6 +197,18 @@ namespace Business
         }
 
 
+
+        public async Task<List<UserRol>> GetRolesByUserIdAsync(int userId)
+        {
+            var roles = await _rolUserData.GetByUserIdAsync(userId);
+
+            if (roles == null || !roles.Any())
+                throw new EntityNotFoundException("No se encontraron roles para el usuario.");
+
+            return roles; // Ya vienen con la propiedad Rol incluida (gracias al Include del Data)
+        }
+
+
         // Método para mapear de UserRol a UserRolDto
         private UserRolDto MapToDTO(UserRol rolUser)
         {

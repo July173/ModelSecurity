@@ -7,6 +7,8 @@ using Entity.DTOs;
 using Entity.DTOs.RolFormPermission;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
+using Utilities.Exceptions;
+using ValidationException = Utilities.Exceptions.ValidationException;
 
 namespace Business
 {
@@ -131,6 +133,30 @@ namespace Business
 
             await _rolFormPermissionData.AssignPermissionsAsync(dto.RolId, dto.FormPermissions);
         }
+
+        /// <summary>
+        /// Obtiene todos los registros de RolFormPermission.
+        /// </summary>
+        /// <returns>Lista de RolFormPermission en formato DTO.</returns>
+        public async Task<List<FormPermissionDto>> GetFormPermissionsByRolIdAsync(int rolId)
+        {
+            if (rolId <= 0)
+            {
+                _logger.LogWarning("Se intentó obtener permisos con un ID de rol inválido: {RolId}", rolId);
+                throw new ValidationException("rolId", "El ID del rol debe ser mayor que cero");
+            }
+
+            try
+            {
+                return await _rolFormPermissionData.GetFormPermissionsByRolIdAsync(rolId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener los permisos por formulario para el rol con ID: {RolId}", rolId);
+                throw new ExternalServiceException("Base de datos", $"Error al recuperar permisos del rol con ID {rolId}", ex);
+            }
+        }
+
 
         /// <summary>
         /// Mapea una entidad RolFormPermission a un DTO.

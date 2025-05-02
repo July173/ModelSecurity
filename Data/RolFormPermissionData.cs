@@ -154,5 +154,29 @@ namespace Data
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<FormPermissionDto>> GetFormPermissionsByRolIdAsync(int idRol)
+        {
+            try
+            {
+                var grouped = await _context.RolFormPermission
+                    .Where(rfp => rfp.RolId == idRol)
+                    .GroupBy(rfp => rfp.FormId)
+                    .Select(g => new FormPermissionDto
+                    {
+                        FormId = g.Key,
+                        PermissionIds = g.Select(rfp => rfp.PermissionId).ToList()
+                    })
+                    .ToListAsync();
+
+                return grouped;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al obtener permisos por formulario para el rol con ID {idRol}");
+                throw;
+            }
+        }
+
     }
 }
