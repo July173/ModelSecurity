@@ -1,6 +1,7 @@
 ﻿using Business;
 using Data;
 using Entity.DTOs.Rol;
+using Entity.DTOs.UserRol;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -266,16 +267,14 @@ namespace Web.Controllers
         /// <response code="404">Rol no encontrado</response>
         /// <response code="500">Error interno</response>
 
-        [HttpDelete("{id}/active")]
+        [HttpDelete("active")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
 
-        public async Task<IActionResult> SetActive(int id, [FromBody] RolStatusDto dto)
+        public async Task<IActionResult> SetActive( [FromBody] RolStatusDto dto)
         {
-            if (id != dto.Id)
-                return BadRequest("El ID de la ruta no coincide con el del cuerpo");
 
             try
             {
@@ -289,12 +288,50 @@ namespace Web.Controllers
             }
             catch (EntityNotFoundException ex)
             {
-                _logger.LogInformation(ex, "Rol no encontrado con ID: {RolId}", id);
+                _logger.LogInformation(ex, "Rol no encontrado con ID: {RolId}", dto.Id);
                 return NotFound(new { message = ex.Message });
             }
             catch (ExternalServiceException ex)
             {
                 _logger.LogError(ex, "Error al cambiar estado activo del rol");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Obtiene una relación específica por su ID
+        /// </summary>
+        /// <param name="id">ID de la relación</param>
+        /// <returns>Relación solicitada</returns>
+        /// <response code="200">Retorna la relación solicitada</response>
+        /// <response code="400">ID proporcionado no válido</response>
+        /// <response code="404">Relación no encontrada</response>
+        /// <response code="500">Error interno del servidor</response>
+        [HttpGet("User/{idUser}")]
+        [ProducesResponseType(typeof(UserRolDto), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetRolUserByIduser(int idUser)
+        {
+            try
+            {
+                var rolUser = await _RolBusiness.GetRolUserByIdUserAsync(idUser);
+                return Ok(rolUser);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Validación fallida para la relación con ID: {RolUserId}", idUser);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Relación no encontrada con ID: {RolUserId}", idUser);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al obtener la relación con ID: {RolUserId}", idUser);
                 return StatusCode(500, new { message = ex.Message });
             }
         }

@@ -217,6 +217,27 @@ namespace Business
             }
         }
 
+        public async Task<IEnumerable<Rol>> GetRolUserByIdUserAsync(int idUser)
+        {
+            if (idUser <= 0)
+            {
+                _logger.LogWarning("Se intentó obtener lod roles de un usuario con ID inválido: {idUser}", idUser);
+                throw new Utilities.Exceptions.ValidationException("id", "El ID del usuario debe ser mayor que cero");
+            }
+
+            try
+            {
+                var rolUsers = await _rolData.GetRolesByUserIdAsync(idUser);
+
+                return rolUsers;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener el rol de usuario con ID: {RolUserId}", idUser);
+                throw new ExternalServiceException("Base de datos", $"Error al recuperar el rol de usuario con ID {idUser}", ex);
+            }
+        }
+
         //Metodo para mapear de Rol a RolDTO
         private RolDto MapToDTO(Rol rol)
         {

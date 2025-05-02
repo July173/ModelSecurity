@@ -27,7 +27,6 @@ namespace Data
         public async Task<IEnumerable<User>> GetAllAsync()
         {
                 return await _context.Set<User>()
-                .Where(u => u.Active)//Trae solo los activos
                 .ToListAsync();
         }
     
