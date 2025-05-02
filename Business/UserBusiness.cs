@@ -222,7 +222,7 @@ namespace Business
         public async Task<UserDto> ValidateCredentialsAsync(string email, string password)
         {
             var user = await _userData.GetByEmailAsync(email);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
+            if (user == null ||!user.Active || !BCrypt.Net.BCrypt.Verify(password, user.Password))
                 return null;
 
             return MapToDTO(user);

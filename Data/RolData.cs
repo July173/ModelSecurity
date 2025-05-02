@@ -33,7 +33,6 @@ namespace Data
         public async Task<IEnumerable<Rol>> GetAllAsync()
         {
             return await _context.Set<Rol>()
-                .Where(r => r.Active)//Trae solo los activos
                 .ToListAsync();
         }
 
@@ -184,6 +183,24 @@ namespace Data
                 return false;
             }
 
+        }
+
+
+        public async Task<List<Rol>> GetRolesByUserIdAsync(int userId)
+        {
+            try
+            {
+                return await _context.UserRol
+                    .Where(ur => ur.UserId == userId)
+                    .Include(ur => ur.Rol) // Asegura que se incluya el rol completo
+                    .Select(ur => ur.Rol)  // Solo devuelves la entidad Rol
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al obtener los roles del usuario con ID {userId}");
+                throw;
+            }
         }
 
 
