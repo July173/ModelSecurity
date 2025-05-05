@@ -161,7 +161,10 @@ namespace Business
         {
             return await _rolFormPermissionData.ObtenerPermisosAgrupadosPorUsuario(userId);
         }
-
+        public async Task<List<MenuDto>> GetMenu(int userId)
+        {
+            return await _rolFormPermissionData.ObtenerMenu(userId);
+        }
 
         /// <summary>
         /// Mapea una entidad RolFormPermission a un DTO.

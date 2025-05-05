@@ -15,5 +15,7 @@ namespace Entity.Model
         public Rol Rol { get; set; }
         public int FormId { get; set; }
         public Form Form { get; set; }
+
+        
     }
 }

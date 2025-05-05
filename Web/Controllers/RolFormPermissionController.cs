@@ -232,6 +232,15 @@ namespace Web.Controllers
             return Ok(permisos);
         }
 
+
+
+        [HttpGet("menu/{userId}")]
+        public async Task<IActionResult> GetMenuModule(int userId)
+        {
+            var permisos = await _rolFormPermissionBusiness.GetMenu(userId);
+            return Ok(permisos);
+        }
+
     }
 }
 

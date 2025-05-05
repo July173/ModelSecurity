@@ -213,5 +213,41 @@ namespace Data
             return resultado;
         }
 
+        public async Task<List<MenuDto>> ObtenerMenu(int userId)
+        {
+            var datos = await (
+                from ru in _context.UserRol
+                where ru.UserId == userId
+                join r in _context.Rol on ru.RolId equals r.Id
+                join rfp in _context.RolFormPermission on ru.RolId equals rfp.RolId
+                join fm in _context.FormModule on rfp.FormId equals fm.FormId
+                join m in _context.Module on fm.ModuleId equals m.Id
+                join f in _context.Form on rfp.FormId equals f.Id
+                select new
+                {
+                    Rol = r.TypeRol,
+                    Module = m.Name,
+                    Formulario = f.Name
+
+                }
+            ).ToListAsync();
+
+            var resultado = datos
+                .GroupBy(d => d.Rol)
+                .Select(grupoRol => new MenuDto
+                {
+                    Rol = grupoRol.Key,
+                    ModuleForm = grupoRol
+                        .GroupBy(g => g.Module)
+                        .Select(gf => new MenuFormDto
+                        {
+                            Name = gf.Key,
+                            Form = gf.Select(f => f.Formulario).Distinct().ToList()
+                        }).ToList()
+                }).ToList();
+
+            return resultado;
+        }
+
     }
 }
