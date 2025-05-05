@@ -60,7 +60,6 @@ namespace Business
                 throw new ExternalServiceException("Base de datos", $"Error al recuperar el usuario con ID {id}", ex);
             }
         }
-
         public async Task<UserDto> CreateUserAsync(UserDto userDto)
         {
             try
@@ -86,6 +85,10 @@ namespace Business
                 throw new ExternalServiceException("Base de datos", "Error al crear el usuario", ex);
             }
         }
+
+
+
+
 
         public async Task<bool> UpdateParcialUserAsync(UserUpdateDto dto)
         {

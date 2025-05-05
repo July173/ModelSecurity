@@ -1,7 +1,10 @@
 ﻿using Business;
 using Data;
 using Entity.DTOs.UserRol;
+using Entity.Model;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -238,13 +241,37 @@ namespace Web.Controllers
         }
 
 
-            [HttpPost("asignar")]
-            public async Task<IActionResult> AsignarRoles([FromBody] UserRolAssignDto dto)
+        [HttpPost("asignar")]
+        public async Task<IActionResult> AsignarRoles([FromBody] UserRolAssignDto dto)
+        {
+            var result = await _RolUserBusiness.AssignRolesAsync(dto);
+            return Ok(new { success = result });
+        }
+
+
+        [HttpGet("byUser/{userId}")]
+        public async Task<IActionResult> GetRolesByUserId(int userId)
+        {
+            try
             {
-                var result = await _RolUserBusiness.AssignRolesAsync(dto);
-                return Ok(new { success = result });
+                var result = await _RolUserBusiness.GetRolesByUserIdAsync(userId);
+                return Ok(result);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
             }
         }
 
+
+
     }
+}
+
+
+    
 
