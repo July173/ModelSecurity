@@ -124,7 +124,7 @@ namespace Data
         ///</summary>
         ///<param name="id">Id del form</param>
         ///<returns> True si la actualizacion es verdadera</returns>
-        public async Task<bool> PatchAsync(int id,  string newDescription, string newName)
+        public async Task<bool> PatchAsync(int id,  string newDescription, string newName, string newPath)
         {
             try
             {
@@ -135,6 +135,7 @@ namespace Data
 
                 form.Name = newName;
                 form.Description = newDescription;
+                form.Path = newPath;
 
 
                 _context.Entry(form).Property(f => f.Description).IsModified = true;

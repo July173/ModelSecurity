@@ -7,6 +7,7 @@ using Entity.DTOs.RolFormPermission;
 using Entity.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Nest;
 
 namespace Data
 {
@@ -227,7 +228,8 @@ namespace Data
                 {
                     Rol = r.TypeRol,
                     Module = m.Name,
-                    Formulario = f.Name
+                    FormularioName = f.Name,
+                    FomrularioPath = f.Path
 
                 }
             ).ToListAsync();
@@ -242,7 +244,14 @@ namespace Data
                         .Select(gf => new MenuFormDto
                         {
                             Name = gf.Key,
-                            Form = gf.Select(f => f.Formulario).Distinct().ToList()
+                            Form = gf
+                            .Select(f =>new FormItemDto
+                            {
+                                Name = f.FormularioName,
+                                Path = f.FomrularioPath
+                            })
+                            .DistinctBy(f => f.Name)
+                            .ToList()
                         }).ToList()
                 }).ToList();
 

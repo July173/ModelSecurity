@@ -168,7 +168,7 @@ namespace Business
                     throw new EntityNotFoundException("Form", dto.Id);
                 }
 
-                return await _formData.PatchAsync(dto.Id, dto.Name, dto.Description);
+                return await _formData.PatchAsync(dto.Id, dto.Name, dto.Description, dto.Path);
             }
             catch (Exception ex)
             {
@@ -194,6 +194,7 @@ namespace Business
                 // Modifica sus campos directamente
                 entity.Name = dto.Name;
                 entity.Description = dto.Description;
+                entity.Path = dto.Path;
                 entity.UpdateDate = DateTime.Now;
 
                 return await _formData.UpdateAsync(entity); //actualizas la misma instancia rastreada
@@ -231,6 +232,7 @@ namespace Business
                 Name = form.Name,
                 Description = form.Description,
                 Active = form.Active,
+                Path = form.Path
                
             };
         }
@@ -244,6 +246,7 @@ namespace Business
                 Name = formDto.Name,
                 Description = formDto.Description,
                 Active = formDto.Active,
+                Path = formDto.Path
                
             };
         }
