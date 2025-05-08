@@ -1,3 +1,4 @@
+using System;
 using Business;
 using Data;
 using Entity.Contexts;
@@ -5,6 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped(typeof(IBaseData<>), typeof(UniversalData<>));
+builder.Services.AddScoped(typeof(IBaseBusiness<>), typeof(UniversalBusiness<>));
+
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -141,8 +146,10 @@ builder.Services.AddCors(Opciones =>
 });
 
 //Agregar DbContext
-builder.Services.AddDbContext<ApplicationDbContext>(opciones =>
-    opciones.UseSqlServer("name=DefaultConnection"));
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
 
 var app = builder.Build();
 
